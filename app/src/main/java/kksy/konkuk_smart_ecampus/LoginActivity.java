@@ -1,6 +1,7 @@
 package kksy.konkuk_smart_ecampus;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
+
         editTextUserId = findViewById(R.id.editTextUserId);
         editTextUserPw = findViewById(R.id.editTextUserPw);
         buttonLogin = findViewById(R.id.buttonLogin);
@@ -35,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
+                finish();
             }
         });
     }
