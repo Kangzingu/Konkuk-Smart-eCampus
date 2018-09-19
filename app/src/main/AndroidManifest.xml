@@ -29,8 +29,9 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".IntroActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".IntroActivity" />
+        <activity android:name=".BeaconActivity"></activity>
     </application>
 
 </manifest>

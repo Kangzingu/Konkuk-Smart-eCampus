@@ -12,6 +12,7 @@ public class TempActivity extends AppCompatActivity {
 
     private Button gLoginActivity;
     private Button gAdminActivity;
+    private Button gBeaconActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class TempActivity extends AppCompatActivity {
 
         gLoginActivity=(Button)findViewById(R.id.gotoLoginActivity);
         gAdminActivity=(Button)findViewById(R.id.gotoAdminActivity);
+        gBeaconActivity=(Button)findViewById(R.id.gotoBeaconActivity);
     }
 
     public void gotoLoginActivity(View view) {
@@ -30,6 +32,12 @@ public class TempActivity extends AppCompatActivity {
 
     public void gotoAdminActivity(View view) {
         Intent intent = new Intent(this, AdminActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void gotoBeaconActivity(View view){
+        Intent intent = new Intent(this, BeaconActivity.class);
         startActivity(intent);
         finish();
     }
