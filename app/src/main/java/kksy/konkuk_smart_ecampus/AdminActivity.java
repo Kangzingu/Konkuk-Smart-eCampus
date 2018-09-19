@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,7 +43,6 @@ public class AdminActivity extends AppCompatActivity {
 
     public void regi(View view) {
         //학생 정보를 파이어베이스에 등록함
-        myDBHandler=new MyDBHandler("student");
 
         //객체 생성
         Student student=new Student(ptID.getText().toString(),ptPW.getText().toString(),
@@ -51,6 +51,7 @@ public class AdminActivity extends AppCompatActivity {
 
         //객체를 DB에 등록
         myDBHandler.newStudent(student);
-
+        Toast.makeText(getApplicationContext(),"등록완료^.<",Toast.LENGTH_SHORT).show();
+        regi.setText("");ptID.setText("");ptPW.setText("");stID.setText("");department.setText("");
     }
 }
