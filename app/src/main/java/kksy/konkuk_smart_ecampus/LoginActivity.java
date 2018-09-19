@@ -64,11 +64,11 @@ public class LoginActivity extends AppCompatActivity {
 //                     */
 //                }
 
-                // 계정확인이 완료되면, userId 정보를 갖고 MainAcitivty로 이동
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("userId", userId);
-                startActivity(intent);
-                finish();
+//                // 계정확인이 완료되면, userId 정보를 갖고 MainAcitivty로 이동
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                intent.putExtra("userId", userId);
+//                startActivity(intent);
+//                finish();
             }
         });
     }
@@ -81,7 +81,11 @@ public class LoginActivity extends AppCompatActivity {
             editTextUserPw.setText(pref.getString("pw", ""));
             checkBoxAutoLogin.setChecked(true);
             // goto mainActivity
-
+            // 계정확인이 완료되면, userId 정보를 갖고 MainAcitivty로 이동
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("userId", userId);
+            startActivity(intent);
+            finish();
         } else {
             // autoLogin이 체크되어 있지 않을 경우
 
