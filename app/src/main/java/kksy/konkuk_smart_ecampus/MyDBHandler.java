@@ -19,6 +19,13 @@ public class MyDBHandler {
         mdatabase = FirebaseDatabase.getInstance();
         mdbRef=mdatabase.getReference(TABLE);
 
+        if(mdbRef==null){
+            //table이 없으면 생성
+            mdbRef.child(TABLE);
+        }else{
+            //table이 있으면 진행하지 않음
+        }
+
     }
 
     public void newStudent(Student student){
@@ -33,5 +40,28 @@ public class MyDBHandler {
 
 
     }
+    public void newProfessor(Professor professor){
+        String tableNames;
+        tableNames=professor.getProID();
 
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames);
+
+        //등록
+        relation_table.setValue(professor);
+
+
+    }
+    public void newSubject(Subject subject){
+        String tableNames;
+        tableNames=subject.getSubID();
+
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames);
+
+        //등록
+        relation_table.setValue(subject);
+
+
+    }
 }

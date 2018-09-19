@@ -15,6 +15,12 @@
         android:hint="포탈아이디" />
 
     <EditText
+        android:id="@+id/sName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="이름" />
+
+    <EditText
     android:id="@+id/ptPW"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -39,5 +45,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="등록" />
+
+    <Spinner
+        android:id="@+id/selectTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/table"/>
 
 </LinearLayout>

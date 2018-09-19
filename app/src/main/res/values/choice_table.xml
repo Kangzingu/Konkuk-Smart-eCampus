@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="table">
+        <item>학생</item>
+        <item>교수</item>
+        <item>과목</item>
+        <item>수강</item>
+        <item>강의</item>
+        <item>타임라인</item>
+    </string-array>
+</resources>
