@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "701314128139",
+    "firebase_url": "https://konkuk-smart-ecampus.firebaseio.com",
+    "project_id": "konkuk-smart-ecampus",
+    "storage_bucket": "konkuk-smart-ecampus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701314128139:android:71161adf445b7d0c",
+        "android_client_info": {
+          "package_name": "kksy.konkuk_smart_ecampus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701314128139-ds94rbdconigaam32avskujhca3s3jv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1AVOpEbA5lrcbYtjvxPP98F7Je7RH_LY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
