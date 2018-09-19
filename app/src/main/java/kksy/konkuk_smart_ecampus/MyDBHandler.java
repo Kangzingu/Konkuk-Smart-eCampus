@@ -37,8 +37,6 @@ public class MyDBHandler {
 
         //등록
         relation_table.setValue(student);
-
-
     }
     public void newProfessor(Professor professor){
         String tableNames;
@@ -49,8 +47,6 @@ public class MyDBHandler {
 
         //등록
         relation_table.setValue(professor);
-
-
     }
     public void newSubject(Subject subject){
         String tableNames;
@@ -61,7 +57,15 @@ public class MyDBHandler {
 
         //등록
         relation_table.setValue(subject);
+    }
+    public void newBoard(Board board){
+        String tableNames;
+        tableNames=board.getSubName();
 
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames).child(board.getType()).child(board.getIndex()+"");
 
+        //등록
+        relation_table.setValue(board);
     }
 }

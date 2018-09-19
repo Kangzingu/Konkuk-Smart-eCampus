@@ -9,31 +9,31 @@
     >
 
     <EditText
-        android:id="@+id/ptID"
+        android:id="@+id/e1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="포탈아이디" />
+        android:hint="포탈아이디/교수아이디/과목아이디" />
 
     <EditText
-        android:id="@+id/sName"
+        android:id="@+id/e2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="이름" />
+        android:hint="이름/교수이름/과목이름" />
 
     <EditText
-    android:id="@+id/ptPW"
+    android:id="@+id/e3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:hint="포탈비번" />
 
     <EditText
-        android:id="@+id/stID"
+        android:id="@+id/e4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="학번" />
 
     <EditText
-        android:id="@+id/department"
+        android:id="@+id/e5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="학과" />
