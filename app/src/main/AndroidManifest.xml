@@ -10,25 +10,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".AdminActivity" />
         <activity android:name=".TempActivity">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity android:name=".BeaconActivity"></activity>
     </application>
 
 </manifest>
