@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "701314128139-8ahlgrb5a2jas4td2e9aj45lfvhngh2g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kksy.konkuk_smart_ecampus",
+            "certificate_hash": "8d190e4cd55cc0fe0b4c4e7a34ff1910db5740cc"
+          }
+        },
+        {
           "client_id": "701314128139-ds94rbdconigaam32avskujhca3s3jv4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701314128139-ds94rbdconigaam32avskujhca3s3jv4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
