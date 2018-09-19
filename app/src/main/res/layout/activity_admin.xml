@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminActivity">
+    tools:context=".AdminActivity"
+    android:orientation="vertical"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <EditText
+        android:id="@+id/ptID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="포탈아이디" />
+
+    <EditText
+    android:id="@+id/ptPW"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:hint="포탈비번" />
+
+    <EditText
+        android:id="@+id/stID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="학번" />
+
+    <EditText
+        android:id="@+id/department"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="학과" />
+
+
+    <Button
+        android:onClick="regi"
+        android:id="@+id/regi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="등록" />
+
+</LinearLayout>
