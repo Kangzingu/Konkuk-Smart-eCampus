@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userId = editTextUserId.getText().toString();
+                userPw = editTextUserPw.getText().toString();
                 /*
                 로그인 버튼 클릭 시, userId가 DB에 존재하는지 확인 후, userPw와 비교
                 */
