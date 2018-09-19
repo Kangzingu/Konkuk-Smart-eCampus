@@ -30,6 +30,8 @@ dependencies {
     //추가된 항목들은 이 아래로 기입
     implementation 'com.google.firebase:firebase-core:16.0.1' //(DS 구글 파이어베이스)
     implementation 'com.google.firebase:firebase-database:11.8.0'//(DS 구글 파이어베이스)
+
+    implementation 'de.hdodenhof:circleimageview:2.2.0' //(JY 원형 ImageView)
 }
 
 apply plugin: 'com.google.gms.google-services' // (DS 구글 파이어베이스)
