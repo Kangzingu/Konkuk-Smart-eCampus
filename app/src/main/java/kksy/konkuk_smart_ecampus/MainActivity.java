@@ -1,8 +1,13 @@
 package kksy.konkuk_smart_ecampus;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.Layout;
@@ -16,7 +21,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.Region;
+import com.estimote.sdk.SystemRequirementsChecker;
+
+import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,12 +45,14 @@ public class MainActivity extends AppCompatActivity
     String userId;
     String userEmail;
 
+    //==
+    Switch beaconSwitch;
+    //==
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Navigation Drawer 설정
+        //Navigation Drawer 설정
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -63,6 +82,26 @@ public class MainActivity extends AppCompatActivity
 
         profileName.setText(userName);
         profileEmail.setText(userEmail);
+        //==================
+        beaconSwitch = (Switch) findViewById(R.id.switch1);
+        beaconSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b==true){//비콘 허용 on
+                    //db드가서 허용 했다고 바꾸고
+                    //현재 시간& 유저 정보 이용해서 과목 뭔지 알아내고
+                    //이 과목 수업 하는 강의실 비콘 정보 알아내공
+                    //이 비콘을 연결한다
+                }
+                else{//b==false //비콘 허용 off
+
+                }
+                Toast.makeText(MainActivity.this,"d"+b,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //==================
+
     }
 
     @Override

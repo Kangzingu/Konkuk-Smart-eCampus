@@ -30,7 +30,7 @@ public class BeaconActivity extends AppCompatActivity {
             public void onServiceReady() {
                 beaconManager.startMonitoring(new Region(
                         "monitored region",
-                        UUID.fromString("00042ea4-d4c7-42c5-a721-108d2d3d8f6d"),
+                        UUID.fromString("8249a918-6116-42b8-859c-46aec4f10292"),
                         0, 0));
             }
         });
