@@ -1,7 +1,6 @@
 package kksy.konkuk_smart_ecampus;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SwitchCompat;
@@ -12,13 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     String userImgURL;
     Boolean userIsBeaconOn;
 
+    Toolbar toolbar;
     NavigationView navigationView;
     SwitchCompat switchBeacon;
 
@@ -75,8 +72,11 @@ public class MainActivity extends AppCompatActivity
 
     public void initNavigationView(){
         // Navigation Drawer 초기 설정
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Toolbar Title 설정
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -147,14 +147,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
+
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
-        } else if (id == R.id.nav_mail) {
-
+            toolbarTitle.setText(R.string.home_title);
+        } else if (id == R.id.nav_message) {
+            toolbarTitle.setText(R.string.message_title);
         } else if (id == R.id.nav_settings) {
-
+            toolbarTitle.setText(R.string.settings_title);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

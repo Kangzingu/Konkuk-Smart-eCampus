@@ -10,7 +10,7 @@
             android:title="Home"
             android:checked="true"/>
         <item
-            android:id="@+id/nav_mail"
+            android:id="@+id/nav_message"
             android:icon="@drawable/ic_mail_black_24dp"
             android:title="Message" />
         <item
