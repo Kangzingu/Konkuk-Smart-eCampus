@@ -17,4 +17,7 @@
     <string name="beacon_off">Beacon Off</string>
 
     <string name="konkuk_email">konkuk.ac.kr</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,9 +1,14 @@
 package kksy.konkuk_smart_ecampus;
 
+import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SwitchCompat;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +39,12 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     NavigationView navigationView;
     SwitchCompat switchBeacon;
+    View contentMain;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
+    HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,8 @@ public class MainActivity extends AppCompatActivity
 
         initUserInformation();
         initNavigationView();
+
+        initContentMain();
     }
 
     public void initUserInformation(){
@@ -133,6 +146,16 @@ public class MainActivity extends AppCompatActivity
         */
     }
 
+    public void initContentMain(){
+        View view = findViewById(R.id.app_bar_main);
+        contentMain = view.findViewById(R.id.content_main);
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragmentContainer, new HomeFragment());
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -151,13 +174,20 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
+        fragmentTransaction = fragmentManager.beginTransaction();
+
         if (id == R.id.nav_home) {
             toolbarTitle.setText(R.string.home_title);
+            fragmentTransaction.replace(R.id.fragmentContainer, new HomeFragment());
         } else if (id == R.id.nav_message) {
             toolbarTitle.setText(R.string.message_title);
+            fragmentTransaction.replace(R.id.fragmentContainer, new MessageFragment());
         } else if (id == R.id.nav_settings) {
             toolbarTitle.setText(R.string.settings_title);
+            fragmentTransaction.replace(R.id.fragmentContainer, new SettingsFragment());
         }
+
+        fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
