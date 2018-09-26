@@ -32,11 +32,11 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/colorMedium"
-                app:layout_constraintBottom_toTopOf="@+id/switch1"
+                app:layout_constraintBottom_toTopOf="@+id/switchBeacon"
                 tools:layout_editor_absoluteX="0dp"></View>
 
-            <Switch
-                android:id="@+id/switch1"
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchBeacon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="25dp"
@@ -59,7 +59,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/colorMedium"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch1"></View>
+                app:layout_constraintTop_toBottomOf="@+id/switchBeacon"></View>
 
             <TextView
                 android:id="@+id/textView"

@@ -10,5 +10,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="beacon_on">Beacon On</string>
+    <string name="beacon_off">Beacon Off</string>
+
     <string name="konkuk_email">konkuk.ac.kr</string>
 </resources>

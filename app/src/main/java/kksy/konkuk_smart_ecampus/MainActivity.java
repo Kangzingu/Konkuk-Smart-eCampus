@@ -1,12 +1,10 @@
 package kksy.konkuk_smart_ecampus;
 
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.text.Layout;
-import android.view.LayoutInflater;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,24 +14,67 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView profileName;
     TextView profileEmail;
+    ImageView profileImg;
+
+    Boolean isStudent = true;
 
     String userName;
     String userId;
     String userEmail;
+    String userImgURL;
+    Boolean userIsBeaconOn;
+
+    NavigationView navigationView;
+    SwitchCompat switchBeacon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Navigation Drawer 설정
+        initUserInformation();
+        initNavigationView();
+    }
+
+    public void initUserInformation(){
+        // 사용자 정보 초기 설정
+        Intent intent = getIntent();
+        /*
+        Intent로 사용자 객체 넘겨 줌
+         */
+
+        if(isStudent){
+            // 현재 로그인한 사용자가 학생일 경우 다음 수행
+
+            Student student = new Student();
+            /*
+            DB에서 Student 객체 가져와야 함
+            */
+
+            userName = "default"/*student.getStudentName()*/;
+            userId = "default"/*student.getStudentID()*/;
+            userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
+            userImgURL = student.getImgURL();
+            userIsBeaconOn = true/*student.isBeconCheck()*/;
+        }
+        else{
+            // 현재 로그인한 사용자가 교수일 경우 다음 수행
+        }
+    }
+
+    public void initNavigationView(){
+        // Navigation Drawer 초기 설정
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,26 +84,53 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Navigation Header 초기 설정
+        initNavigationHeader();
+
+        // Beacon Switch 초기 설정
+        switchBeacon = (SwitchCompat) findViewById(R.id.switchBeacon);
+        switchBeacon.setChecked(userIsBeaconOn);
+
+        switchBeacon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Snackbar.make(buttonView, getResources().getText(R.string.beacon_on), Snackbar.LENGTH_SHORT)
+                            .setAction("Beacon On", null).show();
+                    /*
+                    Beacon Switch를 On 하였을 경우 다음 수행
+                     */
+                }
+                else{
+                    Snackbar.make(buttonView, getResources().getText(R.string.beacon_off), Snackbar.LENGTH_SHORT)
+                            .setAction("Beacon Off", null).show();
+                    /*
+                    Beacon Switch를 Off 하였을 경우 다음 수행
+                     */
+                }
+            }
+        });
+    }
+
+    public void initNavigationHeader(){
+        // Navigation Drawer의 Header 부분 설정
         // headerView의 사용자 이름과 이메일을 수정하기 위해 navigationView의 headerView를 가져옴
         View view = navigationView.getHeaderView(0);
-
-        Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
-        userName = "defaultName";
-        /*
-        해당 userId의 이름을 DB에서 가져와 userName에 저장
-         */
-        userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
 
         // 프로필에 이름과 이메일 설정
         profileName = (TextView) view.findViewById(R.id.profile_name);
         profileEmail = (TextView) view.findViewById(R.id.profile_email);
+        profileImg = (ImageView) view.findViewById(R.id.profile_image);
 
         profileName.setText(userName);
         profileEmail.setText(userEmail);
+        /*
+        프로필 이미지 설정
+        profileImg.setImageURI(Uri.parse(userImgURL));
+        */
     }
 
     @Override
@@ -82,7 +150,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_mail) {
 
         } else if (id == R.id.nav_settings) {
