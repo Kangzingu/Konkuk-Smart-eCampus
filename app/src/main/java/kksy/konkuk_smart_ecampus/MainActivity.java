@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     String userEmail;
     String userImgURL;
     Boolean userIsBeaconOn;
+    ArrayList<Subject> userSubjectList;
 
     Toolbar toolbar;
     NavigationView navigationView;
@@ -43,8 +47,6 @@ public class MainActivity extends AppCompatActivity
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-
-    HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,26 +85,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void initNavigationView(){
-        // Navigation Drawer 초기 설정
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Toolbar Title 설정
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Navigation Header 초기 설정
-        initNavigationHeader();
-
+    public void initSwitchBeacon(){
         // Beacon Switch 초기 설정
         switchBeacon = (SwitchCompat) findViewById(R.id.switchBeacon);
         switchBeacon.setChecked(userIsBeaconOn);
@@ -128,6 +111,56 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void initSubjectList(){
+        // 수강 과목 List 초기 설정
+        userSubjectList = new ArrayList<>();
+
+        /*
+        userSugangList에 사용자가 수강 또는 강의하는 과목들 추가
+         */
+
+        userSubjectList.add(new Subject("1234", "산학협력프로젝트2(종합설계)"));
+        userSubjectList.add(new Subject("1234", "과학사"));
+        userSubjectList.add(new Subject("1234", "클라우드웹서비스"));
+        userSubjectList.add(new Subject("1234", "졸업프로젝트2(종합설계)"));
+
+        RecyclerView recyclerView;
+        RecyclerView.LayoutManager layoutManager;
+        SubjectListAdapter adapter;
+        recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new SubjectListAdapter(userSubjectList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void initNavigationView(){
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Toolbar Title 설정
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Navigation Drawer 초기 설정
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // Navigation Header 초기 설정
+        initNavigationHeader();
+
+        // Beacon Switch 초기 설정
+        initSwitchBeacon();
+
+        // 수강 과목 List 초기 설정
+        initSubjectList();
+    }
+
     public void initNavigationHeader(){
         // Navigation Drawer의 Header 부분 설정
         // headerView의 사용자 이름과 이메일을 수정하기 위해 navigationView의 headerView를 가져옴
@@ -147,6 +180,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initContentMain(){
+        // Main Content 초기 설정
         View view = findViewById(R.id.app_bar_main);
         contentMain = view.findViewById(R.id.content_main);
 
