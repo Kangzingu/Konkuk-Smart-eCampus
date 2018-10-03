@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     SwitchCompat switchBeacon;
     View contentMain;
+    RecyclerView recyclerView;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -124,14 +126,28 @@ public class MainActivity extends AppCompatActivity
         userSubjectList.add(new Subject("1234", "클라우드웹서비스"));
         userSubjectList.add(new Subject("1234", "졸업프로젝트2(종합설계)"));
 
-        RecyclerView recyclerView;
-        RecyclerView.LayoutManager layoutManager;
-        SubjectListAdapter adapter;
+//        RecyclerView recyclerView;
+//        RecyclerView.LayoutManager layoutManager;
+//        SubjectListAdapter adapter;
+//        recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
+//        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        adapter = new SubjectListAdapter(userSubjectList);
+//        recyclerView.setAdapter(adapter);
+
         recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new SubjectListAdapter(userSubjectList);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        List<ExpandableListAdapter.Item> data = new ArrayList<>();
+
+        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, getResources().getString(R.string.sugang_title)));
+        for(int i=0; i<userSubjectList.size(); i++){
+            /*
+            Subject 클래스에 수강번호 추가해서 적용
+            */
+            data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, userSubjectList.get(i).getSubName(), "1234"));
+        }
+
+        recyclerView.setAdapter(new ExpandableListAdapter(data));
     }
 
     public void initNavigationView(){
