@@ -19,6 +19,15 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private List<Item> data;
 
+    private ItemClick itemClick;
+    public interface ItemClick {
+        public void onClick(View view, int position);
+    }
+
+    public void setItemClick(ItemClick itemClick){
+        this.itemClick = itemClick;
+    }
+
     public ExpandableListAdapter(List<Item> data) {
         this.data = data;
     }
@@ -46,7 +55,7 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final Item item = data.get(position);
         switch (item.type){
             case HEADER:
@@ -91,6 +100,15 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 final ListChildViewHolder childViewHolder = (ListChildViewHolder) holder;
                 childViewHolder.childTitle.setText(data.get(position).text);
                 childViewHolder.childNum.setText(data.get(position).number);
+
+                childViewHolder.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(itemClick != null){
+                            itemClick.onClick(v, position);
+                        }
+                    }
+                });
                 break;
         }
     }
@@ -120,11 +138,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static class ListChildViewHolder extends  RecyclerView.ViewHolder{
         public TextView childTitle;
         public TextView childNum;
+        public View view;
 
         public ListChildViewHolder(View itemView) {
             super(itemView);
             childTitle = (TextView) itemView.findViewById(R.id.subjectName);
             childNum = (TextView) itemView.findViewById(R.id.subjectNum);
+            this.view = itemView;
         }
     }
 

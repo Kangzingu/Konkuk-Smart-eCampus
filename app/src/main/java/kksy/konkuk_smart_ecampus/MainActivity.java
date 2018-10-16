@@ -23,7 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import static kksy.konkuk_smart_ecampus.ExpandableListAdapter.CHILD;
+import static kksy.konkuk_smart_ecampus.ExpandableListAdapter.HEADER;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     ImageView profileImg;
 
     Boolean isStudent = true;
+    Boolean isClass = false;
 
     String userName;
     String userId;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     String userImgURL;
     Boolean userIsBeaconOn;
     ArrayList<Subject> userSubjectList;
+    ExpandableListAdapter adapter;
 
     Toolbar toolbar;
     NavigationView navigationView;
@@ -121,33 +128,70 @@ public class MainActivity extends AppCompatActivity
         userSugangList에 사용자가 수강 또는 강의하는 과목들 추가
          */
 
-        userSubjectList.add(new Subject("1234", "산학협력프로젝트2(종합설계)"));
-        userSubjectList.add(new Subject("1234", "과학사"));
-        userSubjectList.add(new Subject("1234", "클라우드웹서비스"));
-        userSubjectList.add(new Subject("1234", "졸업프로젝트2(종합설계)"));
+        userSubjectList.add(new Subject("0000", "산학협력프로젝트2(종합설계)"));
+        userSubjectList.add(new Subject("2222", "과학사"));
+        userSubjectList.add(new Subject("1111", "클라우드웹서비스"));
+        userSubjectList.add(new Subject("3333", "졸업프로젝트2(종합설계)"));
 
-//        RecyclerView recyclerView;
-//        RecyclerView.LayoutManager layoutManager;
-//        SubjectListAdapter adapter;
-//        recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
-//        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-//        adapter = new SubjectListAdapter(userSubjectList);
-//        recyclerView.setAdapter(adapter);
+        // 수강 목록을 수강 번호로 정렬
+        Collections.sort(userSubjectList, new Comparator<Subject>() {
+            @Override
+            public int compare(Subject o1, Subject o2) {
+                return o1.getSubID().compareTo(o2.getSubID());
+            }
+        });
 
         recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        List<ExpandableListAdapter.Item> data = new ArrayList<>();
+        final List<ExpandableListAdapter.Item> data = new ArrayList<>();
 
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER, getResources().getString(R.string.sugang_title)));
+        data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
         for(int i=0; i<userSubjectList.size(); i++){
-            /*
-            Subject 클래스에 수강번호 추가해서 적용
-            */
-            data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHILD, userSubjectList.get(i).getSubName(), "1234"));
+            data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
         }
 
-        recyclerView.setAdapter(new ExpandableListAdapter(data));
+        adapter = new ExpandableListAdapter(data);
+        adapter.setItemClick(new ExpandableListAdapter.ItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle); // toolbar title
+                toolbarTitle.setText(data.get(position).text); // toolbar title을 선택한 강의명으로 바꿈
+
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer, ClassFragment.newInstance(data.get(position).text));
+                fragmentTransaction.commit();
+
+                if(isClass){ // 현재 화면이 강의실일 경우
+                    String headerSubjectName = data.get(position).text;
+                    String headerSubjectNum = data.get(position).number;
+                    data.clear();
+                    data.add(0, new ExpandableListAdapter.Item(HEADER, headerSubjectName)); // header를 sugang title로 변경
+                    data.get(0).invisibleChildren = new ArrayList<>();
+                    for(int i=0; i<userSubjectList.size(); i++){
+                        if(!headerSubjectNum.equals(userSubjectList.get(i).getSubID())){
+                            data.get(0).invisibleChildren.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
+                        }
+                    }
+                }
+                else{ // 현재 화면이 HOME 일 경우
+                    data.clear();
+                    data.add(0, new ExpandableListAdapter.Item(HEADER, userSubjectList.get(position - 1).getSubName()));
+                    data.get(0).invisibleChildren = new ArrayList<>();
+                    for(int i=0; i<userSubjectList.size(); i++){
+                        if(i != position - 1){
+                            data.get(0).invisibleChildren.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
+                        }
+                    }
+                    isClass = true;
+                }
+
+                adapter.notifyDataSetChanged();
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     public void initNavigationView(){
@@ -241,6 +285,10 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        isClass = false;
+        initSubjectList();
+
         return true;
     }
 }
