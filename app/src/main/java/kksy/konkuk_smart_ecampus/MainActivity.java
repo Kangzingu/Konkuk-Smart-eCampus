@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity
     SwitchCompat switchBeacon;
     View contentMain;
     RecyclerView recyclerView;
+    MenuItem nowMenuItem;
+    MenuItem classMenuItem;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -187,6 +191,9 @@ public class MainActivity extends AppCompatActivity
 
                 adapter.notifyDataSetChanged();
 
+                nowMenuItem.setChecked(false);
+                recyclerView.setBackgroundColor(getResources().getColor(R.color.colorMenu));
+
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
             }
@@ -267,7 +274,9 @@ public class MainActivity extends AppCompatActivity
         TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle);
 
         int id = item.getItemId();
-
+        nowMenuItem = item;
+        recyclerView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        //classMenuItem.setChecked(false);
         fragmentTransaction = fragmentManager.beginTransaction();
 
         if (id == R.id.nav_home) {
@@ -290,5 +299,13 @@ public class MainActivity extends AppCompatActivity
         initSubjectList();
 
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        nowMenuItem = menu.findItem(R.id.nav_home);
+
+        return super.onCreateOptionsMenu(menu);
     }
 }

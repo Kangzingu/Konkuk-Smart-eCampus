@@ -10,5 +10,7 @@
     <color name="colorMedium">#e1e2e1</color>
     <color name="colorDark">#c7c7c7</color>
 
+    <color name="colorMenu">#dcdcdc</color>
+
     <color name="colorBlack">#000000</color>
 </resources>

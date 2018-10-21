@@ -28,9 +28,10 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="335dp">
+            android:layout_marginTop="345dp">
 
             <View
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="20dp"
@@ -62,22 +63,40 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/switchBeacon"></View>
 
+            <!--<FrameLayout-->
+                <!--android:id="@+id/frameLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/view2"-->
+                <!--android:layout_marginTop="10dp">-->
+
+                <!--&lt;!&ndash;<View&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:background="@color/colorMenu"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:visibility="visible"></View>&ndash;&gt;-->
+                <!---->
+            <!--</FrameLayout>-->
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listviewSubjects"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="20dp"
+                android:background="@color/colorWhite"
+                android:overScrollMode="never"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2"
-                android:overScrollMode="never"></android.support.v7.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@+id/view2"></android.support.v7.widget.RecyclerView>
+
+            <!--android:layout_marginStart="25dp"-->
+            <!--android:layout_marginLeft="25dp"-->
+            <!--android:layout_marginTop="20dp"-->
 
             <View
                 android:id="@+id/view3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="20dp"
                 android:background="@color/colorMedium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/listviewSubjects"></View>
