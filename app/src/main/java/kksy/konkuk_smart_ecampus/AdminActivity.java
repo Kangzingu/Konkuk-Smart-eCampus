@@ -71,7 +71,7 @@ public class AdminActivity extends AppCompatActivity {
         myDBHandler=new MyDBHandler("student");
        student=new Student(e1.getText().toString(),e2.getText().toString(),
                 e3.getText().toString(),e4.getText().toString()
-                ,"",e5.getText().toString());
+                ,e5.getText().toString(),"");//imgURL 수정 필요
 
     }
     public void regiProfessor(){
@@ -79,9 +79,15 @@ public class AdminActivity extends AppCompatActivity {
         professor=new Professor(e1.getText().toString(),e2.getText().toString());
 
     }
+
     public void regiSubject(){
         myDBHandler=new MyDBHandler("subject");
-        subject=new Subject(e1.getText().toString(),e2.getText().toString());
+
+        //출석 인정 시간 임의로 지정
+        String []str1={"09:00","09:10"};
+        String []str2={"09:11","09:30"};
+
+        subject=new Subject(e1.getText().toString(),e2.getText().toString(),str1,str2);// HH:mm
     }
     public void regiLecture(){
 
@@ -120,12 +126,12 @@ public class AdminActivity extends AppCompatActivity {
                 regiSugang();
 
                 break;
-            case 4://강의
-                regiLecture();
-                break;
-            case 5://게시글
+            case 4://게시글
                 regiBoard();
                 myDBHandler.newBoard(board);
+                break;
+            case 5://타임라인
+
                 break;
         }
 

@@ -38,6 +38,7 @@ public class MyDBHandler {
         //등록
         relation_table.setValue(student);
     }
+
     public void newProfessor(Professor professor){
         String tableNames;
         tableNames=professor.getProID();
@@ -48,6 +49,7 @@ public class MyDBHandler {
         //등록
         relation_table.setValue(professor);
     }
+
     public void newSubject(Subject subject){
         String tableNames;
         tableNames=subject.getSubID();

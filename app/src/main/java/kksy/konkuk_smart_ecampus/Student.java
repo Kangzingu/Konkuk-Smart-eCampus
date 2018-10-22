@@ -16,7 +16,7 @@ public class Student {
     public Student(){//default constructor
 
     }
-    public Student(String potalID, String potalPW, String studentID, String department, String imgURL,String studentName){
+    public Student(String potalID, String studentName,String potalPW, String studentID, String department, String imgURL){
 
         this.studentName=studentName;
         this.potalID = potalID;
@@ -25,8 +25,8 @@ public class Student {
         this.department = department;
         this.imgURL = imgURL;
 
-        this.autoLoginCheck=false;
-        this.beconCheck=false;
+        this.autoLoginCheck=false;//default : false (자동로그인 활성화 안됨)
+        this.beconCheck=false;//default : false (비콘 활성화 안됨)
     }
 
     /*
