@@ -12,25 +12,25 @@
         android:id="@+id/e1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="포탈아이디/교수아이디/과목아이디" />
+        android:hint="포탈아이디/교수아이디/과목아이디/담당교수번호/게시판타입(과제, 공지, 강의자료)" />
 
     <EditText
         android:id="@+id/e2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="이름/교수이름/과목이름" />
+        android:hint="이름/교수이름/과목이름/지정과목번호/게시글 제목" />
 
     <EditText
     android:id="@+id/e3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:hint="포탈비번/출석인정(형식 : 8:00~8:10)" />
+    android:hint="포탈비번/출석인정(형식 : 8:00~8:10)/게시글 내용" />
 
     <EditText
         android:id="@+id/e4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="학번/지각처리(형식 : 8:11~8:30)" />
+        android:hint="학번/지각처리(형식 : 8:11~8:30)/속한 게시글의 과목아이디" />
 
     <EditText
         android:id="@+id/e5"

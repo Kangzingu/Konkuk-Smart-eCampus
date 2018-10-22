@@ -4,7 +4,7 @@ public class Student {
     private String studentName;//학생 이름
     private String potalID; //ID
     private String potalPW; //PW
-    private String studentID; //학번 (key)
+    private String studentID; //학번 (private key)
     private String department; //학과
     private boolean beconCheck; //비콘 ON OFF 유무 default false
     private boolean autoLoginCheck; //자동 로그인 체크 유므 default false
@@ -88,5 +88,11 @@ public class Student {
         this.imgURL = imgURL;
     }
 
+    public String getStudentName() {
+        return studentName;
+    }
 
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
 }

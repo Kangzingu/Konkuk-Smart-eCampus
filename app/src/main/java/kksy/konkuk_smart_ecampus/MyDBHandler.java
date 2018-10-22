@@ -62,12 +62,23 @@ public class MyDBHandler {
     }
     public void newBoard(Board board){
         String tableNames;
-        tableNames=board.getSubName();
+        tableNames=board.getsubID();
 
         DatabaseReference relation_table;
-        relation_table=mdbRef.child(tableNames).child(board.getType()).child(board.getIndex()+"");
+        relation_table=mdbRef.child(tableNames).child(board.getType()).push();
 
         //등록
         relation_table.setValue(board);
+    }
+
+    public void newLecture(Lecture lecture){
+        String tableNames;
+        tableNames=lecture.getProID()+"-"+lecture.getSubID();
+
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames);
+
+        //등록
+        relation_table.setValue(lecture);
     }
 }
