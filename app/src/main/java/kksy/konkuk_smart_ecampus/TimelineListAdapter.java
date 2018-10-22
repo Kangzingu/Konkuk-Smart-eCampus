@@ -32,7 +32,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = null;
+        View view;
         Context context = parent.getContext();
 
         LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -64,10 +64,12 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if(item.isOpen){
                     timelineHolder.contentView.setVisibility(View.GONE);
                     item.isOpen = false;
+                    timelineHolder.headToogle.setImageResource(R.drawable.ic_expand_more_24dp);
                 }
                 else{
                     timelineHolder.contentView.setVisibility(View.VISIBLE);
                     item.isOpen = true;
+                    timelineHolder.headToogle.setImageResource(R.drawable.ic_expand_less_24dp);
                 }
             }
         });
@@ -83,7 +85,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return 0;
+        return data.size();
     }
 
     private static class ListTimelineViewHolder extends  RecyclerView.ViewHolder{
