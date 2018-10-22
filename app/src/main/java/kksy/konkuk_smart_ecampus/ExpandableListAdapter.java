@@ -16,6 +16,7 @@ import java.util.List;
 public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int HEADER = 0;
     public static final int CHILD = 1;
+    public static final int CHILD2 = 2;
 
     private List<Item> data;
 
@@ -49,6 +50,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 view = inflater.inflate(R.layout.item_subject_layout, parent, false);
                 ListChildViewHolder child = new ListChildViewHolder(view);
                 return child;
+            case CHILD2:
+                view = inflater.inflate(R.layout.item_timeline_layout, parent, false);
+                ListChild2ViewHolder child2 = new ListChild2ViewHolder(view);
+                return child2;
         }
 
         return null;
@@ -76,6 +81,10 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             int count = 0;
                             int pos = data.indexOf(itemController.refferalItem);
                             while(data.size() > pos + 1 && data.get(pos + 1).type == CHILD){
+                                item.invisibleChildren.add(data.remove(pos + 1));
+                                count++;
+                            }
+                            while(data.size() > pos + 1 && data.get(pos + 1).type == CHILD2){
                                 item.invisibleChildren.add(data.remove(pos + 1));
                                 count++;
                             }
@@ -109,6 +118,12 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         }
                     }
                 });
+                break;
+            case CHILD2:
+                ListChild2ViewHolder child2ViewHolder = (ListChild2ViewHolder) holder;
+                child2ViewHolder.child2Subject.setText(data.get(position).timeline_subject);
+                child2ViewHolder.child2Title.setText(data.get(position).timeline_title);
+                child2ViewHolder.child2Date.setText(data.get(position).timeline_date);
                 break;
         }
     }
@@ -148,11 +163,29 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    private static class ListChild2ViewHolder extends RecyclerView.ViewHolder{
+        public TextView child2Title;
+        public TextView child2Subject;
+        public TextView child2Date;
+        public ImageView child2Img;
+
+        public ListChild2ViewHolder(View itemView) {
+            super(itemView);
+            child2Title = (TextView) itemView.findViewById(R.id.textViewTimelineTitle);
+            child2Subject = (TextView) itemView.findViewById(R.id.textViewTimelineSubject);
+            child2Date = (TextView) itemView.findViewById(R.id.textViewTimelineDate);
+            child2Img = (ImageView) itemView.findViewById(R.id.imageViewTimeline);
+        }
+    }
+
     public static class Item{
         public int type;
         public String text;
         public String number;
-        public List<Item> invisibleChildren;
+        public String timeline_title;
+        public String timeline_subject;
+        public String timeline_date;
+        public java.util.List<Item> invisibleChildren;
 
         public Item(){
 
@@ -167,6 +200,13 @@ public class ExpandableListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             this.type = type;
             this.text = text;
             this.number = number;
+        }
+
+        public Item(int type, String timeline_subject, String timeline_title, String timeline_date) {
+            this.type = type;
+            this.timeline_subject = timeline_subject;
+            this.timeline_title = timeline_title;
+            this.timeline_date = timeline_date;
         }
     }
 }

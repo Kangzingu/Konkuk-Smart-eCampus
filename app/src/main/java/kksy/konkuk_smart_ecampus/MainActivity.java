@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
     View contentMain;
     RecyclerView recyclerView;
     MenuItem nowMenuItem;
-    MenuItem classMenuItem;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
