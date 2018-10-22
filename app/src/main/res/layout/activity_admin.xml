@@ -24,13 +24,13 @@
     android:id="@+id/e3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:hint="포탈비번" />
+    android:hint="포탈비번/출석인정(형식 : 8:00~8:10)" />
 
     <EditText
         android:id="@+id/e4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="학번" />
+        android:hint="학번/지각처리(형식 : 8:11~8:30)" />
 
     <EditText
         android:id="@+id/e5"

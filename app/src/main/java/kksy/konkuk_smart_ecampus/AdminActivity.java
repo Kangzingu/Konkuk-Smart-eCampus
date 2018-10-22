@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
 현재는 포탈에서 학생 정보를 가지고 올 수 없으므로
 학생은 관리자 페이지에서 임시로 등록하고 삭제할 수 있도록 구현한다.
@@ -84,10 +87,25 @@ public class AdminActivity extends AppCompatActivity {
         myDBHandler=new MyDBHandler("subject");
 
         //출석 인정 시간 임의로 지정
-        String []str1={"09:00","09:10"};
-        String []str2={"09:11","09:30"};
+        /*
+        split 예제
+        String str1;
+        String word1 = str1.split(";")[0];
+        String word2 = str1.split(";")[1];
+         */
 
-        subject=new Subject(e1.getText().toString(),e2.getText().toString(),str1,str2);// HH:mm
+        String str1=e3.getText().toString();
+        String str2=e4.getText().toString();
+
+        List<String> list1=new ArrayList<String>();
+        List<String> list2=new ArrayList<String>();
+
+        list1.add(str1.split("~")[0]);
+        list1.add(str1.split("~")[1]);
+        list2.add(str2.split("~")[0]);
+        list2.add(str2.split("~")[1]);
+
+        subject=new Subject(e1.getText().toString(),e2.getText().toString(),list1,list2);// 시간 입력 방식  HH:mm
     }
     public void regiLecture(){
 
