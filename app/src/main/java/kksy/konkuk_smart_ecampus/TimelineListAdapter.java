@@ -2,6 +2,7 @@ package kksy.konkuk_smart_ecampus;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +16,25 @@ import java.util.List;
 public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Item> data;
+    private int colorWhite;
+    private int colorGreen;
 
     private TimelineItemClick timelineItemClick;
     public interface TimelineItemClick{
         public void onClick(View view, int position);
     }
 
+    private TimelineItemLongClick timelineItemLongClick;
+    public interface  TimelineItemLongClick{
+        public void onLongClick(View view, int position);
+    }
+
     public void setItemClick(TimelineItemClick timelineItemClick){
         this.timelineItemClick = timelineItemClick;
+    }
+
+    public void setItemLongClick(TimelineItemLongClick timelineItemLongClick){
+        this.timelineItemLongClick = timelineItemLongClick;
     }
 
     public TimelineListAdapter(List<Item> data){
@@ -40,6 +52,9 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         view = inflater.inflate(R.layout.item_timeline_layout, parent, false);
         ListTimelineViewHolder holder = new ListTimelineViewHolder(view);
 
+        colorWhite = view.getResources().getColor(R.color.colorWhite);
+        colorGreen = view.getResources().getColor(R.color.colorSecondPrimary);
+
         return holder;
     }
 
@@ -52,6 +67,12 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         timelineHolder.title.setText(item.timeline_title);
         timelineHolder.subject.setText(item.timeline_subject);
         timelineHolder.date.setText(item.timeline_date);
+        if(item.isCheck){
+            timelineHolder.timelineView.setBackgroundColor(colorWhite);
+        }
+        else{
+            timelineHolder.timelineView.setBackgroundColor(colorGreen);
+        }
         if(item.isOpen){
             timelineHolder.headToogle.setImageResource(R.drawable.ic_expand_less_24dp);
         }
@@ -77,8 +98,30 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             @Override
             public void onClick(View v) {
                 if(timelineItemClick != null){
-                    timelineItemClick.onClick(v, position);
+                    if(!item.isCheck){
+                        timelineHolder.timelineView.setBackgroundColor(colorWhite);
+                        item.isCheck = true;
+                        timelineItemClick.onClick(v, position);
+                    }
+                    else{
+                        timelineItemClick.onClick(v, position);
+                    }
                 }
+            }
+        });
+        timelineHolder.timelineView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Snackbar.make(v, "Long Click", Snackbar.LENGTH_SHORT)
+                        .setAction("Long Click", null).show();
+
+                /*
+                Timeline 게시글 삭제 알림 - Swipe로 구현
+                 */
+
+                timelineItemLongClick.onLongClick(v, position);
+
+                return true;
             }
         });
     }
@@ -89,6 +132,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private static class ListTimelineViewHolder extends  RecyclerView.ViewHolder{
+        public LinearLayout timelineView;
         public TextView headTitle;
         public ImageView headToogle;
         public LinearLayout contentView;
@@ -99,6 +143,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public ListTimelineViewHolder(View itemView) {
             super(itemView);
+            timelineView = (LinearLayout) itemView.findViewById(R.id.timelineView);
             headTitle = (TextView) itemView.findViewById(R.id.item_timeline_title);
             headToogle = (ImageView) itemView.findViewById(R.id.item_timeline_toggle_btn);
             contentView = (LinearLayout) itemView.findViewById(R.id.timelineContentView);
@@ -114,12 +159,14 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public String timeline_subject;
         public String timeline_date;
         public boolean isOpen;
+        public boolean isCheck;
 
         public Item(String timeline_subject, String timeline_title, String timeline_date) {
             this.timeline_subject = timeline_subject;
             this.timeline_title = timeline_title;
             this.timeline_date = timeline_date;
             this.isOpen = false;
+            this.isCheck = false;
         }
     }
 }

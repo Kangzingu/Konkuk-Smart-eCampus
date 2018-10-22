@@ -2,6 +2,7 @@ package kksy.konkuk_smart_ecampus;
 
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment {
         Timeline 데이터 가져와서 적용해야 함
          */
 
-        List<TimelineListAdapter.Item> data = new ArrayList<>();
+        final List<TimelineListAdapter.Item> data = new ArrayList<>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -73,7 +74,31 @@ public class HomeFragment extends Fragment {
         data.add(item2);
         data.add(item3);
 
-        recyclerView.setAdapter(new TimelineListAdapter(data));
+        adapter = new TimelineListAdapter(data);
+        adapter.setItemClick(new TimelineListAdapter.TimelineItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                /*
+                Timeline 아이템 클릭 시, DB update
+                해당 게시물 창으로 이동
+                 */
+                Snackbar.make(view, "해당 게시물로 이동", Snackbar.LENGTH_SHORT)
+                        .setAction("해당 게시물로 이동", null).show();
+            }
+        });
+        adapter.setItemLongClick(new TimelineListAdapter.TimelineItemLongClick() {
+            @Override
+            public void onLongClick(View view, int position) {
+                /*
+                Timeline 아이템 길게 클릭 시, 삭제 - 이건 adapter에서 수행
+                길게 클릭 한 아이템 array 에서 삭제
+                 */
+                data.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
     }
 
 }
