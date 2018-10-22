@@ -11,16 +11,16 @@ public class Board {
     private String title;//게시글 제목
     //private String file;//file url
 
-    private String subID;//해당 게시글이 속한 과목의 과목번호(key)
+    private String proID_subID;//해당 게시글이 속한 강의의 key( 교원번호-과목번호 )
 
 
 
-    public Board(String type, /*String index,*/ String title,String context,String subID){
+    public Board(String type, /*String index,*/ String title,String context,String proID_subID){
         this.title=title;
         this.type = type;
         //this.index = index;
         this.context = context;
-        this.subID=subID;
+        this.proID_subID=proID_subID;
     }
     public Board(){
 
@@ -53,10 +53,12 @@ public class Board {
     public void setTitle(String title){
         this.title=title;
     }
-    public String getsubID(){
-        return this.subID;
+
+    public String getProID_subID() {
+        return proID_subID;
     }
-    public void setsubID(String subName){
-        this.subID=subName;
+
+    public void setProID_subID(String proID_subID) {
+        this.proID_subID = proID_subID;
     }
 }
