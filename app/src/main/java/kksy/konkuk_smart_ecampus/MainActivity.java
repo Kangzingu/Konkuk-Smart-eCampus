@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainer, ClassFragment.newInstance(data.get(position).text));
                 fragmentTransaction.commit();
-
                 if(isClass){ // 현재 화면이 강의실일 경우
                     String headerSubjectName = data.get(position).text;
                     String headerSubjectNum = data.get(position).number;

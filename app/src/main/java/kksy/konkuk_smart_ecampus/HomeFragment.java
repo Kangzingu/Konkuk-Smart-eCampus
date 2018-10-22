@@ -75,6 +75,15 @@ public class HomeFragment extends Fragment {
         data.add(item3);
 
         adapter = new TimelineListAdapter(data);
+        adapter.setItemPickClick(new TimelineListAdapter.TimelineItemPickClick() {
+            @Override
+            public void onPickClick(View view, int postion) {
+                /*
+                좌측 아이콘 클릭 시, 북마크 아이콘 변경 - 이건 adapter에서 수행
+                북마크 설정된 아이템 array 에서 상단 고정 - array 재정렬
+                 */
+            }
+        });
         adapter.setItemClick(new TimelineListAdapter.TimelineItemClick() {
             @Override
             public void onClick(View view, int position) {

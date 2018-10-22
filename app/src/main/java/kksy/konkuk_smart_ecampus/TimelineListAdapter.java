@@ -29,12 +29,21 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void onLongClick(View view, int position);
     }
 
+    private TimelineItemPickClick timelineItemPickClick;
+    public interface TimelineItemPickClick{
+        public void onPickClick(View view, int postion);
+    }
+
     public void setItemClick(TimelineItemClick timelineItemClick){
         this.timelineItemClick = timelineItemClick;
     }
 
     public void setItemLongClick(TimelineItemLongClick timelineItemLongClick){
         this.timelineItemLongClick = timelineItemLongClick;
+    }
+
+    public void setItemPickClick(TimelineItemPickClick timelineItemPickClick){
+        this.timelineItemPickClick = timelineItemPickClick;
     }
 
     public TimelineListAdapter(List<Item> data){
@@ -94,6 +103,23 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
         });
+        timelineHolder.headPick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(timelineItemPickClick != null){
+                    if(item.isPick){
+                        item.isPick = false;
+                        timelineHolder.headPick.setImageResource(R.drawable.ic_fiber_manual_record_24dp);
+                    }
+                    else{
+                        item.isPick = true;
+                        timelineHolder.headPick.setImageResource(R.drawable.ic_bookmark_24dp);
+                    }
+
+                    timelineItemPickClick.onPickClick(v, position);
+                }
+            }
+        });
         timelineHolder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +161,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public LinearLayout timelineView;
         public TextView headTitle;
         public ImageView headToogle;
+        public ImageView headPick;
         public LinearLayout contentView;
         public TextView title;
         public TextView subject;
@@ -146,6 +173,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             timelineView = (LinearLayout) itemView.findViewById(R.id.timelineView);
             headTitle = (TextView) itemView.findViewById(R.id.item_timeline_title);
             headToogle = (ImageView) itemView.findViewById(R.id.item_timeline_toggle_btn);
+            headPick = (ImageView) itemView.findViewById(R.id.item_timeline_pick);
             contentView = (LinearLayout) itemView.findViewById(R.id.timelineContentView);
             title = (TextView) itemView.findViewById(R.id.textViewTimelineTitle);
             subject = (TextView) itemView.findViewById(R.id.textViewTimelineSubject);
@@ -160,6 +188,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public String timeline_date;
         public boolean isOpen;
         public boolean isCheck;
+        public boolean isPick;
 
         public Item(String timeline_subject, String timeline_title, String timeline_date) {
             this.timeline_subject = timeline_subject;
@@ -167,6 +196,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.timeline_date = timeline_date;
             this.isOpen = false;
             this.isCheck = false;
+            this.isPick = false;
         }
     }
 }
