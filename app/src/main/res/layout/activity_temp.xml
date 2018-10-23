@@ -34,4 +34,14 @@
         android:text="비콘으로가자자자"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="1dp"/>
+
+    <Button
+        android:onClick="gotoQuerySampleActivity"
+        android:id="@+id/gotoQuerySampleActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="쿼리 사용법"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="26dp" />
+
 </LinearLayout>

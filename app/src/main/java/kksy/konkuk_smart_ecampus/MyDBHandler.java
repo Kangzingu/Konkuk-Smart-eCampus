@@ -87,14 +87,18 @@ public class MyDBHandler {
         mdbRef=mdatabase.getReference("lecture");
         table=mdbRef;
 
-        Query query = table.equalTo(tableNames);
+        Query query = table.equalTo(tableNames).equalTo("p25787542-s184325");
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
                     Lecture temp_lecture=snapshot.getValue(Lecture.class);
 
                     if (temp_lecture!=null)
-                    Log. v ("MyDBHandler",temp_lecture.getProID());
+                    Log. i ("MyDBHandler",temp_lecture.getProID());
+                    else
+                        Log. i ("MyDBHandler","error");
                 }
 
 
