@@ -32,6 +32,15 @@ public class Student {
     /*
     get, set 함수
      */
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
     public String getPotalID() {
         return potalID;
     }
@@ -88,11 +97,5 @@ public class Student {
         this.imgURL = imgURL;
     }
 
-    public String getStudentName() {
-        return studentName;
-    }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
 }

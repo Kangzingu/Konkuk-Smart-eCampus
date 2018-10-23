@@ -7,15 +7,17 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home" />
+            android:title="Home"
+            android:checked="true"/>
         <item
-            android:id="@+id/nav_mail"
+            android:id="@+id/nav_message"
             android:icon="@drawable/ic_mail_black_24dp"
             android:title="Message" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Settings" />
+
     </group>
 
 </menu>

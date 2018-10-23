@@ -10,5 +10,15 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="home_title">Home</string>
+    <string name="message_title">Message</string>
+    <string name="settings_title">Settings</string>
+    <string name="beacon_on">Beacon On</string>
+    <string name="beacon_off">Beacon Off</string>
+    <string name="sugang_title">수강 과목 (2018년도 2학기)</string>
+
     <string name="konkuk_email">konkuk.ac.kr</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

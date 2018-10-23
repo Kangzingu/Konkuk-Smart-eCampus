@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:overScrollMode="never">
 
     <include
+        android:id="@+id/app_bar_main"
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -20,37 +22,39 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer">
+        app:menu="@menu/activity_main_drawer"
+        android:overScrollMode="never">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="335dp">
+            android:layout_marginTop="345dp">
 
             <View
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/colorMedium"
-                app:layout_constraintBottom_toTopOf="@+id/switch1"
-                tools:layout_editor_absoluteX="0dp"></View>
+                app:layout_constraintBottom_toTopOf="@+id/switchBeacon"
+                tools:layout_editor_absoluteX="0dp">
 
-            <Switch
-                android:id="@+id/switch1"
+            </View>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchBeacon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:switchMinWidth="60dp"
+                android:layout_marginEnd="25dp"
                 android:text="Beacon"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:switchMinWidth="60dp" />
 
             <View
                 android:id="@+id/view2"
@@ -59,33 +63,26 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/colorMedium"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch1"></View>
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="20dp"
-                android:text="수강 과목"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
-                android:textSize="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+                app:layout_constraintTop_toBottomOf="@+id/switchBeacon"></View>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/listview_subjects"
+                android:id="@+id/listviewSubjects"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="5dp"
+                android:background="@color/colorWhite"
+                android:overScrollMode="never"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"></android.support.v7.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@+id/view2"></android.support.v7.widget.RecyclerView>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listviewSubjects"></View>
         </android.support.constraint.ConstraintLayout>
     </android.support.design.widget.NavigationView>
 
