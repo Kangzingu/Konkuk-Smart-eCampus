@@ -1,72 +1,36 @@
 package kksy.konkuk_smart_ecampus;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.bluetooth.BluetoothAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
-import com.estimote.sdk.Beacon;
-import com.estimote.sdk.BeaconManager;
-import com.estimote.sdk.Region;
 import com.estimote.sdk.SystemRequirementsChecker;
 
-import java.util.List;
-import java.util.UUID;
 
 public class BeaconActivity extends AppCompatActivity {
 
-    private BeaconManager beaconManager;
+    private Switch beaconSwitch;
+    BluetoothAdapter bluetoothAdapter= BluetoothAdapter.getDefaultAdapter();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        beaconManager = new BeaconManager(getApplicationContext());
-
-        beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+        setContentView(R.layout.activity_beacon);
+        beaconSwitch = (Switch) findViewById(R.id.beaconSwitch);
+        beaconSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onServiceReady() {
-                beaconManager.startMonitoring(new Region(
-                        "monitored region",
-                        UUID.fromString("8249a918-6116-42b8-859c-46aec4f10292"),
-                        0, 0));
-            }
-        });
-        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onEnteredRegion(Region region, List<Beacon> list) {
-                showNotification("들어옴", "비콘 연결됨" + list.get(0).getMacAddress());
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onExitedRegion(Region region) {
-                showNotification("나감", "비콘 연결 끊김");
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked==true){
+                    bluetoothAdapter.enable();
+                }
+                else{
+                    bluetoothAdapter.disable();
+                }
             }
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void showNotification(String title, String message) {
-        Intent notifyIntent = new Intent(this, MainActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0,
-                new Intent[]{notifyIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .build();
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
-    }
+    @Override
     protected void onResume(){
         super.onResume();
         SystemRequirementsChecker.checkWithDefaultDialogs(this);
