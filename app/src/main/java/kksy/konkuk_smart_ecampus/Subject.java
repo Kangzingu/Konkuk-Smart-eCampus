@@ -1,8 +1,13 @@
 package kksy.konkuk_smart_ecampus;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Subject {
 
-    private String subID; //과목번호 (key)
+    private String subID; //과목번호 (private key)
     private String subName; //과목이름
 
     public Subject(){
@@ -12,7 +17,6 @@ public class Subject {
     public Subject(String subID, String subName) {
         this.subID = subID;
         this.subName = subName;
-
     }
 
     public String getSubID() {
@@ -30,7 +34,6 @@ public class Subject {
     public void setSubName(String subName) {
         this.subName = subName;
     }
-
 
 
 }

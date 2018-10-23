@@ -1,7 +1,7 @@
 package kksy.konkuk_smart_ecampus;
 
 public class Professor {
-    private String proID; //교원번호
+    private String proID; //교원번호(private key)
     private String proName; //교수이름
 
     public Professor(){
