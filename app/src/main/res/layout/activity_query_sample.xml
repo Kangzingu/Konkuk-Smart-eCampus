@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".QuerySampleActivity">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="버튼 누르면 실행"
+        android:id="@+id/test"
+        android:onClick="queryTest"
+        />
 </android.support.constraint.ConstraintLayout>

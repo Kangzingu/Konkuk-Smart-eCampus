@@ -13,6 +13,7 @@ public class TempActivity extends AppCompatActivity {
     private Button gLoginActivity;
     private Button gAdminActivity;
     private Button gBeaconActivity;
+    private Button gQuerySampleActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class TempActivity extends AppCompatActivity {
         gLoginActivity=(Button)findViewById(R.id.gotoLoginActivity);
         gAdminActivity=(Button)findViewById(R.id.gotoAdminActivity);
         gBeaconActivity=(Button)findViewById(R.id.gotoBeaconActivity);
+        gQuerySampleActivity=(Button)findViewById(R.id.gotoQuerySampleActivity);
     }
 
     public void gotoLoginActivity(View view) {

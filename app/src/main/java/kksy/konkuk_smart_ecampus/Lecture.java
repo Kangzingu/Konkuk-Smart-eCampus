@@ -31,6 +31,10 @@ public class Lecture {
     /*
     Constructor
      */
+    public Lecture(){
+
+    }
+
     public Lecture(String proID, String subID, String beconInfo, List<String> attendTime, List<String> lateTime) {
         this.proID = proID;
         this.subID = subID;
