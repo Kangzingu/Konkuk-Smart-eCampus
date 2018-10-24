@@ -64,8 +64,8 @@ public class MyDBHandler {
         //등록
         relation_table.setValue(subject);
     }
-    public void newBoard(Board board){
 
+    public void newBoard(Board board){
 
         /*
         1. 게시판 릴레이션에 추가
@@ -74,7 +74,10 @@ public class MyDBHandler {
         tableNames=board.getProID_subID();
 
         DatabaseReference relation_table;
-        relation_table=mdbRef.child(tableNames).child(board.getType()).push();
+
+        //board id 지정(set)
+        //현재 type 의 id 중 마지막 아이디를 가지고 온다.-> +1을 한 결과를 set해줌
+        relation_table=mdbRef.child(tableNames).child(board.getType()).child(board.getBoardID());
 
         //등록
         relation_table.setValue(board);
@@ -118,5 +121,16 @@ public class MyDBHandler {
 
         //등록
         relation_table.setValue(lecture);
+    }
+
+    public void newAttendance(Attendance attendance){
+        String tableNames;
+        tableNames=attendance.getSubID_pID();
+
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames);
+
+        //등록
+        relation_table.setValue(attendance);
     }
 }

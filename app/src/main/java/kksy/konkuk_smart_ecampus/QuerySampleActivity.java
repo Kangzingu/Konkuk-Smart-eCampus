@@ -16,10 +16,12 @@ import com.google.firebase.database.ValueEventListener;
 
 public class QuerySampleActivity extends AppCompatActivity {
 
-    static final String TABLE="lecture";//임시로 지정
+    static final String TABLE="student";//임시로 지정
 
     FirebaseDatabase mdatabase;
     DatabaseReference mdbRef;
+    Query query;
+
     Button btn_test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,41 +35,33 @@ public class QuerySampleActivity extends AppCompatActivity {
     public void queryTest(View view) {
         //select * from Lecture where proID_subID=tableNames;
 
-        final Query query = mdbRef.orderByKey().equalTo("p25787542-s184325");
+        query = mdbRef.orderByChild("studentID").equalTo("201611210");
 
-      //  Log. i ("MyDBHandler",query.toString());
+        Log. i ("MyDBHandler",query.toString());//201611210-> com.google.firebase.database.Query@f860247 /com.google.firebase.database.Query@e1fbb9d
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
 
-                    //Lecture temp_lecture=snapshot.getValue(Lecture.class);
 
-                    if(dataSnapshot.getRef()!=query){
-                        Log. i ("MyDBHandler","나야");
-                    }
-//                    if (temp_lecture!=null)
-//                        Log. i ("MyDBHandler",temp_lecture.getProID());
-//                    else
-//                        Log. i ("MyDBHandler","error");
+                   /*
+
+                  로그 :  Log. i ("MyDBHandler",snapshot.getKey());
+                  결과 :  201611210
+
+                  로그 :  Log. i ("MyDBHandler",snapshot.getValue().toString());
+                  결과 : {imgURL=, beconCheck=true, autoLoginCheck=false, studentID=201611210, potalPW=1928374, potalID=kwisjr, studentName=다스리, department=sw}
+
+                  */
+
+                   Student student=snapshot.getValue(Student.class);//객체 담기
+                   Log.i("MyDBHandler",student.getStudentName());//출력 예상 결과 : 다스리
+
                 }
 
-//
-//                if(dataSnapshot.getValue(Lecture.class)!=null){
-//                    Log. i ("MyDBHandler",dataSnapshot.getValue(Lecture.class).getLateTime().toString());
-//                }
-
-//                Lecture temp_lecture=new Lecture();
-//                temp_lecture=dataSnapshot.getValue(Lecture.class);
-//
-//                    if (temp_lecture!=null)
-//                        Log. i ("MyDBHandler",temp_lecture.getProID());
-//                    else
-//                        Log. i ("MyDBHandler","error");
-//
-//
-//                Log. i ("MyDBHandler",dataSnapshot.getKey());
-
             }
+
             @Override public void onCancelled(DatabaseError databaseError) {
             }
         });

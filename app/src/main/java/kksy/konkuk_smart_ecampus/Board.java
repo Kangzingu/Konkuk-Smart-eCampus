@@ -2,7 +2,8 @@ package kksy.konkuk_smart_ecampus;
 
 public class Board {
 
-    //private key를 일단 push로 둠
+    //private key
+    private String boardID;//게시글번호(key) 과제, 공지, 강의자료
 
     private String type;//게시글 유형 : 과제, 공지, 강의자료
     //private String index;(autoincrement)
@@ -21,6 +22,7 @@ public class Board {
         //this.index = index;
         this.context = context;
         this.proID_subID=proID_subID;
+        this.boardID=boardID;
     }
     public Board(){
 
@@ -60,5 +62,13 @@ public class Board {
 
     public void setProID_subID(String proID_subID) {
         this.proID_subID = proID_subID;
+    }
+
+    public String getBoardID() {
+        return boardID;
+    }
+
+    public void setBoardID(String boardID) {
+        this.boardID = boardID;
     }
 }
