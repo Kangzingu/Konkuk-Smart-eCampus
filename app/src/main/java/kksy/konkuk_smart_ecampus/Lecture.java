@@ -13,9 +13,9 @@ public class Lecture {
 
     //껍데기 : 강의계획서, 온라인 강의, 시험, 질의응답, 투표, 설문
 
-    List<Board> materials;//강의자료
-    List<Board> notice;//공지사항
-    List<Board> homework;//과제
+    List<String> materials;//강의자료
+    List<String> notice;//공지사항
+    List<String> homework;//과제
 
     private String beconInfo;//해당 강의에서 출결에 사용되는 비콘 정보
 
@@ -50,6 +50,9 @@ public class Lecture {
         this.attendTime=attendTime;
         this.lateTime=lateTime;
 
+        this.materials=new ArrayList<String>();
+        this.notice=new ArrayList<String>();
+        this.homework=new ArrayList<String>();
     }
 
     /*

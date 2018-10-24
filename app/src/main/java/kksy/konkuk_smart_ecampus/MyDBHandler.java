@@ -77,50 +77,28 @@ public class MyDBHandler {
 
         //board id 지정( set boardID() ) : 현재 type 의 id 중 마지막 아이디를 가지고 온다.-> +1을 한 결과를 set해줌
         //select * from Board where type=board.getType() ;
-        Query query;
-        query = mdbRef.child(tableNames).child(board.getType()).orderByChild("boardID").limitToLast(1);
+        Query query1;
+        query1 = mdbRef.child(tableNames).child(board.getType()).orderByChild("boardID").limitToLast(1);
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
             /*
             OnDataChange 함수는 초기 값으로 한 번 호출되며, 이 위치의 데이터가 업데이트 될때마다 다시 호출됨.
              */
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                      Log.i("MyDBHandler",snapshot.getValue().toString());
+                     // Log.i("MyDBHandler",snapshot.getValue().toString());
 
                       board.setBoardID(snapshot.getValue(Board.class).getBoardID()+1);
-                      Log.i("MyDBHandler","boardid "+board.getBoardID());
+                      
+                     // Log.i("MyDBHandler","boardid "+board.getBoardID());
                     }
 
                 //등록
                 mdbRef.child(board.getProID_subID()).child(board.getType()).child(board.getBoardID()+"").setValue(board);
 
-                Log.i("MyDBHandler","등록?");
+               // Log.i("MyDBHandler","등록?");
             }
-            @Override public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        /*
-        2. 강의 릴레이션에 추가
-         */
-
-    //select * from Lecture where proID_subID=tableNames;
-
-        Query query1;
-        query1 = mdatabase.getReference("lecture").orderByChild("proID_subID").equalTo("p25787542-s184325");//"p25787542-s184325" 로 임의 지정test
-
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-
-
-                }
-            }
-
             @Override public void onCancelled(DatabaseError databaseError) {
 
             }
