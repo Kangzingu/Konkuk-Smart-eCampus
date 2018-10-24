@@ -37,8 +37,6 @@ public class QuerySampleActivity extends AppCompatActivity {
 
         query = mdbRef.orderByChild("studentID").equalTo("201611210");
 
-        Log. i ("MyDBHandler",query.toString());//201611210-> com.google.firebase.database.Query@f860247 /com.google.firebase.database.Query@e1fbb9d
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
 

@@ -6,6 +6,8 @@ import java.util.List;
 public class Lecture {
 
     //private key는 교원번호-과목번호
+    private String proID_subID;
+
     private String proID; //교원번호 (key)
     private String subID; //과목번호 (key)
 
@@ -23,10 +25,6 @@ public class Lecture {
     private List<String> attendTime;//출석 인정
     private List<String> lateTime;//지각 처리
 
-    //출석부
-
-
-
 
     /*
     Constructor
@@ -36,6 +34,9 @@ public class Lecture {
     }
 
     public Lecture(String proID, String subID, String beconInfo, List<String> attendTime, List<String> lateTime) {
+
+        this.proID_subID=proID+"-"+subID;
+
         this.proID = proID;
         this.subID = subID;
 
@@ -101,5 +102,13 @@ public class Lecture {
 
     public void setBeconInfo(String beconInfo) {
         this.beconInfo = beconInfo;
+    }
+
+    public String getProID_subID() {
+        return proID_subID;
+    }
+
+    public void setProID_subID(String proID_subID) {
+        this.proID_subID = proID_subID;
     }
 }
