@@ -24,13 +24,13 @@
     android:id="@+id/e3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:hint="포탈비번/출석인정(형식 : 8:00~8:10)/게시글 내용" />
+    android:hint="포탈비번/출석인정(형식 : 08:00~08:10)/게시글 내용" />
 
     <EditText
         android:id="@+id/e4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="학번/지각처리(형식 : 8:11~8:30)/속한 게시글의 과목아이디" />
+        android:hint="학번/지각처리(형식 : 08:11~08:30)/속한 게시글의 과목아이디" />
 
     <EditText
         android:id="@+id/e5"
