@@ -1,5 +1,6 @@
 package kksy.konkuk_smart_ecampus;
 
+import android.bluetooth.BluetoothAdapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -22,6 +23,8 @@ import android.widget.Switch;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.estimote.sdk.SystemRequirementsChecker;
 
 import java.util.List;
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity
 
     //==
     Switch beaconSwitch;
+    BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
     //==
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +108,12 @@ public class MainActivity extends AppCompatActivity
         // Beacon Switch 초기 설정
         switchBeacon = (SwitchCompat) findViewById(R.id.switchBeacon);
         switchBeacon.setChecked(userIsBeaconOn);
-
+        if(userIsBeaconOn==true){
+            bluetoothAdapter.enable();
+        }
+        else{
+            bluetoothAdapter.disable();
+        }
         switchBeacon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -114,6 +123,8 @@ public class MainActivity extends AppCompatActivity
                     /*
                     Beacon Switch를 On 하였을 경우 다음 수행
                      */
+                    bluetoothAdapter.enable();
+                    //DB드가서 사용자의 비콘 온오프 여부 바꺼야해
                 }
                 else{
                     Snackbar.make(buttonView, getResources().getText(R.string.beacon_off), Snackbar.LENGTH_SHORT)
@@ -121,6 +132,8 @@ public class MainActivity extends AppCompatActivity
                     /*
                     Beacon Switch를 Off 하였을 경우 다음 수행
                      */
+                    bluetoothAdapter.disable();
+                    //DB드가서 사용자의 비콘 온오프 여부 바꺼야해
                 }
             }
         });
@@ -309,5 +322,14 @@ public class MainActivity extends AppCompatActivity
         nowMenuItem = menu.findItem(R.id.nav_home);
 
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        SystemRequirementsChecker.checkWithDefaultDialogs(this);
+
+    }
+    protected void onPause(){
+        super.onPause();
     }
 }
