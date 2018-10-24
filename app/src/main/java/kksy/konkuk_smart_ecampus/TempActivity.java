@@ -41,4 +41,10 @@ public class TempActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void gotoQuerySampleActivity(View view) {
+        Intent intent = new Intent(this, QuerySampleActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
