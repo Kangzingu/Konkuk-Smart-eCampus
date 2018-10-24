@@ -90,7 +90,7 @@ public class MyDBHandler {
                      // Log.i("MyDBHandler",snapshot.getValue().toString());
 
                       board.setBoardID(snapshot.getValue(Board.class).getBoardID()+1);
-                      
+
                      // Log.i("MyDBHandler","boardid "+board.getBoardID());
                     }
 
