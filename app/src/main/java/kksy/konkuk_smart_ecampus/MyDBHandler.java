@@ -15,14 +15,12 @@ import java.util.logging.Handler;
 
 public class MyDBHandler {
 
-    String check;
     FirebaseDatabase mdatabase;
     DatabaseReference mdbRef;
 
     Handler handler;
 
     public MyDBHandler(String TABLE){//default constructor
-        check="";
         mdatabase = FirebaseDatabase.getInstance();
         mdbRef=mdatabase.getReference(TABLE);
 
@@ -68,7 +66,7 @@ public class MyDBHandler {
         relation_table.setValue(subject);
     }
 
-    public void newBoard(Board board){
+    public void newBoard(final Board board){
 
         /*
         1. 게시판 릴레이션에 추가
@@ -76,58 +74,55 @@ public class MyDBHandler {
         String tableNames;
         tableNames=board.getProID_subID();
 
-        DatabaseReference relation_table;
 
         //board id 지정( set boardID() ) : 현재 type 의 id 중 마지막 아이디를 가지고 온다.-> +1을 한 결과를 set해줌
         //select * from Board where type=board.getType() ;
         Query query;
         query = mdbRef.child(tableNames).child(board.getType()).orderByChild("boardID").limitToLast(1);
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
+            /*
+            OnDataChange 함수는 초기 값으로 한 번 호출되며, 이 위치의 데이터가 업데이트 될때마다 다시 호출됨.
+             */
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                       Log.i("MyDBHandler",snapshot.getValue().toString());
-                      Board LastBoard=snapshot.getValue(Board.class);
-                      check=LastBoard.getBoardID();
+
+                      board.setBoardID(snapshot.getValue(Board.class).getBoardID()+1);
+                      Log.i("MyDBHandler","boardid "+board.getBoardID());
                     }
 
+                //등록
+                mdbRef.child(board.getProID_subID()).child(board.getType()).child(board.getBoardID()+"").setValue(board);
+
+                Log.i("MyDBHandler","등록?");
             }
             @Override public void onCancelled(DatabaseError databaseError) {
 
             }
         });
 
-       if(check!=""){
-           Log.i("MyDBHandler","check에 값이 채워짐");
-           board.setBoardID((Integer.parseInt(check)+1)+"");
-           relation_table=mdbRef.child(tableNames).child(board.getType()).child(board.getBoardID());
-       }else{
-           Log.i("MyDBHandler","check는계쏙 0임");
-           board.setBoardID(0+"");
-           relation_table=mdbRef.child(tableNames).child(board.getType()).child(board.getBoardID());
-       }
-
-        //등록
-       relation_table.setValue(board);
 
         /*
         2. 강의 릴레이션에 추가
          */
 
-        //select * from Lecture where proID_subID=tableNames;
-        mdbRef=mdatabase.getReference("lecture");
+    //select * from Lecture where proID_subID=tableNames;
 
-       query = mdbRef.orderByChild("proID_subID").equalTo("p25787542-s184325");//"p25787542-s184325" 로 임의 지정test
+        Query query1;
+        query1 = mdatabase.getReference("lecture").orderByChild("proID_subID").equalTo("p25787542-s184325");//"p25787542-s184325" 로 임의 지정test
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
 
 
-
                 }
             }
+
             @Override public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
