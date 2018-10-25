@@ -3,6 +3,7 @@ package kksy.konkuk_smart_ecampus;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,8 +65,8 @@ public class MyDBHandler {
         //등록
         relation_table.setValue(subject);
     }
-    public void newBoard(Board board){
 
+    public void newBoard(final Board board){
 
         /*
         1. 게시판 릴레이션에 추가
@@ -73,37 +74,33 @@ public class MyDBHandler {
         String tableNames;
         tableNames=board.getProID_subID();
 
-        DatabaseReference relation_table;
-        relation_table=mdbRef.child(tableNames).child(board.getType()).push();
 
-        //등록
-        relation_table.setValue(board);
+        //board id 지정( set boardID() ) : 현재 type 의 id 중 마지막 아이디를 가지고 온다.-> +1을 한 결과를 set해줌
+        //select * from Board where type=board.getType() ;
+        Query query1;
+        query1 = mdbRef.child(tableNames).child(board.getType()).orderByChild("boardID").limitToLast(1);
 
-        /*
-        2. 강의 릴레이션에 추가
-         */
-        //select * from Lecture where proID_subID=tableNames;
-        DatabaseReference table;
-        mdbRef=mdatabase.getReference("lecture");
-        table=mdbRef;
-
-        Query query = table.equalTo(tableNames).equalTo("p25787542-s184325");
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            /*
+            OnDataChange 함수는 초기 값으로 한 번 호출되며, 이 위치의 데이터가 업데이트 될때마다 다시 호출됨.
+             */
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
 
-                    Lecture temp_lecture=snapshot.getValue(Lecture.class);
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                     // Log.i("MyDBHandler",snapshot.getValue().toString());
 
-                    if (temp_lecture!=null)
-                    Log. i ("MyDBHandler",temp_lecture.getProID());
-                    else
-                        Log. i ("MyDBHandler","error");
-                }
+                      board.setBoardID(snapshot.getValue(Board.class).getBoardID()+1);
 
+                     // Log.i("MyDBHandler","boardid "+board.getBoardID());
+                    }
 
+                //등록
+                mdbRef.child(board.getProID_subID()).child(board.getType()).child(board.getBoardID()+"").setValue(board);
+
+               // Log.i("MyDBHandler","등록?");
             }
             @Override public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
@@ -111,12 +108,23 @@ public class MyDBHandler {
 
     public void newLecture(Lecture lecture){
         String tableNames;
-        tableNames=lecture.getProID()+"-"+lecture.getSubID();
+        tableNames=lecture.getProID_subID();
 
         DatabaseReference relation_table;
         relation_table=mdbRef.child(tableNames);
 
         //등록
         relation_table.setValue(lecture);
+    }
+
+    public void newAttendance(Attendance attendance){
+        String tableNames;
+        tableNames=attendance.getSubID_pID();
+
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames).child(attendance.studentID);
+
+        //등록
+        relation_table.setValue(attendance);
     }
 }
