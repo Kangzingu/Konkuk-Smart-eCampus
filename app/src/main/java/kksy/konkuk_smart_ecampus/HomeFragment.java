@@ -4,6 +4,8 @@ package kksy.konkuk_smart_ecampus;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,6 +31,9 @@ public class HomeFragment extends Fragment {
 
     List<TimelineListAdapter.Item> timelineList;
 
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -41,6 +46,9 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.listViewTimeline);
+
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         initTimeline();
 
@@ -62,18 +70,21 @@ public class HomeFragment extends Fragment {
          */
 
         timelineList.add(new TimelineListAdapter.Item(
+                "0",
                 "산학협력프로젝트2(종합설계)",
                 "[10/2] 미팅 요약서",
                 "2018.10.02 오후 11:59",
                 false, false
         ));
         timelineList.add(new TimelineListAdapter.Item(
+                "0",
                 "산학협력프로젝트2(종합설계)",
                 "[10/4] 2차 요구사항 분석서 제출",
                 "2018.10.05 오후 11:59",
                 false, true
         ));
         timelineList.add(new TimelineListAdapter.Item(
+                "0",
                 "발명과특허",
                 "자기소개서",
                 "2018.10.07 오후 11:59",
@@ -131,6 +142,10 @@ public class HomeFragment extends Fragment {
                 /*
                 게시물 클릭 시, 해당 게시물 ID를 통해 게시물 fragment로 이동
                  */
+
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).timeline_post_id));
+                fragmentTransaction.commit();
 
                 Snackbar.make(view, "해당 게시물로 이동", Snackbar.LENGTH_SHORT)
                         .setAction("해당 게시물로 이동", null).show();

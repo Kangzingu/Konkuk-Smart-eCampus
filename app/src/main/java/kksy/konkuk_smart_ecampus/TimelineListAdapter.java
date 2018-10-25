@@ -182,6 +182,7 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public static class Item{
+        public String timeline_post_id;
         public String timeline_title;
         public String timeline_subject;
         public String timeline_date;
@@ -189,7 +190,8 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public boolean isCheck;
         public boolean isNotPick;
 
-        public Item(String timeline_subject, String timeline_title, String timeline_date, boolean isCheck, boolean isNotPick) {
+        public Item(String timeline_post_id, String timeline_subject, String timeline_title, String timeline_date, boolean isCheck, boolean isNotPick) {
+            this.timeline_post_id = timeline_post_id;
             this.timeline_subject = timeline_subject;
             this.timeline_title = timeline_title;
             this.timeline_date = timeline_date;
