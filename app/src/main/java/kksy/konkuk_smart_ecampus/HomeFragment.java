@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static kksy.konkuk_smart_ecampus.ExpandableListAdapter.CHILD2;
@@ -46,51 +48,90 @@ public class HomeFragment extends Fragment {
     }
 
     public void initTimeline(){
-        /*
-        Timeline 데이터 가져와서 적용해야 함
-         */
-
-        final List<TimelineListAdapter.Item> data = new ArrayList<>();
-
+        timelineList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-        TimelineListAdapter.Item item1 = new TimelineListAdapter.Item(
+        /*
+        - 여리
+        TimelineListAdapter.Item 객체 생성을 통해 Timeline의 Item들 생성
+        생성한 Item들을 data에 추가
+
+        - TimelineListAdapter.Item
+            TimelineListAdapter.Item(강의명, 게시물 제목, 게시물 업로드 날짜, 게시물 확인 여부, 게시물 북마크 여부)
+        - timelineList : Timeline의 List
+         */
+
+        timelineList.add(new TimelineListAdapter.Item(
                 "산학협력프로젝트2(종합설계)",
                 "[10/2] 미팅 요약서",
-                "2018.10.02 오후 11:59"
-        );
-        TimelineListAdapter.Item item2 = new TimelineListAdapter.Item(
+                "2018.10.02 오후 11:59",
+                false, false
+        ));
+        timelineList.add(new TimelineListAdapter.Item(
                 "산학협력프로젝트2(종합설계)",
                 "[10/4] 2차 요구사항 분석서 제출",
-                "2018.10.05 오후 11:59"
-        );
-        TimelineListAdapter.Item item3 = new TimelineListAdapter.Item(
+                "2018.10.05 오후 11:59",
+                false, true
+        ));
+        timelineList.add(new TimelineListAdapter.Item(
                 "발명과특허",
                 "자기소개서",
-                "2018.10.07 오후 11:59"
-        );
+                "2018.10.07 오후 11:59",
+                true, false
+        ));
 
-        data.add(item1);
-        data.add(item2);
-        data.add(item3);
+        // timeline에서 보여질 item 정렬
 
-        adapter = new TimelineListAdapter(data);
+        /*Collections.sort(data, sortByDate);*/
+        Collections.sort(timelineList, sortByChecked);
+        Collections.sort(timelineList, sortByBookmark);
+
+        adapter = new TimelineListAdapter(timelineList);
         adapter.setItemPickClick(new TimelineListAdapter.TimelineItemPickClick() {
             @Override
             public void onPickClick(View view, int postion) {
-                /*
-                좌측 아이콘 클릭 시, 북마크 아이콘 변경 - 이건 adapter에서 수행
-                북마크 설정된 아이템 array 에서 상단 고정 - array 재정렬
-                 */
+                if(!timelineList.get(postion).isNotPick){
+                    timelineList.get(postion).isNotPick = true;
+
+                    /*
+                    - 여리
+                    Bookmark 해제 시, bookmark 여부 DB에도 반영
+                     */
+                }
+                else{
+                    timelineList.get(postion).isNotPick = false;
+
+                    /*
+                    - 여리
+                    Bookmark 등록 시, bookmark 여부 DB에도 반영
+                     */
+                }
+
+                Collections.sort(timelineList, sortByChecked);
+                Collections.sort(timelineList, sortByBookmark);
+                adapter.notifyDataSetChanged();
             }
         });
         adapter.setItemClick(new TimelineListAdapter.TimelineItemClick() {
             @Override
             public void onClick(View view, int position) {
+                if(!timelineList.get(position).isCheck){ // 게시물 미확인 -> 게시물 확인
+                    timelineList.get(position).isCheck = true;
+
+                    /*
+                    - 여리
+                    게시물 확인 시, 게시물 확인 여부 DB에도 반영
+                     */
+                }
+
+                Collections.sort(timelineList, sortByChecked);
+                Collections.sort(timelineList, sortByBookmark);
+                adapter.notifyDataSetChanged();
+
                 /*
-                Timeline 아이템 클릭 시, DB update
-                해당 게시물 창으로 이동
+                게시물 클릭 시, 해당 게시물 ID를 통해 게시물 fragment로 이동
                  */
+
                 Snackbar.make(view, "해당 게시물로 이동", Snackbar.LENGTH_SHORT)
                         .setAction("해당 게시물로 이동", null).show();
             }
@@ -98,16 +139,47 @@ public class HomeFragment extends Fragment {
         adapter.setItemLongClick(new TimelineListAdapter.TimelineItemLongClick() {
             @Override
             public void onLongClick(View view, int position) {
+
                 /*
-                Timeline 아이템 길게 클릭 시, 삭제 - 이건 adapter에서 수행
-                길게 클릭 한 아이템 array 에서 삭제
+                - 여리
+                게시물 삭제 시, Timeline DB에서도 삭제
                  */
-                data.remove(position);
+
+                timelineList.remove(position);
                 adapter.notifyDataSetChanged();
+
+                Snackbar.make(view, "아이템 삭제", Snackbar.LENGTH_SHORT)
+                        .setAction("아이템 삭제", null).show();
             }
         });
 
         recyclerView.setAdapter(adapter);
     }
+
+    // Bookmark 설정 된 게시글이 위로 가도록 정렬
+    private final static Comparator<TimelineListAdapter.Item> sortByBookmark = new Comparator<TimelineListAdapter.Item>() {
+        @Override
+        public int compare(TimelineListAdapter.Item o1, TimelineListAdapter.Item o2) {
+            return Boolean.compare(o1.isNotPick, o2.isNotPick);
+        }
+    };
+
+    // 읽지 않은 게시글이 위로 가도록 정렬
+    private final static Comparator<TimelineListAdapter.Item> sortByChecked = new Comparator<TimelineListAdapter.Item>() {
+        @Override
+        public int compare(TimelineListAdapter.Item o1, TimelineListAdapter.Item o2) {
+            if(Boolean.compare(o1.isCheck, o2.isCheck) == 0)
+                return 1;
+            return Boolean.compare(o1.isCheck, o2.isCheck);
+        }
+    };
+
+    // 최근 업로드 게시글이 위로 가도록 정렬
+    private final static Comparator<TimelineListAdapter.Item> sortByDate = new Comparator<TimelineListAdapter.Item>() {
+        @Override
+        public int compare(TimelineListAdapter.Item o1, TimelineListAdapter.Item o2) {
+            return 0;
+        }
+    };
 
 }
