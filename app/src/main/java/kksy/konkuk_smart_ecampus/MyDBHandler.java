@@ -122,7 +122,7 @@ public class MyDBHandler {
         tableNames=attendance.getSubID_pID();
 
         DatabaseReference relation_table;
-        relation_table=mdbRef.child(tableNames);
+        relation_table=mdbRef.child(tableNames).child(attendance.studentID);
 
         //등록
         relation_table.setValue(attendance);

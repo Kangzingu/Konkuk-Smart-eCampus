@@ -5,7 +5,7 @@ public class Attendance {
     public String subID_pID;//과목코드-교원번호(key)
     public String studentID;//학번
 
-    public String round;//회차
+    public String round;//회차(현재 회차는 입력받는 값임)
     public String date;//yyyy-mm-dd hh:mm
 
     public String state;//지각, 결석, 출석
@@ -13,7 +13,7 @@ public class Attendance {
     public Attendance(String subID_pID, String studentID, String round, String date, String state) {
         this.subID_pID = subID_pID;
         this.studentID = studentID;
-        this.round = round;
+        this.round = round;//현재 회차는 입력받는 값임
         this.date = date;
         this.state = state;
     }
