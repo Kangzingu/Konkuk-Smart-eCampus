@@ -193,7 +193,17 @@ public class MainActivity extends AppCompatActivity
                 toolbarTitle.setText(data.get(position).text); // toolbar title을 선택한 강의명으로 바꿈
 
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainer, ClassFragment.newInstance(data.get(position).text));
+                /*
+                - 여리
+                바로 밑에 있는 코드가 MainActivity에서 ClassFragment로 파라미터 넘기는 부분
+                ClassFragment.newInstance(data.get(position).number)) -> 여기서 넘겨짐
+
+                현재 과목의 수강번호가 넘겨지도록 설정.
+
+                만약, 다른 방법으로 바꾸고 싶다면 여기서 파라미터 넘기는 부분을 수정하고,
+                ClassFragment 에서 따로 주석 설명 해둔곳을 수정해야 함.
+                 */
+                fragmentTransaction.replace(R.id.fragmentContainer, ClassFragment.newInstance(data.get(position).number));
                 fragmentTransaction.commit();
                 if(isClass){ // 현재 화면이 강의실일 경우
                     String headerSubjectName = data.get(position).text;

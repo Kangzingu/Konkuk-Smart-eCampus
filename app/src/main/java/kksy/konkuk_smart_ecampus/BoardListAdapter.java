@@ -8,42 +8,40 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.ViewHolder> {
-    ArrayList<Subject> subjectList;
+public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.ViewHolder> {
+    List<Board> boardList;
 
-    public SubjectListAdapter(ArrayList<Subject> subjectList) {
-        this.subjectList = subjectList;
+    public BoardListAdapter(List<Board> boardList) {
+        this.boardList = boardList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_subject_layout, parent, false);
+                .inflate(R.layout.item_board_layout, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.subjectName.setText(subjectList.get(position).getSubName());
-        holder.subjectNum.setText(subjectList.get(position).getSubID());
+        holder.boardTitle.setText(boardList.get(position).getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return subjectList.size();
+        return boardList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectName;
-        TextView subjectNum;
+        TextView boardTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            subjectName = itemView.findViewById(R.id.subjectName);
-            subjectNum = itemView.findViewById(R.id.subjectNum);
+            boardTitle = itemView.findViewById(R.id.textViewBoardTitle);
         }
     }
 }
