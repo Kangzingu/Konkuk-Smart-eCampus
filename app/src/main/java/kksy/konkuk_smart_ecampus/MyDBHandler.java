@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
 import java.util.logging.Handler;
 
 public class MyDBHandler {
@@ -66,7 +67,7 @@ public class MyDBHandler {
         relation_table.setValue(subject);
     }
 
-    public void newBoard(final Board board){
+    public void newBoard(Board board){
 
         /*
         1. 게시판 릴레이션에 추가
@@ -74,35 +75,46 @@ public class MyDBHandler {
         String tableNames;
         tableNames=board.getProID_subID();
 
+        DatabaseReference relation_table;
+        relation_table=mdbRef.child(tableNames).child(board.getType()).child(board.getUploadDate()).push();
+        board.setBoardID(relation_table.getKey());
+        Log.i("MyDBHandler",board.getBoardID());
+        //등록
+        relation_table.setValue(board);
 
+
+/*
+이거 일단 남겨둘거얌
+ */
         //board id 지정( set boardID() ) : 현재 type 의 id 중 마지막 아이디를 가지고 온다.-> +1을 한 결과를 set해줌
         //select * from Board where type=board.getType() ;
-        Query query1;
-        query1 = mdbRef.child(tableNames).child(board.getType()).orderByChild("boardID").limitToLast(1);
+//        Query query1;
+//        query1 = mdbRef.child(tableNames).child(board.getType()).orderByChild("boardID").limitToLast(1);
+//
+//        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+//            /*
+//            OnDataChange 함수는 초기 값으로 한 번 호출되며, 이 위치의 데이터가 업데이트 될때마다 다시 호출됨.
+//             */
+//            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                     // Log.i("MyDBHandler",snapshot.getValue().toString());
+//
+//                      board.setBoardID(snapshot.getValue(Board.class).getBoardID()+1);
+//
+//                     // Log.i("MyDBHandler","boardid "+board.getBoardID());
+//                    }
+//
+//                //등록
+//                mdbRef.child(board.getProID_subID()).child(board.getType()).child(board.getBoardID()+"").setValue(board);
+//
+//               // Log.i("MyDBHandler","등록?");
+//            }
+//            @Override public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-            /*
-            OnDataChange 함수는 초기 값으로 한 번 호출되며, 이 위치의 데이터가 업데이트 될때마다 다시 호출됨.
-             */
-            @Override public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                     // Log.i("MyDBHandler",snapshot.getValue().toString());
-
-                      board.setBoardID(snapshot.getValue(Board.class).getBoardID()+1);
-
-                     // Log.i("MyDBHandler","boardid "+board.getBoardID());
-                    }
-
-                //등록
-                mdbRef.child(board.getProID_subID()).child(board.getType()).child(board.getBoardID()+"").setValue(board);
-
-               // Log.i("MyDBHandler","등록?");
-            }
-            @Override public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 
@@ -122,7 +134,7 @@ public class MyDBHandler {
         tableNames=attendance.getSubID_pID();
 
         DatabaseReference relation_table;
-        relation_table=mdbRef.child(tableNames).child(attendance.studentID);
+        relation_table=mdbRef.child(tableNames).child(attendance.studentID).child(attendance.date).child(attendance.round);
 
         //등록
         relation_table.setValue(attendance);

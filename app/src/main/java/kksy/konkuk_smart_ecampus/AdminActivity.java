@@ -123,6 +123,7 @@ public class AdminActivity extends AppCompatActivity {
         board=new Board(e1.getText().toString(),e2.getText().toString(),
                 e3.getText().toString(),e4.getText().toString());
 
+
     }
 
     public void regi(View view) { //학생 정보를 파이어베이스에 등록함
