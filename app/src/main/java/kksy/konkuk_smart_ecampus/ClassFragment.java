@@ -105,19 +105,19 @@ public class ClassFragment extends Fragment {
         - assignmentList : 과제 List
          */
 
-        noticeList.add(new Board(0, "공지사항", "팀프로젝트 조구성"));
-        noticeList.add(new Board(0,"공지사항", "실습 설정 dll 오류 나는 문제"));
-        noticeList.add(new Board(0,"공지사항", "실습 이미지 영상"));
-        noticeList.add(new Board(0,"공지사항", "(10/25 수정)컴퓨터 비전 실습 공지"));
-        noticeList.add(new Board(0,"공지사항", "과제 공지"));
+        noticeList.add(new Board(0.+"", "공지사항", "팀프로젝트 조구성"));
+        noticeList.add(new Board(0+"","공지사항", "실습 설정 dll 오류 나는 문제"));
+        noticeList.add(new Board(0+"","공지사항", "실습 이미지 영상"));
+        noticeList.add(new Board(0+"","공지사항", "(10/25 수정)컴퓨터 비전 실습 공지"));
+        noticeList.add(new Board(0+"","공지사항", "과제 공지"));
 
-        lectureDataList.add(new Board(0,"강의자료", "9-10주차 강의 노트"));
-        lectureDataList.add(new Board(0,"강의자료", "3주차 Binary image analysis 2"));
-        lectureDataList.add(new Board(0,"강의자료", "2주차 Binary image analysis 1"));
+        lectureDataList.add(new Board(0+"","강의자료", "9-10주차 강의 노트"));
+        lectureDataList.add(new Board(0+"","강의자료", "3주차 Binary image analysis 2"));
+        lectureDataList.add(new Board(0+"","강의자료", "2주차 Binary image analysis 1"));
 
-        assignmentList.add(new Board(0,"과제", "[10/4] 2차 요구사항 분석서 제출"));
-        assignmentList.add(new Board(0,"과제", "[10/2] 미팅 요약서"));
-        assignmentList.add(new Board(0,"과제", "[9/28] 미팅 요약서"));
+        assignmentList.add(new Board(0+"","과제", "[10/4] 2차 요구사항 분석서 제출"));
+        assignmentList.add(new Board(0+"","과제", "[10/2] 미팅 요약서"));
+        assignmentList.add(new Board(0+"","과제", "[9/28] 미팅 요약서"));
 
         /*
         - 여리
