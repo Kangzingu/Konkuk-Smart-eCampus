@@ -24,6 +24,13 @@ public class Board {
         this.proID_subID=proID_subID;
         this.boardID=boardID;
     }
+
+    public Board(int boardID, String type, String title) {
+        this.boardID = boardID;
+        this.type = type;
+        this.title = title;
+    }
+
     public Board(){
 
     }

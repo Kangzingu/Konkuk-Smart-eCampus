@@ -90,13 +90,19 @@ public class MainActivity extends AppCompatActivity
 
             Student student = new Student();
             /*
-            DB에서 Student 객체 가져와야 함
+            - 여리
+            현재 로그인한 Student의 정보 가져와서 각 정보에 연결
+            userName : student 이름
+            userId : student 포탈 아이디
+            userEmail : student의 건국 웹메일
+            userImgURL : student의 프로필 사진
+            userIsBeaconOn : student의 beacon 설정 여부
             */
 
             userName = "default"/*student.getStudentName()*/;
             userId = "default"/*student.getStudentID()*/;
             userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
-            userImgURL = student.getImgURL();
+            userImgURL = null;/*student.getImgURL()*/;
             userIsBeaconOn = true/*student.isBeconCheck()*/;
         }
         else{
@@ -121,6 +127,7 @@ public class MainActivity extends AppCompatActivity
                     Snackbar.make(buttonView, getResources().getText(R.string.beacon_on), Snackbar.LENGTH_SHORT)
                             .setAction("Beacon On", null).show();
                     /*
+                    - 진구
                     Beacon Switch를 On 하였을 경우 다음 수행
                      */
                     bluetoothAdapter.enable();
@@ -130,6 +137,7 @@ public class MainActivity extends AppCompatActivity
                     Snackbar.make(buttonView, getResources().getText(R.string.beacon_off), Snackbar.LENGTH_SHORT)
                             .setAction("Beacon Off", null).show();
                     /*
+                    - 진구
                     Beacon Switch를 Off 하였을 경우 다음 수행
                      */
                     bluetoothAdapter.disable();
@@ -144,7 +152,10 @@ public class MainActivity extends AppCompatActivity
         userSubjectList = new ArrayList<>();
 
         /*
-        userSugangList에 사용자가 수강 또는 강의하는 과목들 추가
+        - 여리
+        현재 로그인한 student가 수강하는 강의 목록 추가
+        userSubjectList : Student가 수강하는 강의 목록 -> Subject 객체 생성을 통해 등록
+        Subject : Subject(과목번호, 강의이름)으로 객체 생성
          */
 
         userSubjectList.add(new Subject("0000", "산학협력프로젝트2(종합설계)"));
@@ -164,6 +175,11 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         final List<ExpandableListAdapter.Item> data = new ArrayList<>();
 
+        /*
+        - 여리
+        data는 ExpandableListAdapter 적용을 위한 List 이므로 만지지 않아도 됨
+         */
+
         data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
         for(int i=0; i<userSubjectList.size(); i++){
             data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
@@ -177,7 +193,17 @@ public class MainActivity extends AppCompatActivity
                 toolbarTitle.setText(data.get(position).text); // toolbar title을 선택한 강의명으로 바꿈
 
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainer, ClassFragment.newInstance(data.get(position).text));
+                /*
+                - 여리
+                바로 밑에 있는 코드가 MainActivity에서 ClassFragment로 파라미터 넘기는 부분
+                ClassFragment.newInstance(data.get(position).number)) -> 여기서 넘겨짐
+
+                현재 과목의 수강번호가 넘겨지도록 설정.
+
+                만약, 다른 방법으로 바꾸고 싶다면 여기서 파라미터 넘기는 부분을 수정하고,
+                ClassFragment 에서 따로 주석 설명 해둔곳을 수정해야 함.
+                 */
+                fragmentTransaction.replace(R.id.fragmentContainer, ClassFragment.newInstance(data.get(position).number));
                 fragmentTransaction.commit();
                 if(isClass){ // 현재 화면이 강의실일 경우
                     String headerSubjectName = data.get(position).text;
@@ -256,7 +282,8 @@ public class MainActivity extends AppCompatActivity
         profileEmail.setText(userEmail);
 
         /*
-        프로필 이미지 설정
+        - 여리
+        프로필 이미지 설정 코드 주석만 해제해주면 됨 (아마도?)
         profileImg.setImageURI(Uri.parse(userImgURL));
         */
     }

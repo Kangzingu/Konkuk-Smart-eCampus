@@ -88,6 +88,12 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         else{
             timelineHolder.headToogle.setImageResource(R.drawable.ic_expand_more_24dp);
         }
+        if(!item.isNotPick){
+            timelineHolder.headPick.setImageResource(R.drawable.ic_bookmark_24dp);
+        }
+        else{
+            timelineHolder.headPick.setImageResource(R.drawable.ic_fiber_manual_record_24dp);
+        }
         timelineHolder.headToogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,12 +113,10 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             @Override
             public void onClick(View v) {
                 if(timelineItemPickClick != null){
-                    if(item.isPick){
-                        item.isPick = false;
+                    if(!item.isNotPick){
                         timelineHolder.headPick.setImageResource(R.drawable.ic_fiber_manual_record_24dp);
                     }
                     else{
-                        item.isPick = true;
                         timelineHolder.headPick.setImageResource(R.drawable.ic_bookmark_24dp);
                     }
 
@@ -126,7 +130,6 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if(timelineItemClick != null){
                     if(!item.isCheck){
                         timelineHolder.timelineView.setBackgroundColor(colorWhite);
-                        item.isCheck = true;
                         timelineItemClick.onClick(v, position);
                     }
                     else{
@@ -138,15 +141,11 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         timelineHolder.timelineView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Snackbar.make(v, "Long Click", Snackbar.LENGTH_SHORT)
-                        .setAction("Long Click", null).show();
-
                 /*
                 Timeline 게시글 삭제 알림 - Swipe로 구현
                  */
 
                 timelineItemLongClick.onLongClick(v, position);
-
                 return true;
             }
         });
@@ -183,20 +182,22 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public static class Item{
+        public String timeline_post_id;
         public String timeline_title;
         public String timeline_subject;
         public String timeline_date;
         public boolean isOpen;
         public boolean isCheck;
-        public boolean isPick;
+        public boolean isNotPick;
 
-        public Item(String timeline_subject, String timeline_title, String timeline_date) {
+        public Item(String timeline_post_id, String timeline_subject, String timeline_title, String timeline_date, boolean isCheck, boolean isNotPick) {
+            this.timeline_post_id = timeline_post_id;
             this.timeline_subject = timeline_subject;
             this.timeline_title = timeline_title;
             this.timeline_date = timeline_date;
             this.isOpen = false;
-            this.isCheck = false;
-            this.isPick = false;
+            this.isCheck = isCheck;
+            this.isNotPick = isNotPick;
         }
     }
 }
