@@ -1,6 +1,7 @@
 package kksy.konkuk_smart_ecampus;
 
 import android.bluetooth.BluetoothAdapter;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,6 +27,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.SystemRequirementsChecker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -67,6 +75,15 @@ public class MainActivity extends AppCompatActivity
     Switch beaconSwitch;
     BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
     //==
+
+    //YEORI
+    FirebaseDatabase mdatabase;
+    DatabaseReference mdbRef;
+    Query query;
+    Handler handler=null;
+    Thread t;
+    //
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         initNavigationView();
 
         initContentMain();
+
     }
 
     public void initUserInformation(){
@@ -85,10 +103,15 @@ public class MainActivity extends AppCompatActivity
         Intent로 사용자 객체 넘겨 줌
          */
 
+        mdatabase = FirebaseDatabase.getInstance();
+        handler=new Handler();
+
+
         if(isStudent){
             // 현재 로그인한 사용자가 학생일 경우 다음 수행
 
             Student student = new Student();
+
             /*
             - 여리
             현재 로그인한 Student의 정보 가져와서 각 정보에 연결
@@ -100,10 +123,48 @@ public class MainActivity extends AppCompatActivity
             */
 
             userName = "default"/*student.getStudentName()*/;
-            userId = "default"/*student.getStudentID()*/;
+            userId = "201611210"/*student.getStudentID()*/; //자동로그인에서 mainActivity로 넘어갈 때 intent로 학번을 줄 생각임(열)
             userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
             userImgURL = null;/*student.getImgURL()*/;
             userIsBeaconOn = true/*student.isBeconCheck()*/;
+
+            mdbRef=mdatabase.getReference("student");
+            query = mdbRef.orderByChild("studentID").equalTo(userId);
+            Log.i("query log 검사", query.toString());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        Student student=snapshot.getValue(Student.class);//객체 담기
+                        Log.i("student 검사", student.getStudentName());
+                        userName = student.getStudentName();
+                        userId = student.getStudentID();
+                        userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
+                        userImgURL = student.getImgURL();
+                        userIsBeaconOn = student.isBeconCheck();
+
+                        t=new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //UI작업 수행
+                                        profileName.setText(userName);
+                                        profileEmail.setText(userEmail);
+                                    }
+                                });
+                            }
+                        });
+                        t.start();
+                    }
+
+                }
+
+                @Override public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
         }
         else{
             // 현재 로그인한 사용자가 교수일 경우 다음 수행
@@ -358,5 +419,45 @@ public class MainActivity extends AppCompatActivity
     }
     protected void onPause(){
         super.onPause();
+    }
+
+    public void getStudent(){
+
+        mdbRef=mdatabase.getReference("student");
+        query = mdbRef.orderByChild("studentID").equalTo("201611210");
+        Log.i("query log 검사", query.toString());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Student student=snapshot.getValue(Student.class);//객체 담기
+                    Log.i("student 검사", student.getStudentName());
+                    userName = student.getStudentName();
+                    userId = student.getStudentID();
+                    userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
+                    userImgURL = student.getImgURL();
+                    userIsBeaconOn = student.isBeconCheck();
+
+                    t=new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //UI작업 수행
+                                    profileName.setText(userName);
+                                    profileEmail.setText(userEmail);
+                                }
+                            });
+                        }
+                    });
+                    t.start();
+                }
+
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 }
