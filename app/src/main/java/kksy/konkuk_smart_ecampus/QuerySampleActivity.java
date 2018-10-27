@@ -41,8 +41,6 @@ public class QuerySampleActivity extends AppCompatActivity {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-
-
                    /*
 
                   로그 :  Log. i ("MyDBHandler",snapshot.getKey());

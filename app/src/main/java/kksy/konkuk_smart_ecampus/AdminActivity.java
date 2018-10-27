@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class AdminActivity extends AppCompatActivity {
     Subject subject;
     Lecture lecture;
     Board board;
+    Sugang sugang;
 
     //
     int pos=0;
@@ -116,6 +118,10 @@ public class AdminActivity extends AppCompatActivity {
 
     }
     public void regiSugang(){
+        myDBHandler=new MyDBHandler("sugang");
+
+        String str1=e1.getText().toString();
+        sugang=new Sugang(e1.getText().toString(),str1.split("-")[0],str1.split("-")[1]);
 
     }
     public void regiBoard(){
@@ -144,6 +150,7 @@ public class AdminActivity extends AppCompatActivity {
                 break;
             case 3://수강
                 regiSugang();
+                myDBHandler.newSugang(sugang);
                 break;
             case 4://강의
                 regiLecture();

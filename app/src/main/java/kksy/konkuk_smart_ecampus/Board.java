@@ -18,7 +18,7 @@ public class Board {
     private String title;//게시글 제목
     //private String file;//file url
 
-    private String proID_subID;//해당 게시글이 속한 강의의 key( 교원번호-과목번호 )
+    private String subID_proID;//해당 게시글이 속한 강의의 key( 과목번호-교원번호 )
 
 
     public Board(String boardID, String type, String title) {
@@ -28,12 +28,12 @@ public class Board {
     }
 
 
-    public Board(String type, /*String index,*/ String title,String context,String proID_subID){
+    public Board(String type, /*String index,*/ String title,String context,String subID_proID){
         this.title=title;
         this.type = type;
         //this.index = index;
         this.context = context;
-        this.proID_subID=proID_subID;
+        this.subID_proID=subID_proID;
 
         /*
         게시판 업로드 시간 받아오기
@@ -82,13 +82,6 @@ public class Board {
         this.title=title;
     }
 
-    public String getProID_subID() {
-        return proID_subID;
-    }
-
-    public void setProID_subID(String proID_subID) {
-        this.proID_subID = proID_subID;
-    }
 
     public String getBoardID() {
         return boardID;
@@ -104,5 +97,13 @@ public class Board {
 
     public void setUploadDate(String uploadDate) {
         this.uploadDate = uploadDate;
+    }
+
+    public String getSubID_proID() {
+        return subID_proID;
+    }
+
+    public void setSubID_proID(String subID_proID) {
+        this.subID_proID = subID_proID;
     }
 }
