@@ -5,37 +5,38 @@ import java.util.List;
 
 public class TimeLine {
 
-    public List<String> materials;//강의자료 게시글 번호
-    public List<String> notice;//공지사항
-    public List<String> homework;//과제
+
+    private List<TimeLineBoardFormat> materials;//강의자료 게시글 번호
+    private List<TimeLineBoardFormat> notice;//공지사항
+    private List<TimeLineBoardFormat> homework;//과제
 
     public TimeLine(){
-        this.materials=new ArrayList<String>();
-        this.notice=new ArrayList<String>();
-        this.homework=new ArrayList<String>();
+        this.materials=new ArrayList<>();
+        this.notice=new ArrayList<>();
+        this.homework=new ArrayList<>();
     }
 
-    public List<String> getMaterials() {
+    public List<TimeLineBoardFormat> getMaterials() {
         return materials;
     }
 
-    public void setMaterials(List<String> materials) {
+    public void setMaterials(List<TimeLineBoardFormat> materials) {
         this.materials = materials;
     }
 
-    public List<String> getNotice() {
+    public List<TimeLineBoardFormat> getNotice() {
         return notice;
     }
 
-    public void setNotice(List<String> notice) {
+    public void setNotice(List<TimeLineBoardFormat> notice) {
         this.notice = notice;
     }
 
-    public List<String> getHomework() {
+    public List<TimeLineBoardFormat> getHomework() {
         return homework;
     }
 
-    public void setHomework(List<String> homework) {
+    public void setHomework(List<TimeLineBoardFormat> homework) {
         this.homework = homework;
     }
 }

@@ -226,6 +226,26 @@ public class MainActivity extends AppCompatActivity
         userSubjectList : Student가 수강하는 강의 목록 -> Subject 객체 생성을 통해 등록
         Subject : Subject(과목번호, 강의이름)으로 객체 생성
          */
+        mdbRef=mdatabase.getReference("sugang");
+        query = mdbRef.orderByChild("studentID").equalTo(userId);
+        Query query2;
+        Log.i("sugang", query.toString());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                    Sugang sugang=snapshot.getValue(Sugang.class);
+
+//                    Log.i("sugang", snapshot.getValue().toString());
+
+                }
+
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         userSubjectList.add(new Subject("0000", "산학협력프로젝트2(종합설계)"));
         userSubjectList.add(new Subject("2222", "과학사"));
