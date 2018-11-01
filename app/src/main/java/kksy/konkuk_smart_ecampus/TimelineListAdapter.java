@@ -189,8 +189,11 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public boolean isOpen;
         public boolean isCheck;
         public boolean isNotPick;
+        public String subid_proid;
+        public String boardID;
 
-        public Item(String timeline_post_id, String timeline_subject, String timeline_title, String timeline_date, boolean isCheck, boolean isNotPick) {
+        public Item(String timeline_post_id, String timeline_subject, String timeline_title, String timeline_date, boolean isCheck, boolean isNotPick,
+                    String subid_proid, String boardID) {
             this.timeline_post_id = timeline_post_id;
             this.timeline_subject = timeline_subject;
             this.timeline_title = timeline_title;
@@ -198,6 +201,8 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.isOpen = false;
             this.isCheck = isCheck;
             this.isNotPick = isNotPick;
+            this.subid_proid=subid_proid;
+            this.boardID=boardID;
         }
     }
 }

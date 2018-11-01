@@ -33,7 +33,7 @@ public class PostFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int mPostId;
 
-    private String mBoardId="-LPkQXJjtAwvp1dJoMS0"; //boardID를 담고있음. fragment에서 fragment로 넘어올 때 넣을 것.
+    private String mBoardId;/*="-LPkQXJjtAwvp1dJoMS0"*/; //boardID를 담고있음. fragment에서 fragment로 넘어올 때 넣을 것.
     String postType;
     String postTitle;
     String postDate;
@@ -81,7 +81,8 @@ public class PostFragment extends Fragment {
             수정 하려면 위에 mPostId 처럼 변수 만들고,
             ClassFragment 또는 HomeFragment에서  PostFragment에게 파라미터 넘겨줘야 함.
              */
-            mPostId = getArguments().getInt(ARG_PARAM_POST_ID);
+            mBoardId = getArguments().getString(ARG_PARAM_POST_ID);
+            Log.i("boardid", mBoardId);
         }
 
         mdatabase = FirebaseDatabase.getInstance();

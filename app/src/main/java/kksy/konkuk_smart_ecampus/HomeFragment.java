@@ -127,7 +127,9 @@ public class HomeFragment extends Fragment {
                                                             board.getTitle(),
                                                             board.getUploadDate(),
                                                             timeLineA.get(j).isIsread(),
-                                                            timeLineA.get(j).isWantTop()
+                                                            timeLineA.get(j).isWantTop(),
+                                                            board.getSubID_proID(),
+                                                            board.getBoardID()
                                                     ));
                                                 }
                                             }
@@ -151,7 +153,9 @@ public class HomeFragment extends Fragment {
                                                             board.getTitle(),
                                                             board.getUploadDate(),
                                                             timeLineA.get(j).isIsread(),
-                                                            timeLineA.get(j).isWantTop()
+                                                            timeLineA.get(j).isWantTop(),
+                                                            board.getSubID_proID(),
+                                                            board.getBoardID()
                                                     ));
 
                                                 }
@@ -175,9 +179,10 @@ public class HomeFragment extends Fragment {
                                                             board.getTitle(),
                                                             board.getUploadDate(),
                                                             timeLineA.get(j).isIsread(),
-                                                            timeLineA.get(j).isWantTop()
+                                                            timeLineA.get(j).isWantTop(),
+                                                            board.getSubID_proID(),
+                                                            board.getBoardID()
                                                     ));
-                                                    adapter.notifyDataSetChanged();
 
                                                 }
                                             }
@@ -185,6 +190,10 @@ public class HomeFragment extends Fragment {
                                         }
                                         //Log.i("value", board.getTitle());
                                     }
+                                    /*Collections.sort(data, sortByDate);*/
+//                                    Collections.sort(timelineList, sortByChecked);
+//                                    Collections.sort(timelineList, sortByBookmark);
+                                    adapter.notifyDataSetChanged();
                                 }
                         }
 
@@ -212,27 +221,30 @@ public class HomeFragment extends Fragment {
         - timelineList : Timeline의 List
          */
 
-        timelineList.add(new TimelineListAdapter.Item(
-                "0",
-                "산학협력프로젝트2(종합설계)",
-                "[10/2] 미팅 요약서",
-                "2018.10.02 오후 11:59",
-                false, false
-        ));
-        timelineList.add(new TimelineListAdapter.Item(
-                "0",
-                "산학협력프로젝트2(종합설계)",
-                "[10/4] 2차 요구사항 분석서 제출",
-                "2018.10.05 오후 11:59",
-                false, true
-        ));
-        timelineList.add(new TimelineListAdapter.Item(
-                "0",
-                "발명과특허",
-                "자기소개서",
-                "2018.10.07 오후 11:59",
-                true, false
-        ));
+//        timelineList.add(new TimelineListAdapter.Item(
+//                "0",
+//                "산학협력프로젝트2(종합설계)",
+//                "[10/2] 미팅 요약서",
+//                "2018.10.02 오후 11:59",
+//                false, false,"s1_p1",
+//                "LP1JCk"
+//        ));
+//        timelineList.add(new TimelineListAdapter.Item(
+//                "0",
+//                "산학협력프로젝트2(종합설계)",
+//                "[10/4] 2차 요구사항 분석서 제출",
+//                "2018.10.05 오후 11:59",
+//                false, true,"s1_p1",
+//                "LP1JCk"
+//        ));
+//        timelineList.add(new TimelineListAdapter.Item(
+//                "0",
+//                "발명과특허",
+//                "자기소개서",
+//                "2018.10.07 오후 11:59",
+//                true, false,"s1_p1",
+//                "LP1JCk"
+//        ));
 
         // timeline에서 보여질 item 정렬
 
@@ -255,12 +267,26 @@ public class HomeFragment extends Fragment {
 //                    timeLine.getHomework().get(0).setIsread(true);
                 }
                 else{
+
                     timelineList.get(postion).isNotPick = false;
 
                     /*
                     - 여리
                     Bookmark 등록 시, bookmark 여부 DB에도 반영
                      */
+                    DatabaseReference relation_table;
+                    mdbRef=mdatabase.getReference("sugang");
+
+                    String subid_proid=timelineList.get(postion).subid_proid;
+                    String[] temp=subid_proid.split("_");
+
+                    relation_table=mdbRef.child(temp[0]+"-"+userID).child("timeLine").push();
+                    TimelineListAdapter.Item item=timelineList.get(postion);
+                    TimeLineBoardFormat temp2=new TimeLineBoardFormat();
+                    temp2.setBoardID(item.boardID);
+                    temp2.setIsread(item.isOpen);
+                    temp2.setWantTop(item.isCheck);
+                    //relation_table.setValue()
                 }
 
                 Collections.sort(timelineList, sortByChecked);
@@ -280,8 +306,8 @@ public class HomeFragment extends Fragment {
                      */
                 }
 
-                Collections.sort(timelineList, sortByChecked);
-                Collections.sort(timelineList, sortByBookmark);
+//                Collections.sort(timelineList, sortByChecked);
+//                Collections.sort(timelineList, sortByBookmark);
                 adapter.notifyDataSetChanged();
 
                 /*
@@ -289,7 +315,10 @@ public class HomeFragment extends Fragment {
                  */
 
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).timeline_post_id));
+                Log.i("boardnum", position+"");
+                Log.i("boardnum", timelineList.get(0).boardID);
+                Log.i("boardnum", timelineList.get(1).boardID);
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID));
                 fragmentTransaction.commit();
 
                 Snackbar.make(view, "해당 게시물로 이동", Snackbar.LENGTH_SHORT)
