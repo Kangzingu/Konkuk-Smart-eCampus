@@ -2,11 +2,22 @@ package kksy.konkuk_smart_ecampus;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Iterator;
 
 
 /**
@@ -22,6 +33,7 @@ public class PostFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int mPostId;
 
+    private String mBoardId="-LPkQXJjtAwvp1dJoMS0"; //boardID를 담고있음. fragment에서 fragment로 넘어올 때 넣을 것.
     String postType;
     String postTitle;
     String postDate;
@@ -32,6 +44,12 @@ public class PostFragment extends Fragment {
     TextView textViewPostDate;
     TextView textViewPostContent;
 
+    //YEORI
+    FirebaseDatabase mdatabase;
+    DatabaseReference mdbRef;
+    Query query;
+    Board realBoard;    //realBoard는 query를 통해 찾은 board를 저장해 놓는 로컬 변수이다.
+    //
     public PostFragment() {
         // Required empty public constructor
     }
@@ -66,10 +84,92 @@ public class PostFragment extends Fragment {
             mPostId = getArguments().getInt(ARG_PARAM_POST_ID);
         }
 
+        mdatabase = FirebaseDatabase.getInstance();
+        mdbRef=mdatabase.getReference("board");
+
+        //다스리
         /*
-        - 여리
-        mPostId를 통해서 postType, postTitle, postDate, postContent에 입력
-         */
+        * s1만 찾아도 되게 만든다고 했당.
+        * s1.. 까지만.. */
+
+        query = mdbRef.orderByKey().equalTo("s1-p1");
+//        Log.i("yeori", query.toString());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.i("yeori", "여긴오니..?");
+//                Log.i("yeori", dataSnapshot.getChildren().toString());
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Log.i("yeori", snapshot.getValue().toString());
+                    boolean check=false;
+                    Iterable<DataSnapshot> data=snapshot.getChildren();
+
+                    //강의자료
+                    //Log.i("data5",  data.iterator().next().getKey());
+                    //->강의자료의 모든 value들을 가져온다. 2018...
+                    Iterable<DataSnapshot> data1=data.iterator().next().getChildren();  //2018-10-26 21:51:45, 2018-10-27...
+                    for(Iterator<DataSnapshot> da = data1.iterator(); data1.iterator().hasNext();){
+                        Board board=da.next().getChildren().iterator().next().getValue(Board.class);
+                        if(mBoardId.equals(board.getBoardID())){
+                            check=true;
+                            realBoard=board;
+                            break;
+                        }
+                        //Log.i("보쟈", da.next().getValue().toString()); //-LP11bhR2..., -LPIJ...
+                    }
+
+                    //공지
+                    Iterable<DataSnapshot> data2=data.iterator().next().getChildren();
+                    for(Iterator<DataSnapshot> da=data2.iterator();data2.iterator().hasNext();){
+                        Board board=da.next().getChildren().iterator().next().getValue(Board.class);
+                        if(check)
+                            break;
+                        else if(!check){
+                            if(mBoardId.equals(board.getBoardID())){
+                                check=true;
+                                realBoard=board;
+                                break;
+                            }
+                        }
+                    }
+
+                    //과제
+                    Iterable<DataSnapshot> data3=data.iterator().next().getChildren();
+                    for(Iterator<DataSnapshot> da=data3.iterator();data3.iterator().hasNext();){
+                        Board board=da.next().getChildren().iterator().next().getValue(Board.class);
+                        if(check)
+                            break;
+                        else if(!check){
+                            if(mBoardId.equals(board.getBoardID())){
+                                check=true;
+                                realBoard=board;
+                                break;
+                            }
+                        }
+                        //Log.i("value", board.getTitle());
+                    }
+                    Log.i("yeori", realBoard.getBoardID());
+                    /*
+                    - 여리
+                    mPostId를 통해서 postType, postTitle, postDate, postContent에 입력
+                    */
+                    postType=realBoard.getType();
+                    postTitle=realBoard.getTitle();
+                    postDate=realBoard.getUploadDate();
+                    postContent=realBoard.getContext();
+
+                    textViewPostType.setText(postType);
+                    textViewPostTitle.setText(postTitle);
+                    textViewPostDate.setText(postDate);
+                    textViewPostContent.setText(postContent);
+
+                }
+
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override

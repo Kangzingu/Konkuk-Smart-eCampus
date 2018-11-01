@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
     Query query;
     Handler handler=null;
     Thread t;
+    Query query2;
     //
 
     @Override
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity
          */
         mdbRef=mdatabase.getReference("sugang");
         query = mdbRef.orderByChild("studentID").equalTo(userId);
-        Query query2;
+
         Log.i("sugang", query.toString());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
@@ -228,7 +229,38 @@ public class MainActivity extends AppCompatActivity
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
 
                     Sugang sugang=snapshot.getValue(Sugang.class);
+                    String subID=sugang.getSubID();
+                    mdbRef=mdatabase.getReference("subject");
+                    query2=mdbRef.orderByChild("subID").equalTo(subID);
 
+                    /*(열)
+                    * 이중 쿼리를 쓴 이유는
+                    * 1) 학생이 수강하고 있는 과목을 알려면, 학번으로 sugang에 접근 한 뒤 subID를 알아내고,
+                    * 2) 이를 가지고 subject의 subName에 접근해야 하기 때문.*/
+
+                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                //subName : 졸프, subID : s1
+                                //Log.i("subject", snapshot1.getValue().toString());
+                                Subject subject=snapshot1.getValue(Subject.class);
+                                userSubjectList.add(subject);
+                            }
+
+                            /*
+                            * 자영
+                            * 동기식으로 해결하고 싶다면 for문 밖의 이곳에 넣으면 됩니당.
+                            * 이미 userSubjectList에는 요소가 들어있는 상태임.
+                            * adapter.notifyDataSetChanged();
+                            */
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 //                    Log.i("sugang", snapshot.getValue().toString());
 
                 }
@@ -238,7 +270,7 @@ public class MainActivity extends AppCompatActivity
             @Override public void onCancelled(DatabaseError databaseError) {
             }
         });
-
+        //비동기 문제 해결 할 때에는 이거 주석처리 해놓고 하시면 될 것 같아용(열)
         userSubjectList.add(new Subject("0000", "산학협력프로젝트2(종합설계)"));
         userSubjectList.add(new Subject("2222", "과학사"));
         userSubjectList.add(new Subject("1111", "클라우드웹서비스"));

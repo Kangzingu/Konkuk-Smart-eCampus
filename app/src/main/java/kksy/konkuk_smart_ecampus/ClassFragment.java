@@ -41,7 +41,7 @@ public class ClassFragment extends Fragment {
     - 여리
     mSubNum : 선택한 과목의 수강번호 -> 과목의 ID 역할
      */
-    private String mSubNum="s154325";   //현재 수강번호가 3041 형식으로 주어져 있지 않기 때문에 설정함.
+    private String mSubNum="s1";   //현재 수강번호가 3041 형식으로 주어져 있지 않기 때문에 설정함.
     //수강 릴레이션이 만들어지면 수정할 예정임(열)
 
     BoardListAdapter adapter;
