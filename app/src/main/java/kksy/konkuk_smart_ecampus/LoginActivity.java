@@ -59,7 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                 if(isAutoLogin){
                     /*
                     자동 로그인을 선택하였을 때 실행 되는 코드
-                     */
+                     *///ㅎㅇ
+
                     loginChecked = true;
                     if(loginChecked) {
                         //autologin이 체크되어 있을 경우에는, 값을 저장한다.

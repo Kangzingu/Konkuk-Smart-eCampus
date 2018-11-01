@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     String userId;
     String userEmail;
     String userImgURL;
-    Boolean userIsBeaconOn;
+    Boolean userIsBeaconCheck;
     ArrayList<Subject> userSubjectList;
     ExpandableListAdapter adapter;
 
@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
-    //==
+    //Zingu
     Switch beaconSwitch;
     BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
-    //==
+    //
 
     //YEORI
     FirebaseDatabase mdatabase;
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity
             userId = "201611210"/*student.getStudentID()*/; //자동로그인에서 mainActivity로 넘어갈 때 intent로 학번을 줄 생각임(열)
             userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
             userImgURL = null;/*student.getImgURL()*/;
-            userIsBeaconOn = true/*student.isBeconCheck()*/;
+            userIsBeaconCheck = false;/*student.isBeconCheck()*/;
 
             mdbRef=mdatabase.getReference("student");
             query = mdbRef.orderByChild("studentID").equalTo(userId);
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity
                         userId = student.getStudentID();
                         userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
                         userImgURL = student.getImgURL();
-                        userIsBeaconOn = student.isBeconCheck();
+                        userIsBeaconCheck = student.isBeconCheck();
 
                         t=new Thread(new Runnable() {
                             @Override
@@ -175,8 +175,9 @@ public class MainActivity extends AppCompatActivity
     public void initSwitchBeacon(){
         // Beacon Switch 초기 설정
         switchBeacon = (SwitchCompat) findViewById(R.id.switchBeacon);
-        switchBeacon.setChecked(userIsBeaconOn);
-        if(userIsBeaconOn==true){
+        switchBeacon.setChecked(userIsBeaconCheck);
+        if(userIsBeaconCheck==true){
+            //디비에 있는 사용자 설정값 따라 첫 구동시 블루투스 온오프
             bluetoothAdapter.enable();
         }
         else{
@@ -184,27 +185,34 @@ public class MainActivity extends AppCompatActivity
         }
         switchBeacon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                //스위치 변경 시
                 if(isChecked){
                     Snackbar.make(buttonView, getResources().getText(R.string.beacon_on), Snackbar.LENGTH_SHORT)
                             .setAction("Beacon On", null).show();
-                    /*
-                    - 진구
-                    Beacon Switch를 On 하였을 경우 다음 수행
-                     */
                     bluetoothAdapter.enable();
-                    //DB드가서 사용자의 비콘 온오프 여부 바꺼야해
-                }
+                }//블루투스 켜기
                 else{
                     Snackbar.make(buttonView, getResources().getText(R.string.beacon_off), Snackbar.LENGTH_SHORT)
                             .setAction("Beacon Off", null).show();
-                    /*
-                    - 진구
-                    Beacon Switch를 Off 하였을 경우 다음 수행
-                     */
                     bluetoothAdapter.disable();
-                    //DB드가서 사용자의 비콘 온오프 여부 바꺼야해
-                }
+                }//블루투스 끄기
+                mdbRef=mdatabase.getReference("student");
+                query = mdbRef.orderByChild("studentID").equalTo(userId);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            snapshot.child("beconCheck").getRef().setValue(isChecked);
+                            //디비의 블루투스(비콘) 허용 여부 설정 또한 같이 업데이트
+                        }
+
+                    }
+
+                    @Override public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
             }
         });
     }
@@ -489,7 +497,7 @@ public class MainActivity extends AppCompatActivity
                     userId = student.getStudentID();
                     userEmail = student.getPotalID() + "@" + getResources().getString(R.string.konkuk_email);
                     userImgURL = student.getImgURL();
-                    userIsBeaconOn = student.isBeconCheck();
+                    userIsBeaconCheck = student.isBeconCheck();
 
                     t=new Thread(new Runnable() {
                         @Override
