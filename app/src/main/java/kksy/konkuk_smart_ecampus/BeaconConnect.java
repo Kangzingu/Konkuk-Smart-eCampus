@@ -86,7 +86,7 @@ public class BeaconConnect extends Application {
                         timeAsNum = System.currentTimeMillis();
                         timeAsDate = new Date(timeAsNum);
                         timeAsformat=new SimpleDateFormat("yyyy-MM-dd");
-                        String dateToday= timeAsformat.format(timeAsDate);
+                        String dateToday= "2018-10-27";//timeAsformat.format(timeAsDate);
                         childSnap=dataSnapshot.child("attendance").child(subID_pID).child(studentID).child(dateToday).getChildren().iterator();
                         while (childSnap.hasNext()) {
                             currentObject = childSnap.next();
