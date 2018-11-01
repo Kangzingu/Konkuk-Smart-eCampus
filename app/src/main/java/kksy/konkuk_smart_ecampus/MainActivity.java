@@ -254,6 +254,7 @@ public class MainActivity extends AppCompatActivity
                             * 이미 userSubjectList에는 요소가 들어있는 상태임.
                             * adapter.notifyDataSetChanged();
                             */
+                            adapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -271,10 +272,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
         //비동기 문제 해결 할 때에는 이거 주석처리 해놓고 하시면 될 것 같아용(열)
-        userSubjectList.add(new Subject("0000", "산학협력프로젝트2(종합설계)"));
+        userSubjectList.add(new Subject("s2", "산학협력프로젝트2(종합설계)"));
 //        userSubjectList.add(new Subject("2222", "과학사"));
 //        userSubjectList.add(new Subject("1111", "클라우드웹서비스"));
-        userSubjectList.add(new Subject("3333", "졸업프로젝트2(종합설계)"));
+        userSubjectList.add(new Subject("s3", "졸업프로젝트2(종합설계)"));
 
         // 수강 목록을 수강 번호로 정렬
         Collections.sort(userSubjectList, new Comparator<Subject>() {
