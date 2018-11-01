@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment {
     DatabaseReference mdbRef;
     Query query;
     Query query2;
+    static boolean on=false;
     ArrayList<Board> boards=new ArrayList<Board>();
     String userID="201611210";  //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
     String subject="s1";    //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
@@ -87,7 +88,6 @@ public class HomeFragment extends Fragment {
         //이 보드에 맞는 걸 가져오면 된다.
         mdbRef=mdatabase.getReference("sugang");
         query = mdbRef.orderByChild("studentID").equalTo(userID);
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,6 +96,7 @@ public class HomeFragment extends Fragment {
                     Log.i("str", sugang.getSubID());
                     TimeLine timeLine=sugang.getTimeLine();
 //                    Log.i("str2", timeLine.getMaterials().get(0).getBoardID());
+
                     timeLines.add(timeLine);
 
                     mdbRef=mdatabase.getReference("board");
@@ -106,88 +107,85 @@ public class HomeFragment extends Fragment {
                     query2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
-                                Iterable<DataSnapshot> data=snapshot1.getChildren();
+                                on=true;
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    Iterable<DataSnapshot> data = snapshot1.getChildren();
+                                    //강의자료
+                                    //->강의자료의 모든 value들을 가져온다. 2018...
+                                    Iterable<DataSnapshot> data1 = data.iterator().next().getChildren();  //2018-10-26 21:51:45, 2018-10-27...
+                                    for (Iterator<DataSnapshot> da = data1.iterator(); data1.iterator().hasNext(); ) {
+                                        Board board = da.next().getChildren().iterator().next().getValue(Board.class);
+                                        for (int i = 0; i < timeLines.size(); i++) {
+                                            List<TimeLineBoardFormat> timeLineA = timeLines.get(i).getMaterials();
 
-                                //강의자료
-                                //->강의자료의 모든 value들을 가져온다. 2018...
-                                Iterable<DataSnapshot> data1=data.iterator().next().getChildren();  //2018-10-26 21:51:45, 2018-10-27...
-                                for(Iterator<DataSnapshot> da = data1.iterator(); data1.iterator().hasNext();){
-                                    Board board=da.next().getChildren().iterator().next().getValue(Board.class);
-                                    for(int i=0;i<timeLines.size();i++){
-                                        List<TimeLineBoardFormat> timeLineA=timeLines.get(i).getMaterials();
-
-                                        for(int j=0;j<timeLineA.size();j++){
-                                            if(board.getBoardID().equals(timeLineA.get(j).getBoardID())){
-                                                Log.i("board title",i+"");
-                                                timelineList.add(new TimelineListAdapter.Item(
-                                                        i+"",
-                                                        "산학협력 프로젝트2",
-                                                        board.getTitle(),
-                                                        board.getUploadDate(),
-                                                        timeLineA.get(j).isIsread(),
-                                                        timeLineA.get(j).isWantTop()
-                                                ));
-
-
-
+                                            for (int j = 0; j < timeLineA.size(); j++) {
+                                                if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
+                                                    Log.i("board title", i + " " + board.getType());
+                                                    timelineList.add(new TimelineListAdapter.Item(
+                                                            i + "",
+                                                            "산학협력 프로젝트2",
+                                                            board.getTitle(),
+                                                            board.getUploadDate(),
+                                                            timeLineA.get(j).isIsread(),
+                                                            timeLineA.get(j).isWantTop()
+                                                    ));
+                                                }
                                             }
+
                                         }
-
+                                        //Log.i("보쟈", da.next().getValue().toString()); //-LP11bhR2..., -LPIJ...
                                     }
-                                    //Log.i("보쟈", da.next().getValue().toString()); //-LP11bhR2..., -LPIJ...
-                                }
 
-                                //공지
-                                Iterable<DataSnapshot> data2=data.iterator().next().getChildren();
-                                for(Iterator<DataSnapshot> da=data2.iterator();data2.iterator().hasNext();){
-                                    Board board=da.next().getChildren().iterator().next().getValue(Board.class);
-                                    for(int i=0;i<timeLines.size();i++){
-                                        List<TimeLineBoardFormat> timeLineA=timeLines.get(i).getMaterials();
+                                    //공지
+                                    Iterable<DataSnapshot> data2 = data.iterator().next().getChildren();
+                                    for (Iterator<DataSnapshot> da = data2.iterator(); data2.iterator().hasNext(); ) {
+                                        Board board = da.next().getChildren().iterator().next().getValue(Board.class);
+                                        for (int i = 0; i < timeLines.size(); i++) {
+                                            List<TimeLineBoardFormat> timeLineA = timeLines.get(i).getMaterials();
 
-                                        for(int j=0;j<timeLineA.size();j++){
-                                            if(board.getBoardID().equals(timeLineA.get(j).getBoardID())){
-                                                timelineList.add(new TimelineListAdapter.Item(
-                                                        i+"",
-                                                        "산학협력 프로젝트2",
-                                                        board.getTitle(),
-                                                        board.getUploadDate(),
-                                                        timeLineA.get(j).isIsread(),
-                                                        timeLineA.get(j).isWantTop()
-                                                ));
+                                            for (int j = 0; j < timeLineA.size(); j++) {
+                                                if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
+                                                    timelineList.add(new TimelineListAdapter.Item(
+                                                            i + "",
+                                                            "산학협력 프로젝트2",
+                                                            board.getTitle(),
+                                                            board.getUploadDate(),
+                                                            timeLineA.get(j).isIsread(),
+                                                            timeLineA.get(j).isWantTop()
+                                                    ));
 
+                                                }
                                             }
+
                                         }
-
                                     }
-                                }
 
-                                //과제
-                                Iterable<DataSnapshot> data3=data.iterator().next().getChildren();
-                                for(Iterator<DataSnapshot> da=data3.iterator();data3.iterator().hasNext();){
-                                    Board board=da.next().getChildren().iterator().next().getValue(Board.class);
-                                    for(int i=0;i<timeLines.size();i++){
-                                        List<TimeLineBoardFormat> timeLineA=timeLines.get(i).getMaterials();
+                                    //과제
+                                    Iterable<DataSnapshot> data3 = data.iterator().next().getChildren();
+                                    for (Iterator<DataSnapshot> da = data3.iterator(); data3.iterator().hasNext(); ) {
+                                        Board board = da.next().getChildren().iterator().next().getValue(Board.class);
+                                        for (int i = 0; i < timeLines.size(); i++) {
+                                            List<TimeLineBoardFormat> timeLineA = timeLines.get(i).getMaterials();
 
-                                        for(int j=0;j<timeLineA.size();j++){
-                                            if(board.getBoardID().equals(timeLineA.get(j).getBoardID())){
-                                                timelineList.add(new TimelineListAdapter.Item(
-                                                        i+"",
-                                                        "산학협력 프로젝트2",
-                                                        board.getTitle(),
-                                                        board.getUploadDate(),
-                                                        timeLineA.get(j).isIsread(),
-                                                        timeLineA.get(j).isWantTop()
-                                                ));
-                                                adapter.notifyDataSetChanged();
+                                            for (int j = 0; j < timeLineA.size(); j++) {
+                                                if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
+                                                    timelineList.add(new TimelineListAdapter.Item(
+                                                            i + "",
+                                                            "산학협력 프로젝트2",
+                                                            board.getTitle(),
+                                                            board.getUploadDate(),
+                                                            timeLineA.get(j).isIsread(),
+                                                            timeLineA.get(j).isWantTop()
+                                                    ));
+                                                    adapter.notifyDataSetChanged();
 
+                                                }
                                             }
-                                        }
 
+                                        }
+                                        //Log.i("value", board.getTitle());
                                     }
-                                    //Log.i("value", board.getTitle());
                                 }
-                            }
                         }
 
                         @Override
