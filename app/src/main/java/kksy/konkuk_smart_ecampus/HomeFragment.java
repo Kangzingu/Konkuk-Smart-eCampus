@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class HomeFragment extends Fragment {
     Query query2;
     static boolean on=false;
     ArrayList<Board> boards=new ArrayList<Board>();
+    HashMap<String, String> subjects=new HashMap();
     String userID="201611210";  //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
     String subject="s1";    //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
     //수강과목은 여러개 일 수 있으니까 나중에는 배열로 고칠 것.
@@ -81,6 +83,9 @@ public class HomeFragment extends Fragment {
         timelineList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        //여리 - 쿼리에서 진행할 예정
+
+
         boardID=new ArrayList<String>();
         mdatabase = FirebaseDatabase.getInstance();
         //sugang 에 가서 학번으로 timeline에 접근 한 뒤에 타임라인을 가지고온다.
@@ -94,6 +99,7 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Sugang sugang=snapshot.getValue(Sugang.class);
                     Log.i("str", sugang.getSubID());
+                    subjects.put(sugang.getSubID(), "네트워크 프로그래밍");
                     TimeLine timeLine=sugang.getTimeLine();
 //                    Log.i("str2", timeLine.getMaterials().get(0).getBoardID());
 
@@ -123,7 +129,7 @@ public class HomeFragment extends Fragment {
                                                     Log.i("board title", i + " " + board.getType());
                                                     timelineList.add(new TimelineListAdapter.Item(
                                                             i + "",
-                                                            "산학협력 프로젝트2",
+                                                            subjects.get("s1"),
                                                             board.getTitle(),
                                                             board.getUploadDate(),
                                                             timeLineA.get(j).isIsread(),

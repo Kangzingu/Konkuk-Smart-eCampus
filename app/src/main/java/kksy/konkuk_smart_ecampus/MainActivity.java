@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity
     Handler handler=null;
     Thread t;
     Query query2;
+
     //
 
     @Override
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         mdatabase = FirebaseDatabase.getInstance();
         handler=new Handler();
+
 
 
         if(isStudent){
