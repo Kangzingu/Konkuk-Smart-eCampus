@@ -107,6 +107,10 @@ public class ClassFragment extends Fragment {
         recyclerViewLectureData = (RecyclerView) view.findViewById(R.id.listViewLectureData);
         recyclerViewAssignment = (RecyclerView) view.findViewById(R.id.listViewAssignment);
 
+        recyclerViewNotice.setNestedScrollingEnabled(false);
+        recyclerViewLectureData.setNestedScrollingEnabled(false);
+        recyclerViewAssignment.setNestedScrollingEnabled(false);
+
         initBoardMain();
 
         return view;

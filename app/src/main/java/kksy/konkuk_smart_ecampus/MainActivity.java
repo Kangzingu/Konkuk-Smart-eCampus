@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity
 
         recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        
+
         data = new ArrayList<>();
 
         adapter = new ExpandableListAdapter(data);
