@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     String userImgURL;
     Boolean userIsBeaconCheck;
     ArrayList<Subject> userSubjectList;
+    List<ExpandableListAdapter.Item> data;
     ExpandableListAdapter adapter;
 
     Toolbar toolbar;
@@ -221,6 +222,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initSubjectList(){
+        Log.d("Firebase-test", "initSubjectList1");
         // 수강 과목 List 초기 설정
         userSubjectList = new ArrayList<>();
 
@@ -265,6 +267,20 @@ public class MainActivity extends AppCompatActivity
                             * 이미 userSubjectList에는 요소가 들어있는 상태임.
                             * adapter.notifyDataSetChanged();
                             */
+
+                            // 수강 목록을 수강 번호로 정렬
+                            Collections.sort(userSubjectList, new Comparator<Subject>() {
+                                @Override
+                                public int compare(Subject o1, Subject o2) {
+                                    return o1.getSubID().compareTo(o2.getSubID());
+                                }
+                            });
+
+                            data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
+                            for(int i=0; i<userSubjectList.size(); i++){
+                                data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
+                            }
+
                             adapter.notifyDataSetChanged();
                         }
 
@@ -288,27 +304,10 @@ public class MainActivity extends AppCompatActivity
 //        userSubjectList.add(new Subject("1111", "클라우드웹서비스"));
         userSubjectList.add(new Subject("s3", "졸업프로젝트2(종합설계)"));
 
-        // 수강 목록을 수강 번호로 정렬
-        Collections.sort(userSubjectList, new Comparator<Subject>() {
-            @Override
-            public int compare(Subject o1, Subject o2) {
-                return o1.getSubID().compareTo(o2.getSubID());
-            }
-        });
-
         recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        final List<ExpandableListAdapter.Item> data = new ArrayList<>();
-
-        /*
-        - 여리
-        data는 ExpandableListAdapter 적용을 위한 List 이므로 만지지 않아도 됨
-         */
-
-        data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
-        for(int i=0; i<userSubjectList.size(); i++){
-            data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
-        }
+        
+        data = new ArrayList<>();
 
         adapter = new ExpandableListAdapter(data);
         adapter.setItemClick(new ExpandableListAdapter.ItemClick() {
