@@ -84,9 +84,11 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         if(item.isOpen){
             timelineHolder.headToogle.setImageResource(R.drawable.ic_expand_less_24dp);
+            timelineHolder.contentView.setVisibility(View.VISIBLE);
         }
         else{
             timelineHolder.headToogle.setImageResource(R.drawable.ic_expand_more_24dp);
+            timelineHolder.contentView.setVisibility(View.GONE);
         }
         if(!item.isNotPick){
             timelineHolder.headPick.setImageResource(R.drawable.ic_bookmark_24dp);
