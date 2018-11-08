@@ -29,6 +29,15 @@ public class AttendanceFragment extends Fragment {
     private static final String ARG_STDID = "student id";
 
     // TODO: Rename and change types of parameters
+    /*
+    - 진구
+
+    우선은 AttendanceFragment로 넘어올 때, 과목과 학생정보만 가져오도록 함
+    혹시나 더 필요한게 있으면 자영에게 문의
+
+    - subNum : 과목 아이디 (수강신청 할 때 쓰는 4자리 과목 번호)
+    - stdId : 학생 아이디
+     */
     private String subNum;
     private String stdId;
 
@@ -78,6 +87,20 @@ public class AttendanceFragment extends Fragment {
     }
 
     public void initAttendance(){
+        /*
+        - 진구
+
+        출석부 데이터가 들어가야 할 곳은 여기!
+        출석부 UI는 RecyclerView 안에 RecyclerView 가 있는 이중적인 구조임
+        따라서, Vertical 한 RecyclerView 안에 Horizontal 한 RecyclerView 가 있음
+
+        - data : Vertical 한 RecyclerView 안에 들어가는 데이터 ArrayList (1주차, 2주차 같은거에 해당)
+            data 에 AttendanceListAdapter.Item 객체가 들어감
+        - AttendanceListAdapter.Item : 몇 주차 인지에 대한 정보(attendance_week)와 그 주차의 출석 정보 ArrayList(attendance_contents)를 포함함
+            attendance_contents 에 AttendanceContentsAdapter.Item 객체가 들어감
+        - AttendanceContentsAdapter.Item : 출석 날짜(date)와 그 날짜의 출석 여부(state)
+            state 는 ATTEND(출석), LATE(지각), ABSENT(결석)으로 구분
+         */
         data = new ArrayList<>();
 
         ArrayList<AttendanceContentsAdapter.Item> contents1 = new ArrayList<>();
@@ -86,8 +109,8 @@ public class AttendanceFragment extends Fragment {
         data.add(new AttendanceListAdapter.Item(1, contents1));
 
         ArrayList<AttendanceContentsAdapter.Item> contents2 = new ArrayList<>();
-        contents2.add(new AttendanceContentsAdapter.Item(LATE, "2018.09.10(월)"));
-        contents2.add(new AttendanceContentsAdapter.Item(ABSENT, "2018.09.12(수)"));
+        contents2.add(new AttendanceContentsAdapter.Item(ATTEND, "2018.09.10(월)"));
+        contents2.add(new AttendanceContentsAdapter.Item(ATTEND, "2018.09.12(수)"));
         data.add(new AttendanceListAdapter.Item(2, contents2));
 
         ArrayList<AttendanceContentsAdapter.Item> contents3 = new ArrayList<>();

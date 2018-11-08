@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAdapter.ViewHolder> {
@@ -55,10 +54,6 @@ public class AttendanceListAdapter extends RecyclerView.Adapter<AttendanceListAd
     public static class Item{
         public int attendance_week;
         public List<AttendanceContentsAdapter.Item> attendance_contents;
-
-        public Item(int attendance_week) {
-            this.attendance_week = attendance_week;
-        }
 
         public Item(int attendance_week, List<AttendanceContentsAdapter.Item> attendance_contents) {
             this.attendance_week = attendance_week;
