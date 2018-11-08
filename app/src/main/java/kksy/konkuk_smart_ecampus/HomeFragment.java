@@ -1,6 +1,9 @@
 package kksy.konkuk_smart_ecampus;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -43,6 +46,8 @@ public class HomeFragment extends Fragment {
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+
+    AlertDialog.Builder builder;
 
     /*YEORI*/
     ArrayList<TimeLine> timeLines=new ArrayList<TimeLine>();
@@ -333,18 +338,38 @@ public class HomeFragment extends Fragment {
         });
         adapter.setItemLongClick(new TimelineListAdapter.TimelineItemLongClick() {
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(final View view, final int position) {
 
                 /*
                 - 여리
                 게시물 삭제 시, Timeline DB에서도 삭제
                  */
 
-                timelineList.remove(position);
-                adapter.notifyDataSetChanged();
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+                }
+                else{
+                    builder = new AlertDialog.Builder(getContext());
+                }
+                builder.setTitle("타임라인 삭제")
+                        .setMessage("해당 게시물을 삭제하시겠습니까?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                timelineList.remove(position);
+                                adapter.notifyDataSetChanged();
 
-                Snackbar.make(view, "아이템 삭제", Snackbar.LENGTH_SHORT)
-                        .setAction("아이템 삭제", null).show();
+                                Snackbar.make(view, "게시물 삭제", Snackbar.LENGTH_SHORT)
+                                        .setAction("게시물 삭제", null).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
 
