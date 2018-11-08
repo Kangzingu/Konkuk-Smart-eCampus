@@ -83,6 +83,13 @@
                 android:background="@color/colorMedium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/listviewSubjects"></View>
+
+            <include
+                android:id="@+id/menu_classroom"
+                layout="@layout/menu_classroom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/view3"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.design.widget.NavigationView>
 

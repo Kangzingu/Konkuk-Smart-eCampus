@@ -5,6 +5,10 @@
     <color name="colorAccent">#046b40</color>
     <color name="colorAccentDark">#034c2d</color>
 
+    <color name="colorRedAbsentPrimary">#ff7043</color>
+    <color name="colorGreenAttendPrimary">#aed581</color>
+    <color name="colorYellowLatePrimary">#ffd54f</color>
+
     <color name="colorSecondPrimary">#f1f8e9</color>
 
     <color name="colorYellowPrimary">#fdd835</color>

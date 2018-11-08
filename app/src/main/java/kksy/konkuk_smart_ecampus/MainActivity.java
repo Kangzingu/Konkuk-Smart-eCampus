@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -67,8 +68,12 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     SwitchCompat switchBeacon;
     View contentMain;
+    View menuClass;
     RecyclerView recyclerView;
     MenuItem nowMenuItem;
+    LinearLayout btnAttendance;
+
+    String nowClass;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -316,6 +321,9 @@ public class MainActivity extends AppCompatActivity
                 TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle); // toolbar title
                 toolbarTitle.setText(data.get(position).text); // toolbar title을 선택한 강의명으로 바꿈
 
+                menuClass.setVisibility(View.VISIBLE); // 강의실 menu 목록을 보이게 함
+                nowClass = data.get(position).number;
+
                 fragmentTransaction = fragmentManager.beginTransaction();
                 /*
                 - 여리
@@ -390,6 +398,9 @@ public class MainActivity extends AppCompatActivity
 
         // 수강 과목 List 초기 설정
         initSubjectList();
+
+        // 강의실 입장 시 보이는 Menu 초기 설정
+        initClassMenu();
     }
 
     public void initNavigationHeader(){
@@ -421,6 +432,26 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragmentContainer, new HomeFragment());
         fragmentTransaction.commit();
+    }
+
+    public void initClassMenu(){
+        menuClass = findViewById(R.id.menu_classroom);
+        btnAttendance = findViewById(R.id.btn_attendance);
+
+        menuClass.setVisibility(View.GONE);
+        btnAttendance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isClass){
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentContainer, AttendanceFragment.newInstance(nowClass, userId));
+                    fragmentTransaction.commit();
+
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
     }
 
     @Override
@@ -463,6 +494,8 @@ public class MainActivity extends AppCompatActivity
 
         isClass = false;
         initSubjectList();
+
+        menuClass.setVisibility(View.GONE); // 강의실이 아닌 다른 곳일 경우 강의실 Menu를 보이지 않게 함
 
         return true;
     }
