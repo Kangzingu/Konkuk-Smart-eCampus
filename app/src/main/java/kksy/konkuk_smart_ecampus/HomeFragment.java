@@ -1,6 +1,9 @@
 package kksy.konkuk_smart_ecampus;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -23,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,6 +47,8 @@ public class HomeFragment extends Fragment {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    AlertDialog.Builder builder;
+
     /*YEORI*/
     ArrayList<TimeLine> timeLines=new ArrayList<TimeLine>();
     ArrayList<String> boardID=new ArrayList<String>();
@@ -52,6 +58,7 @@ public class HomeFragment extends Fragment {
     Query query2;
     static boolean on=false;
     ArrayList<Board> boards=new ArrayList<Board>();
+    HashMap<String, String> subjects=new HashMap();
     String userID="201611210";  //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
     String subject="s1";    //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
     //수강과목은 여러개 일 수 있으니까 나중에는 배열로 고칠 것.
@@ -81,6 +88,9 @@ public class HomeFragment extends Fragment {
         timelineList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
+        //여리 - 쿼리에서 진행할 예정
+
+
         boardID=new ArrayList<String>();
         mdatabase = FirebaseDatabase.getInstance();
         //sugang 에 가서 학번으로 timeline에 접근 한 뒤에 타임라인을 가지고온다.
@@ -94,6 +104,7 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Sugang sugang=snapshot.getValue(Sugang.class);
                     Log.i("str", sugang.getSubID());
+                    subjects.put(sugang.getSubID(), "네트워크 프로그래밍");
                     TimeLine timeLine=sugang.getTimeLine();
 //                    Log.i("str2", timeLine.getMaterials().get(0).getBoardID());
 
@@ -123,7 +134,7 @@ public class HomeFragment extends Fragment {
                                                     Log.i("board title", i + " " + board.getType());
                                                     timelineList.add(new TimelineListAdapter.Item(
                                                             i + "",
-                                                            "산학협력 프로젝트2",
+                                                            subjects.get("s1"),
                                                             board.getTitle(),
                                                             board.getUploadDate(),
                                                             timeLineA.get(j).isIsread(),
@@ -327,18 +338,38 @@ public class HomeFragment extends Fragment {
         });
         adapter.setItemLongClick(new TimelineListAdapter.TimelineItemLongClick() {
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(final View view, final int position) {
 
                 /*
                 - 여리
                 게시물 삭제 시, Timeline DB에서도 삭제
                  */
 
-                timelineList.remove(position);
-                adapter.notifyDataSetChanged();
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+                }
+                else{
+                    builder = new AlertDialog.Builder(getContext());
+                }
+                builder.setTitle("타임라인 삭제")
+                        .setMessage("해당 게시물을 삭제하시겠습니까?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                timelineList.remove(position);
+                                adapter.notifyDataSetChanged();
 
-                Snackbar.make(view, "아이템 삭제", Snackbar.LENGTH_SHORT)
-                        .setAction("아이템 삭제", null).show();
+                                Snackbar.make(view, "게시물 삭제", Snackbar.LENGTH_SHORT)
+                                        .setAction("게시물 삭제", null).show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
 

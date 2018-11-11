@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -59,14 +61,19 @@ public class MainActivity extends AppCompatActivity
     String userImgURL;
     Boolean userIsBeaconCheck;
     ArrayList<Subject> userSubjectList;
+    List<ExpandableListAdapter.Item> data;
     ExpandableListAdapter adapter;
 
     Toolbar toolbar;
     NavigationView navigationView;
     SwitchCompat switchBeacon;
     View contentMain;
+    View menuClass;
     RecyclerView recyclerView;
     MenuItem nowMenuItem;
+    LinearLayout btnAttendance;
+
+    String nowClass;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity
     Handler handler=null;
     Thread t;
     Query query2;
+
     //
 
     @Override
@@ -106,6 +114,7 @@ public class MainActivity extends AppCompatActivity
 
         mdatabase = FirebaseDatabase.getInstance();
         handler=new Handler();
+
 
 
         if(isStudent){
@@ -220,6 +229,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initSubjectList(){
+        Log.d("Firebase-test", "initSubjectList1");
         // 수강 과목 List 초기 설정
         userSubjectList = new ArrayList<>();
 
@@ -264,6 +274,20 @@ public class MainActivity extends AppCompatActivity
                             * 이미 userSubjectList에는 요소가 들어있는 상태임.
                             * adapter.notifyDataSetChanged();
                             */
+
+                            // 수강 목록을 수강 번호로 정렬
+                            Collections.sort(userSubjectList, new Comparator<Subject>() {
+                                @Override
+                                public int compare(Subject o1, Subject o2) {
+                                    return o1.getSubID().compareTo(o2.getSubID());
+                                }
+                            });
+
+                            data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
+                            for(int i=0; i<userSubjectList.size(); i++){
+                                data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
+                            }
+
                             adapter.notifyDataSetChanged();
                         }
 
@@ -287,27 +311,10 @@ public class MainActivity extends AppCompatActivity
 //        userSubjectList.add(new Subject("1111", "클라우드웹서비스"));
         userSubjectList.add(new Subject("s3", "졸업프로젝트2(종합설계)"));
 
-        // 수강 목록을 수강 번호로 정렬
-        Collections.sort(userSubjectList, new Comparator<Subject>() {
-            @Override
-            public int compare(Subject o1, Subject o2) {
-                return o1.getSubID().compareTo(o2.getSubID());
-            }
-        });
-
         recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        final List<ExpandableListAdapter.Item> data = new ArrayList<>();
 
-        /*
-        - 여리
-        data는 ExpandableListAdapter 적용을 위한 List 이므로 만지지 않아도 됨
-         */
-
-        data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
-        for(int i=0; i<userSubjectList.size(); i++){
-            data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
-        }
+        data = new ArrayList<>();
 
         adapter = new ExpandableListAdapter(data);
         adapter.setItemClick(new ExpandableListAdapter.ItemClick() {
@@ -315,6 +322,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view, int position) {
                 TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbarTitle); // toolbar title
                 toolbarTitle.setText(data.get(position).text); // toolbar title을 선택한 강의명으로 바꿈
+
+                menuClass.setVisibility(View.VISIBLE); // 강의실 menu 목록을 보이게 함
+                nowClass = data.get(position).number;
 
                 fragmentTransaction = fragmentManager.beginTransaction();
                 /*
@@ -390,6 +400,9 @@ public class MainActivity extends AppCompatActivity
 
         // 수강 과목 List 초기 설정
         initSubjectList();
+
+        // 강의실 입장 시 보이는 Menu 초기 설정
+        initClassMenu();
     }
 
     public void initNavigationHeader(){
@@ -421,6 +434,26 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragmentContainer, new HomeFragment());
         fragmentTransaction.commit();
+    }
+
+    public void initClassMenu(){
+        menuClass = findViewById(R.id.menu_classroom);
+        btnAttendance = findViewById(R.id.btn_attendance);
+
+        menuClass.setVisibility(View.GONE);
+        btnAttendance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isClass){
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentContainer, AttendanceFragment.newInstance(nowClass, userId));
+                    fragmentTransaction.commit();
+
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
     }
 
     @Override
@@ -463,6 +496,8 @@ public class MainActivity extends AppCompatActivity
 
         isClass = false;
         initSubjectList();
+
+        menuClass.setVisibility(View.GONE); // 강의실이 아닌 다른 곳일 경우 강의실 Menu를 보이지 않게 함
 
         return true;
     }
