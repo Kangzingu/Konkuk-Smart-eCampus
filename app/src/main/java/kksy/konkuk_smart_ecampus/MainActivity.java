@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void initSwitchBeacon(){
+        BeaconConnect beaconConnect=(BeaconConnect) getApplication();
+        beaconConnect.SetUserID(userId);
         // Beacon Switch 초기 설정
         switchBeacon = (SwitchCompat) findViewById(R.id.switchBeacon);
         switchBeacon.setChecked(userIsBeaconCheck);

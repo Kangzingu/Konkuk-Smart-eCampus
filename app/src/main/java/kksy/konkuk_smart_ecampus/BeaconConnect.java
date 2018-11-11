@@ -28,8 +28,11 @@ import java.util.Date;
 public class BeaconConnect extends Application {
     private BeaconManager beaconManager;
     DatabaseReference databaseReference;
-    String studentID;//인텐트로 받아야행^^ 학생 키임
     String subID_pID;
+    String studentID;//인텐트로 받아야행^^ 학생 키임
+    String round;
+    String date;
+    String state;
     DataSnapshot currentObject;//디비 읽으면서 임시 저장 하는 넘
     DataSnapshot studentObject;
     DataSnapshot lectureObject;
@@ -43,9 +46,16 @@ public class BeaconConnect extends Application {
     DatabaseReference mdbRef;
     Query query;
 
+    MyDBHandler myDBHandler;
+    public void addAttendance(){
+        myDBHandler=new MyDBHandler("attendance");
+        Attendance attendance=new Attendance(subID_pID,studentID,round,date,state);
+
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        studentID = "";
         mdatabase = FirebaseDatabase.getInstance();
         beaconManager = new BeaconManager(getApplicationContext());
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
@@ -66,66 +76,67 @@ public class BeaconConnect extends Application {
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        studentID = "201611210";
-                        //임시로 해놓은거 원래 여기에 사용자 ID 들어와야행
-                        Iterator<DataSnapshot> childSnap = dataSnapshot.child("student").getChildren().iterator();
-                        while (childSnap.hasNext()) {
-                            currentObject = childSnap.next();
-                            if ((currentObject.child("studentID").getValue().toString()).equals(studentID)) {
-                                studentObject=currentObject;
+                        if (!studentID.equals("")) {
+                             Iterator<DataSnapshot> childSnap = dataSnapshot.child("student").getChildren().iterator();
+                            while (childSnap.hasNext()) {
+                                currentObject = childSnap.next();
+                                if ((currentObject.child("studentID").getValue().toString()).equals(studentID)) {
+                                    studentObject = currentObject;
+                                }
                             }
-                        }
-                        childSnap = dataSnapshot.child("lecture").getChildren().iterator();
-                        while (childSnap.hasNext()) {
-                            currentObject = childSnap.next();//스냅샷 저장해두고
-                            if ((list.get(0).getProximityUUID().toString()).equals(currentObject.child("beconInfo").getValue().toString())) {
-                                lectureObject=currentObject;
+                            childSnap = dataSnapshot.child("lecture").getChildren().iterator();
+                            while (childSnap.hasNext()) {
+                                currentObject = childSnap.next();//스냅샷 저장해두고
+                                if ((list.get(0).getProximityUUID().toString()).equals(currentObject.child("beconInfo").getValue().toString())) {
+                                    lectureObject = currentObject;
+                                }
                             }
-                        }
-                        subID_pID = lectureObject.child("subID").getValue().toString() + "-" + lectureObject.child("proID").getValue().toString();
-                        timeAsNum = System.currentTimeMillis();
-                        timeAsDate = new Date(timeAsNum);
-                        timeAsformat=new SimpleDateFormat("yyyy-MM-dd");
-                        String dateToday= "2018-10-27";//timeAsformat.format(timeAsDate);
-                        childSnap=dataSnapshot.child("attendance").child(subID_pID).child(studentID).child(dateToday).getChildren().iterator();
-                        while (childSnap.hasNext()) {
-                            currentObject = childSnap.next();
-                            attendanceObject = currentObject;
-                        }
-                        Toast.makeText(getApplicationContext(), attendanceObject.getKey().toString(), Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), attendanceObject.child("state").getValue().toString(), Toast.LENGTH_LONG).show();
-                        String attendStartTime=lectureObject.child("attendTime").child("0").getValue().toString();
-                        String attendEndTime=lectureObject.child("attendTime").child("1").getValue().toString();
-                        String lateStartTime=lectureObject.child("lateTime").child("0").getValue().toString();
-                        String lateEndTime=lectureObject.child("lateTime").child("1").getValue().toString();
-                        //시간 비교
-                        timeAsNum = System.currentTimeMillis();
-                        timeAsDate = new Date(timeAsNum);
-                        timeAsformat= new SimpleDateFormat("HH:mm");
-                        String currentTime = timeAsformat.format(timeAsDate);
-                        //현재시간
-                        if((currentTime.compareTo(attendStartTime)>=0)&&(currentTime.compareTo(attendEndTime)<=0)) {
-                            //08:00 ~ 08:10
-                            //정상 출쳌
-                            Toast.makeText(getApplicationContext(), "출석", Toast.LENGTH_LONG).show();
-                            attendanceObject.child("state").getRef().setValue("출석");
-                        }
-                        else if((currentTime.compareTo(lateStartTime)>=0)&&(currentTime.compareTo(lateEndTime)<=0)){
-                            //08:11 ~ 08:30
-                            //지각
-                            Toast.makeText(getApplicationContext(), "지각", Toast.LENGTH_LONG).show();
-                            attendanceObject.child("state").getRef().setValue("지각");
-                        }
-                        else if((currentTime.compareTo(lateEndTime)>0)){
-                            //결석
-                            Toast.makeText(getApplicationContext(), "결석", Toast.LENGTH_LONG).show();
-                            attendanceObject.child("state").getRef().setValue("결석");
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(), "수업 시간이 아닙니다", Toast.LENGTH_LONG).show();
-                            attendanceObject.child("state").getRef().setValue("데헿");
+                            subID_pID = lectureObject.child("subID").getValue().toString() + "-" + lectureObject.child("proID").getValue().toString();
+                            timeAsNum = System.currentTimeMillis();
+                            timeAsDate = new Date(timeAsNum);
+                            timeAsformat = new SimpleDateFormat("yyyy-MM-dd");
+                            String dateToday = timeAsformat.format(timeAsDate);
+                            date = dateToday;
+                            if(dataSnapshot.child("attendance").hasChild(subID_pID))
+                            childSnap = dataSnapshot.child("attendance").child(subID_pID).child(studentID).child(dateToday).getChildren().iterator();
+                            while (childSnap.hasNext()) {//쭉 보면서 젤 마지막 애 뽑음
+                                currentObject = childSnap.next();
+                                attendanceObject = currentObject;
+                            }
+                            Toast.makeText(getApplicationContext(), attendanceObject.getKey().toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), attendanceObject.child("state").getValue().toString(), Toast.LENGTH_LONG).show();
+                            String attendStartTime = lectureObject.child("attendTime").child("0").getValue().toString();
+                            String attendEndTime = lectureObject.child("attendTime").child("1").getValue().toString();
+                            String lateStartTime = lectureObject.child("lateTime").child("0").getValue().toString();
+                            String lateEndTime = lectureObject.child("lateTime").child("1").getValue().toString();
+                            //시간 비교
+                            timeAsNum = System.currentTimeMillis();
+                            timeAsDate = new Date(timeAsNum);
+                            timeAsformat = new SimpleDateFormat("HH:mm");
+                            String currentTime = timeAsformat.format(timeAsDate);
+                            //현재시간
+
+                            if ((currentTime.compareTo(attendStartTime) >= 0) && (currentTime.compareTo(attendEndTime) <= 0)) {
+                                //08:00 ~ 08:10
+                                //정상 출쳌
+                                Toast.makeText(getApplicationContext(), "출석", Toast.LENGTH_LONG).show();
+                                attendanceObject.child("state").getRef().setValue("출석");
+                            } else if ((currentTime.compareTo(lateStartTime) >= 0) && (currentTime.compareTo(lateEndTime) <= 0)) {
+                                //08:11 ~ 08:30
+                                //지각
+                                Toast.makeText(getApplicationContext(), "지각", Toast.LENGTH_LONG).show();
+                                attendanceObject.child("state").getRef().setValue("지각");
+                            } else if ((currentTime.compareTo(lateEndTime) > 0)) {
+                                //결석
+                                Toast.makeText(getApplicationContext(), "결석", Toast.LENGTH_LONG).show();
+                                attendanceObject.child("state").getRef().setValue("결석");
+                            } else {
+                                Toast.makeText(getApplicationContext(), "수업 시간이 아닙니다", Toast.LENGTH_LONG).show();
+                                attendanceObject.child("state").getRef().setValue("데헿");
+                            }
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                     }
@@ -139,6 +150,9 @@ public class BeaconConnect extends Application {
                 showNotification("나감", "비콘 연결 끊김");
             }
         });
+    }
+    public void SetUserID(String userID) {
+        this.studentID = userID;
     }
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void showNotification(String title, String message) {
