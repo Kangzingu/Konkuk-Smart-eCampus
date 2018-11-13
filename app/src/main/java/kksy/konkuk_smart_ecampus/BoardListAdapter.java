@@ -13,6 +13,16 @@ import java.util.List;
 public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.ViewHolder> {
     List<Board> boardList;
 
+    // onClick
+    private BoardItemClick boardItemClick;
+    public interface BoardItemClick{
+        void onClick(View view, int position);
+    }
+
+    public void setBoardItemClick(BoardItemClick boardItemClick){
+        this.boardItemClick = boardItemClick;
+    }
+
     public BoardListAdapter(List<Board> boardList) {
         this.boardList = boardList;
     }
@@ -27,8 +37,16 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.boardTitle.setText(boardList.get(position).getTitle());
+        holder.boardTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(boardItemClick != null){
+                    boardItemClick.onClick(v, position);
+                }
+            }
+        });
     }
 
     @Override

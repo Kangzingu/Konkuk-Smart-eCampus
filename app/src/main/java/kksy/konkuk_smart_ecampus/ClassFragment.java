@@ -3,7 +3,10 @@ package kksy.konkuk_smart_ecampus;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,7 +47,9 @@ public class ClassFragment extends Fragment {
     private String mSubNum="s1";   //현재 수강번호가 3041 형식으로 주어져 있지 않기 때문에 설정함.
     //수강 릴레이션이 만들어지면 수정할 예정임(열)
 
-    BoardListAdapter adapter;
+    BoardListAdapter adapterNotice;
+    BoardListAdapter adapterLectureData;
+    BoardListAdapter adapterAssignment;
 
     RecyclerView recyclerViewNotice;
     RecyclerView recyclerViewLectureData;
@@ -54,6 +59,9 @@ public class ClassFragment extends Fragment {
     List<Board> lectureDataList;
     List<Board> assignmentList;
 
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
     //여리 - Board 가져오기
     FirebaseDatabase mdatabase;
     DatabaseReference mdbRef;
@@ -61,7 +69,6 @@ public class ClassFragment extends Fragment {
     Thread t;
     Handler handler=null;
     int ind=0;
-    //
 
     public ClassFragment() {
         // Required empty public constructor
@@ -110,6 +117,9 @@ public class ClassFragment extends Fragment {
         recyclerViewNotice.setNestedScrollingEnabled(false);
         recyclerViewLectureData.setNestedScrollingEnabled(false);
         recyclerViewAssignment.setNestedScrollingEnabled(false);
+
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         initBoardMain();
 
@@ -171,13 +181,15 @@ public class ClassFragment extends Fragment {
                         Log.i("value", board.getTitle());
                     }
 
-                    adapter.notifyDataSetChanged();
+                    adapterNotice.notifyDataSetChanged();
+                    adapterLectureData.notifyDataSetChanged();
+                    adapterAssignment.notifyDataSetChanged();
 
-                    adapter = new BoardListAdapter(noticeList);
-                    recyclerViewNotice.setAdapter(adapter);
-
-                    adapter = new BoardListAdapter(lectureDataList);
-                    recyclerViewLectureData.setAdapter(adapter);
+//                    adapter = new BoardListAdapter(noticeList);
+//                    recyclerViewNotice.setAdapter(adapter);
+//
+//                    adapter = new BoardListAdapter(lectureDataList);
+//                    recyclerViewLectureData.setAdapter(adapter);
                 }
 //            //UI작업
 //                t=new Thread(new Runnable() {
@@ -221,15 +233,39 @@ public class ClassFragment extends Fragment {
         여기서 부터는 recycerView와 adapter 설정하는 곳 -> 안만져도 됨
          */
         recyclerViewNotice.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new BoardListAdapter(noticeList);
-        recyclerViewNotice.setAdapter(adapter);
+        adapterNotice = new BoardListAdapter(noticeList);
+        adapterNotice.setBoardItemClick(new BoardListAdapter.BoardItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                // 공지사항
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(noticeList.get(position).getBoardID()));
+                fragmentTransaction.commit();
+            }
+        });
+        recyclerViewNotice.setAdapter(adapterNotice);
 
         recyclerViewLectureData.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new BoardListAdapter(lectureDataList);
-        recyclerViewLectureData.setAdapter(adapter);
+        adapterLectureData = new BoardListAdapter(lectureDataList);
+        adapterLectureData.setBoardItemClick(new BoardListAdapter.BoardItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                // 강의자료
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(lectureDataList.get(position).getBoardID()));
+                fragmentTransaction.commit();
+            }
+        });
+        recyclerViewLectureData.setAdapter(adapterLectureData);
 
         recyclerViewAssignment.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new BoardListAdapter(assignmentList);
-        recyclerViewAssignment.setAdapter(adapter);
+        adapterAssignment = new BoardListAdapter(assignmentList);
+        adapterAssignment.setBoardItemClick(new BoardListAdapter.BoardItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                // 과제
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(assignmentList.get(position).getBoardID()));
+                fragmentTransaction.commit();
+            }
+        });
+        recyclerViewAssignment.setAdapter(adapterAssignment);
     }
 }

@@ -21,17 +21,17 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private TimelineItemClick timelineItemClick;
     public interface TimelineItemClick{
-        public void onClick(View view, int position);
+        void onClick(View view, int position);
     }
 
     private TimelineItemLongClick timelineItemLongClick;
     public interface  TimelineItemLongClick{
-        public void onLongClick(View view, int position);
+        void onLongClick(View view, int position);
     }
 
     private TimelineItemPickClick timelineItemPickClick;
     public interface TimelineItemPickClick{
-        public void onPickClick(View view, int postion);
+        void onPickClick(View view, int postion);
     }
 
     public void setItemClick(TimelineItemClick timelineItemClick){
@@ -143,9 +143,6 @@ public class TimelineListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         timelineHolder.timelineView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                /*
-                Timeline 게시글 삭제 알림 - Swipe로 구현
-                 */
 
                 timelineItemLongClick.onLongClick(v, position);
                 return true;
