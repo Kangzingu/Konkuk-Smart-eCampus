@@ -239,6 +239,7 @@ public class ClassFragment extends Fragment {
             public void onClick(View view, int position) {
                 // 공지사항
                 fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(noticeList.get(position).getBoardID()));
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
@@ -251,6 +252,7 @@ public class ClassFragment extends Fragment {
             public void onClick(View view, int position) {
                 // 강의자료
                 fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(lectureDataList.get(position).getBoardID()));
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
@@ -263,6 +265,7 @@ public class ClassFragment extends Fragment {
             public void onClick(View view, int position) {
                 // 과제
                 fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(assignmentList.get(position).getBoardID()));
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });

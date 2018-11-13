@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    private BackPressCloseHandler backPressCloseHandler;
+
     //Zingu
     Switch beaconSwitch;
     BluetoothAdapter bluetoothAdapter=BluetoothAdapter.getDefaultAdapter();
@@ -97,6 +99,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         initUserInformation();
         initNavigationView();
@@ -447,6 +451,7 @@ public class MainActivity extends AppCompatActivity
                 if(isClass){
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentContainer, AttendanceFragment.newInstance(nowClass, userId));
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -459,10 +464,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if(fragmentManager.getBackStackEntryCount() == 0){
+            backPressCloseHandler.onBackPressed();
+        }
+        else{
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 

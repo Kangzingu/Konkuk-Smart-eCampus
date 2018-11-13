@@ -1,6 +1,7 @@
 package kksy.konkuk_smart_ecampus;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    Activity activity;
     AlertDialog.Builder builder;
 
     /*YEORI*/
@@ -79,12 +81,15 @@ public class HomeFragment extends Fragment {
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
 
+        activity = getActivity();
+
         initTimeline();
 
         return view;
     }
 
     public void initTimeline(){
+        Log.d("HomeFragment", "1");
         timelineList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -330,6 +335,7 @@ public class HomeFragment extends Fragment {
                 Log.i("boardnum", timelineList.get(0).boardID);
                 Log.i("boardnum", timelineList.get(1).boardID);
                 fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID));
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
                 Snackbar.make(view, "해당 게시물로 이동", Snackbar.LENGTH_SHORT)
@@ -401,5 +407,4 @@ public class HomeFragment extends Fragment {
             return 0;
         }
     };
-
 }
