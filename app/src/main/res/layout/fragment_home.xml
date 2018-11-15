@@ -3,18 +3,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listViewTimeline"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp">
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="20dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <kksy.konkuk_smart_ecampus.CircleProgressBar
+                    android:id="@+id/progressBarNotice"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="10dp"
+                    app:progress="30"
+                    app:progressBarThickness="6dp"
+                    app:progressbarColor="@color/colorPrimary" />
+                <LinearLayout
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="공지"
+                        android:textSize="15dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"
+                        android:gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3"
+                            android:textSize="25dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/10"
+                            android:textSize="12dp"
+                            android:textColor="@color/colorDarkGray"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <kksy.konkuk_smart_ecampus.CircleProgressBar
+                    android:id="@+id/progressBarAssignment"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="10dp"
+                    app:progress="40"
+                    app:progressBarThickness="6dp"
+                    app:progressbarColor="@color/colorPrimary" />
+                <LinearLayout
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="과제"
+                        android:textSize="15dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"
+                        android:gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4"
+                            android:textSize="25dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/11"
+                            android:textSize="12dp"
+                            android:textColor="@color/colorDarkGray"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <kksy.konkuk_smart_ecampus.CircleProgressBar
+                    android:id="@+id/progressBarLectureData"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="10dp"
+                    app:progress="80"
+                    app:progressBarThickness="6dp"
+                    app:progressbarColor="@color/colorPrimary" />
+                <LinearLayout
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="강의자료"
+                        android:textSize="15dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"
+                        android:gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4"
+                            android:textSize="25dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/5"
+                            android:textSize="12dp"
+                            android:textColor="@color/colorDarkGray"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listViewTimeline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 </FrameLayout>

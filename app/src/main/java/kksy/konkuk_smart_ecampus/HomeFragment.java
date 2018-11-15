@@ -40,6 +40,7 @@ import static kksy.konkuk_smart_ecampus.ExpandableListAdapter.HEADER;
  */
 public class HomeFragment extends Fragment {
 
+    CircleProgressBar circleProgressBar;
     RecyclerView recyclerView;
     TimelineListAdapter adapter;
 
@@ -76,6 +77,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_home, null);
+        circleProgressBar = (CircleProgressBar) view.findViewById(R.id.progressBarNotice);
         recyclerView = (RecyclerView) view.findViewById(R.id.listViewTimeline);
 
         fragmentManager = getFragmentManager();
@@ -83,9 +85,14 @@ public class HomeFragment extends Fragment {
 
         activity = getActivity();
 
+        initProgressBar();
         initTimeline();
 
         return view;
+    }
+
+    public void initProgressBar(){
+        circleProgressBar.setProgressWithAnimation(60);
     }
 
     public void initTimeline(){
