@@ -352,7 +352,7 @@ public class HomeFragment extends Fragment {
                 Log.i("boardnum", position+"");
                 Log.i("boardnum", timelineList.get(0).boardID);
                 Log.i("boardnum", timelineList.get(1).boardID);
-                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID));
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID, timelineList.get(position).subid_proid));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 

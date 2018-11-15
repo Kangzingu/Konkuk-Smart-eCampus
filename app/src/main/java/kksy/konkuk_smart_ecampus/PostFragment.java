@@ -29,6 +29,7 @@ public class PostFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_POST_ID = "post id";
+    private static final String SID_PID="sid_pid";
 
     // TODO: Rename and change types of parameters
     private int mPostId;
@@ -51,6 +52,7 @@ public class PostFragment extends Fragment {
     DatabaseReference mdbRef;
     Query query;
     Board realBoard;    //realBoard는 query를 통해 찾은 board를 저장해 놓는 로컬 변수이다.
+    String sid_pid;
     //
     public PostFragment() {
         // Required empty public constructor
@@ -63,10 +65,11 @@ public class PostFragment extends Fragment {
      * @return A new instance of fragment PostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String postId) {
+    public static PostFragment newInstance(String postId, String sidpid) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM_POST_ID, postId);
+        args.putString(SID_PID, sidpid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,6 +87,7 @@ public class PostFragment extends Fragment {
             ClassFragment 또는 HomeFragment에서  PostFragment에게 파라미터 넘겨줘야 함.
              */
             mBoardId = getArguments().getString(ARG_PARAM_POST_ID);
+            sid_pid=getArguments().getString(SID_PID);
             Log.i("boardid", mBoardId);
         }
 
@@ -94,8 +98,8 @@ public class PostFragment extends Fragment {
         /*
         * s1만 찾아도 되게 만든다고 했당.
         * s1.. 까지만.. */
-
-        query = mdbRef.orderByKey().equalTo("s1-p1");
+        Log.i("sid_pid", sid_pid);
+        query = mdbRef.orderByKey().equalTo(sid_pid);
 //        Log.i("yeori", query.toString());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
