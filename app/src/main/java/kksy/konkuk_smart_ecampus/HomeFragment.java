@@ -92,9 +92,7 @@ public class HomeFragment extends Fragment {
         Log.d("HomeFragment", "1");
         timelineList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
         //여리 - 쿼리에서 진행할 예정
-
 
         boardID=new ArrayList<String>();
         mdatabase = FirebaseDatabase.getInstance();
@@ -113,7 +111,9 @@ public class HomeFragment extends Fragment {
                     TimeLine timeLine=sugang.getTimeLine();
 //                    Log.i("str2", timeLine.getMaterials().get(0).getBoardID());
 
+                    timeLines=new ArrayList<>();
                     timeLines.add(timeLine);
+                    Log.i("board timeline", timeLine.toString());
 
                     mdbRef=mdatabase.getReference("board");
                     //(임시)
@@ -296,12 +296,12 @@ public class HomeFragment extends Fragment {
                     String subid_proid=timelineList.get(postion).subid_proid;
                     String[] temp=subid_proid.split("_");
 
-                    relation_table=mdbRef.child(temp[0]+"-"+userID).child("timeLine").push();
-                    TimelineListAdapter.Item item=timelineList.get(postion);
-                    TimeLineBoardFormat temp2=new TimeLineBoardFormat();
-                    temp2.setBoardID(item.boardID);
-                    temp2.setIsread(item.isOpen);
-                    temp2.setWantTop(item.isCheck);
+//                    relation_table=mdbRef.child(temp[0]+"-"+userID).child("timeLine").push();
+//                    TimelineListAdapter.Item item=timelineList.get(postion);
+//                    TimeLineBoardFormat temp2=new TimeLineBoardFormat();
+//                    temp2.setBoardID(item.boardID);
+//                    temp2.setIsread(item.isOpen);
+//                    temp2.setWantTop(item.isCheck);
                     //relation_table.setValue()
                 }
 
