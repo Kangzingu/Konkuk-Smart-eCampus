@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("Firebase-test", "initSubjectList1");
         // 수강 과목 List 초기 설정
         userSubjectList = new ArrayList<>();
+        data = new ArrayList<>();
 
         /*
         - 여리
@@ -287,6 +288,7 @@ public class MainActivity extends AppCompatActivity
                                 }
                             });
 
+                            data.clear();
                             data.add(new ExpandableListAdapter.Item(HEADER, getResources().getString(R.string.sugang_title)));
                             for(int i=0; i<userSubjectList.size(); i++){
                                 data.add(new ExpandableListAdapter.Item(CHILD, userSubjectList.get(i).getSubName(), userSubjectList.get(i).getSubID()));
@@ -300,6 +302,7 @@ public class MainActivity extends AppCompatActivity
 
                         }
                     });
+
 //                    Log.i("sugang", snapshot.getValue().toString());
 
                 }
@@ -310,15 +313,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
         //비동기 문제 해결 할 때에는 이거 주석처리 해놓고 하시면 될 것 같아용(열)
-        userSubjectList.add(new Subject("s2", "산학협력프로젝트2(종합설계)"));
+//        userSubjectList.add(new Subject("s2", "산학협력프로젝트2(종합설계)"));
 //        userSubjectList.add(new Subject("2222", "과학사"));
 //        userSubjectList.add(new Subject("1111", "클라우드웹서비스"));
-        userSubjectList.add(new Subject("s3", "졸업프로젝트2(종합설계)"));
+//        userSubjectList.add(new Subject("s3", "졸업프로젝트2(종합설계)"));
 
         recyclerView = (RecyclerView) findViewById(R.id.listviewSubjects);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        data = new ArrayList<>();
 
         adapter = new ExpandableListAdapter(data);
         adapter.setItemClick(new ExpandableListAdapter.ItemClick() {
