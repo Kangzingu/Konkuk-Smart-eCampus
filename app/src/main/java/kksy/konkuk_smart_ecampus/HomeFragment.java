@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Board> boards=new ArrayList<Board>();
     HashMap<String, String> subjects=new HashMap();
     String userID="201611210";  //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
-    String subject="s1";    //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
+    HashMap<String, String> subject;    //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기
     //수강과목은 여러개 일 수 있으니까 나중에는 배열로 고칠 것.
 
     public HomeFragment() {
@@ -105,13 +105,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+
                     Sugang sugang=snapshot.getValue(Sugang.class);
                     Log.i("str", sugang.getSubID());
                     subjects.put(sugang.getSubID(), "네트워크 프로그래밍");
                     TimeLine timeLine=sugang.getTimeLine();
 //                    Log.i("str2", timeLine.getMaterials().get(0).getBoardID());
 
-                    timeLines=new ArrayList<>();
+                    //timeLines=new ArrayList<>();
                     timeLines.add(timeLine);
                     Log.i("board timeline", timeLine.toString());
 
@@ -123,6 +124,7 @@ public class HomeFragment extends Fragment {
                     query2.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.i("여기들어와?", "제발");
                                 on=true;
                                 for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
                                     Iterable<DataSnapshot> data = snapshot1.getChildren();
@@ -136,17 +138,33 @@ public class HomeFragment extends Fragment {
 
                                             for (int j = 0; j < timeLineA.size(); j++) {
                                                 if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
-                                                    Log.i("board title", i + " " + board.getType());
-                                                    timelineList.add(new TimelineListAdapter.Item(
-                                                            i + "",
+                                                    Log.i("board", i + " " + board.getType());
+                                                    TimelineListAdapter.Item item=new TimelineListAdapter.Item( i + "",
                                                             subjects.get("s1"),
                                                             board.getTitle(),
                                                             board.getUploadDate(),
                                                             timeLineA.get(j).isIsread(),
                                                             timeLineA.get(j).isWantTop(),
                                                             board.getSubID_proID(),
-                                                            board.getBoardID()
-                                                    ));
+                                                            board.getBoardID());
+                                                    Log.i("board", timelineList.size()+"");
+
+                                                    //열(도움)
+                                                    //timeLines에 들어있는 거를 총 3번(수강 과목 수)불러서
+                                                    //지금 총 3번이 뜸..
+                                                    //timeLines에 있는 거랑 timeLineList랑 비교해서 이미 추가 되어 있으면.
+                                                    //추가 하지 않고 한번씩만 뜨게 해야함.
+
+//                                                    if(timelineList.size()==0){
+//                                                        Log.i("board", item.boardID);
+//                                                        timelineList.add(item);
+//                                                    }
+//                                                    for(int k=0;k<timelineList.size();k++){
+//                                                        if(timelineList.get(k).boardID!=item.boardID)
+//                                                            Log.i("board", item.boardID);
+//                                                            timelineList.add(item);
+//                                                    }
+
                                                 }
                                             }
 
