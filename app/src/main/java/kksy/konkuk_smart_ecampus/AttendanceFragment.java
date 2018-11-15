@@ -117,7 +117,9 @@ public class AttendanceFragment extends Fragment {
         //        ///////////////////////////////////////////////////////////////////////////////////////////////////////
         //        ////////////////////////////////////////// 다슬 subNum에 있졍 //////////////////////////////////////////
         //        ///////////////////////////////////////////////////////////////////////////////////////////////////////
-        query = mdbRef.orderByKey().equalTo(subNum + "-" + profId);
+
+        query = mdbRef.orderByKey().startAt(subNum).endAt(subNum+"\uf8ff");
+        //query = mdbRef.orderByKey().equalTo( subNum+ "-" + profId);
         countAttendance = 0;
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
