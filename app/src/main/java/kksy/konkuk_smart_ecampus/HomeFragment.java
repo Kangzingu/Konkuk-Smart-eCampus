@@ -53,6 +53,9 @@ public class HomeFragment extends Fragment {
     String now_StudentID = "201611233";//현재 로그인 한 학생 ID
     public String sugang_professor_ID = "noinfo";//다슬이가 불러와야됨->(여리요청 완료)//sugang_subject_ID가 s2라면, sugang_professor_ID는 무조건 p2
 
+
+    CircleProgressBar circleProgressBar;
+
     RecyclerView recyclerView;
     TimelineListAdapter adapter;
 
@@ -88,6 +91,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         mdatabase = FirebaseDatabase.getInstance();
         View view = inflater.inflate(R.layout.fragment_home, null);
+        circleProgressBar = (CircleProgressBar) view.findViewById(R.id.progressBarNotice);
         recyclerView = (RecyclerView) view.findViewById(R.id.listViewTimeline);
 
         fragmentManager = getFragmentManager();
@@ -95,16 +99,21 @@ public class HomeFragment extends Fragment {
 
         activity = getActivity();
 
+        initProgressBar();
         initTimeline();
        // postTimeLine();
         return view;
     }
 
 
+    public void initProgressBar(){
+        circleProgressBar.setProgressWithAnimation(60);
+    }
+
     /*
-       (다슬 수정)
-       : Lecture를 등록해서 사용해야 된다면, 이 함수를 이용하시오
-        */
+         (다슬 수정)
+         : Lecture를 등록해서 사용해야 된다면, 이 함수를 이용하시오
+          */
     public void regiLecture() {
 
         MyDBHandler myDBHandler = new MyDBHandler("lecture");
@@ -115,7 +124,7 @@ public class HomeFragment extends Fragment {
         myDBHandler.newLecture(lecture);
     }
 
-//    public void postTimeLine(){
+//    public void postTimeLine() {
 //        findProfessorID();
 //        findBoardID();
 //        searchBoard();
@@ -243,7 +252,7 @@ public class HomeFragment extends Fragment {
                     //Log.i("HomeFragment \n",board.getBoardID());
                     //boardid 비교
                     if (boardID.containsValue(board.getBoardID()) == true) {
-                       // Log.i("HomeFragment \n", "true");
+                        // Log.i("HomeFragment \n", "true");
                         timelineList.add(new TimelineListAdapter.Item(
                                 "0",
                                 "산학협력프로젝트1",
@@ -398,7 +407,7 @@ public class HomeFragment extends Fragment {
                  */
 
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID));
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID, timelineList.get(position).subid_proid));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 

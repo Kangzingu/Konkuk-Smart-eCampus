@@ -102,6 +102,7 @@ public class ClassFragment extends Fragment {
             MainActivity에서 ClassFragment에게 파라미터 넘겨줘야 함.
              */
             mSubNum = getArguments().getString(ARG_PARAM_NUM);
+            Log.i("subID", mSubNum);
         }
     }
 
@@ -142,7 +143,8 @@ public class ClassFragment extends Fragment {
          */
         mdatabase = FirebaseDatabase.getInstance();
         mdbRef=mdatabase.getReference("board");
-        query = mdbRef.orderByKey().equalTo("s1-p1");
+        Log.i("msubNum", mSubNum+"-"+"p"+mSubNum.charAt(1));
+        query = mdbRef.orderByKey().equalTo(mSubNum+"-"+"p"+mSubNum.charAt(1));
         handler=new Handler();
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -161,7 +163,7 @@ public class ClassFragment extends Fragment {
                     for(Iterator<DataSnapshot> da=data1.iterator();data1.iterator().hasNext();){
                         Board board=da.next().getChildren().iterator().next().getValue(Board.class);
                         lectureDataList.add(board);
-                        Log.i("value", board.getTitle());
+                        Log.i("value", board.getSubID_proID());
                         //Log.i("보쟈", da.next().getValue().toString()); //-LP11bhR2..., -LPIJ...
                     }
 
@@ -238,7 +240,8 @@ public class ClassFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 // 공지사항
-                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(noticeList.get(position).getBoardID()));
+
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(noticeList.get(position).getBoardID(), lectureDataList.get(position).getSubID_proID()));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -251,7 +254,7 @@ public class ClassFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 // 강의자료
-                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(lectureDataList.get(position).getBoardID()));
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(lectureDataList.get(position).getBoardID(), lectureDataList.get(position).getSubID_proID()));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -264,7 +267,7 @@ public class ClassFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 // 과제
-                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(assignmentList.get(position).getBoardID()));
+                fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(assignmentList.get(position).getBoardID(), lectureDataList.get(position).getSubID_proID()));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
