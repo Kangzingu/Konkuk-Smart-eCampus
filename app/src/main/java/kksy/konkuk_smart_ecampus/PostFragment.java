@@ -189,10 +189,10 @@ public class PostFragment extends Fragment {
         아직 String들 한테 데이터가 안들어가서 setText 주석 했음
         테스팅 할 때는 꼭 주석 풀고 테스팅!
          */
-//        textViewPostType.setText(postType);
-//        textViewPostTitle.setText(postTitle);
-//        textViewPostDate.setText(postDate);
-//        textViewPostContent.setText(postContent);
+        textViewPostType.setText(postType);
+        textViewPostTitle.setText(postTitle);
+        textViewPostDate.setText(postDate);
+        textViewPostContent.setText(postContent);
 
         return view;
     }
