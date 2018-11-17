@@ -101,7 +101,7 @@ public class PostFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    
+
                     boolean check=false;
                     Iterable<DataSnapshot> data=snapshot.getChildren();
 
