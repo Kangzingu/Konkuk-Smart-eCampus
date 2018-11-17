@@ -46,8 +46,11 @@ public class HomeFragment extends Fragment {
     /*
     (다슬 수정)
      */
-    ArrayList<TimeLine> timeLines = new ArrayList<TimeLine>();
-    HashMap<String, String> boardID = new HashMap();//key="강의자료","과제","공지"
+    ArrayList<TimeLine> MytimeLines = new ArrayList<TimeLine>();
+    //HashMap<String, String> boardID = new HashMap();//key="강의자료","과제","공지"
+    ArrayList<String> homeworkID=new ArrayList<>();//과제
+    ArrayList<String> noticeID=new ArrayList<>();//공지
+    ArrayList<String> materialID=new ArrayList<>();//강의자료
     Lecture lecture;
     String sugang_subject_ID = "s2"; //현재 검색하려는 과목 리스트
     String now_StudentID = "201611233";//현재 로그인 한 학생 ID
@@ -99,6 +102,7 @@ public class HomeFragment extends Fragment {
 
         activity = getActivity();
 
+     //   regiBoard();
         initProgressBar();
         initTimeline();
        // postTimeLine();
@@ -122,6 +126,12 @@ public class HomeFragment extends Fragment {
 
         Lecture lecture = new Lecture("p2", "s2", "beconinfo", str, str2);
         myDBHandler.newLecture(lecture);
+    }
+
+    public void regiBoard(){
+        MyDBHandler myDBHandler=new MyDBHandler("board");
+        Board board=new Board("과제", /*String index,*/ "분류 팀프로젝트 입니다.","아래 파일을 참조하여, 제안서를 작성하고 기간내에 업로드 하세요","s2-p2");
+        myDBHandler.newBoard(board);
     }
 
 //    public void postTimeLine() {
@@ -150,26 +160,26 @@ public class HomeFragment extends Fragment {
                     //material
                     for (int i = 0; i < timeLine.getMaterials().size(); i++) {
                         TimeLineBoardFormat timeLineBoardFormat = timeLine.getMaterials().get(i);
-                        boardID.put("강의자료", timeLineBoardFormat.getBoardID());
-                        timeLines.add(timeLine);
+                        materialID.add( timeLineBoardFormat.getBoardID());
+                        MytimeLines.add(timeLine);
                         //Log.i("HomeFragment : 강의자료",boardID.get("강의자료"));
                     }
                     //homework
                     for (int i = 0; i < timeLine.getHomework().size(); i++) {
                         TimeLineBoardFormat timeLineBoardFormat = timeLine.getHomework().get(i);
-                        boardID.put("과제", timeLineBoardFormat.getBoardID());
-                        timeLines.add(timeLine);
+                        homeworkID.add(timeLineBoardFormat.getBoardID());
+                        MytimeLines.add(timeLine);
                         // Log.i("HomeFragment : 과제",boardID.get("과제"));
                     }
                     //notice
                     for (int i = 0; i < timeLine.getNotice().size(); i++) {
                         TimeLineBoardFormat timeLineBoardFormat = timeLine.getNotice().get(i);
-                        boardID.put("공지", timeLineBoardFormat.getBoardID());
-                        timeLines.add(timeLine);
-                        //  Log.i("HomeFragment : 공지",boardID.get("공지"));
+                        noticeID.add(timeLineBoardFormat.getBoardID());
+                        MytimeLines.add(timeLine);
                     }
 
                 }
+
             }
 
             @Override
@@ -251,8 +261,9 @@ public class HomeFragment extends Fragment {
                     Board board = snapshot.getChildren().iterator().next().getValue(Board.class);
                     //Log.i("HomeFragment \n",board.getBoardID());
                     //boardid 비교
-                    if (boardID.containsValue(board.getBoardID()) == false) {
-                        // Log.i("HomeFragment \n", "true");
+                    if (materialID.contains(board.getBoardID()) == true||
+                            homeworkID.contains(board.getBoardID()) == true||
+                            noticeID.contains(board.getBoardID()) == true) {
                         timelineList.add(new TimelineListAdapter.Item(
                                 "0",
                                 "산학협력프로젝트1",
