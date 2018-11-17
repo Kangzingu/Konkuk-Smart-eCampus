@@ -46,7 +46,8 @@ public class HomeFragment extends Fragment {
     /*
     (다슬 수정)
      */
-    ArrayList<TimeLine> MytimeLines = new ArrayList<TimeLine>();
+    ArrayList<TimeLine> mytimeLines = new ArrayList<TimeLine>();
+    ArrayList<TimeLineBoardFormat> mytimLineBoardFormat=new ArrayList<TimeLineBoardFormat>();
     //HashMap<String, String> boardID = new HashMap();//key="강의자료","과제","공지"
     ArrayList<String> homeworkID=new ArrayList<>();//과제
     ArrayList<String> noticeID=new ArrayList<>();//공지
@@ -160,22 +161,25 @@ public class HomeFragment extends Fragment {
                     //material
                     for (int i = 0; i < timeLine.getMaterials().size(); i++) {
                         TimeLineBoardFormat timeLineBoardFormat = timeLine.getMaterials().get(i);
+                        mytimLineBoardFormat.add(timeLineBoardFormat);
                         materialID.add( timeLineBoardFormat.getBoardID());
-                        MytimeLines.add(timeLine);
+                        mytimeLines.add(timeLine);
                         //Log.i("HomeFragment : 강의자료",boardID.get("강의자료"));
                     }
                     //homework
                     for (int i = 0; i < timeLine.getHomework().size(); i++) {
                         TimeLineBoardFormat timeLineBoardFormat = timeLine.getHomework().get(i);
+                        mytimLineBoardFormat.add(timeLineBoardFormat);
                         homeworkID.add(timeLineBoardFormat.getBoardID());
-                        MytimeLines.add(timeLine);
+                        mytimeLines.add(timeLine);
                         // Log.i("HomeFragment : 과제",boardID.get("과제"));
                     }
                     //notice
                     for (int i = 0; i < timeLine.getNotice().size(); i++) {
                         TimeLineBoardFormat timeLineBoardFormat = timeLine.getNotice().get(i);
+                        mytimLineBoardFormat.add(timeLineBoardFormat);
                         noticeID.add(timeLineBoardFormat.getBoardID());
-                        MytimeLines.add(timeLine);
+                        mytimeLines.add(timeLine);
                     }
 
                 }
@@ -264,12 +268,23 @@ public class HomeFragment extends Fragment {
                     if (materialID.contains(board.getBoardID()) == true||
                             homeworkID.contains(board.getBoardID()) == true||
                             noticeID.contains(board.getBoardID()) == true) {
+
+                        boolean isCheck=false;
+                        boolean isNotPick=false;
+                        for(int i=0;i<mytimLineBoardFormat.size();i++){
+                            if(mytimLineBoardFormat.get(i).getBoardID().equals(board.getBoardID())){
+                                Log.i("HomeFragment", "yes");
+                                isCheck=mytimLineBoardFormat.get(i).isIsread();
+                                isNotPick=!mytimLineBoardFormat.get(i).isWantTop();//북마크 여부 :자영이가 db랑 반대로 설계함 그래서 wanttop이지만 yes일때 isnotpick이 no임...
+                            }
+                        }
+
                         timelineList.add(new TimelineListAdapter.Item(
                                 "0",
                                 "산학협력프로젝트1",
                                 board.getTitle(),
                                 board.getUploadDate(),
-                                false, false, board.getSubID_proID(),
+                                isCheck, isNotPick, board.getSubID_proID(),
                                 board.getBoardID()
                         ));
                         adapter.notifyDataSetChanged();
@@ -368,8 +383,8 @@ public class HomeFragment extends Fragment {
                     - 여리
                     Bookmark 해제 시, bookmark 여부 DB에도 반영
                      */
-//                    TimeLine timeLine;
-//                    timeLine.getHomework().get(0).setIsread(true);
+                    
+
                 } else {
 
                     timelineList.get(postion).isNotPick = false;
