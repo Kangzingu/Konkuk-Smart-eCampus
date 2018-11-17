@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,6 +43,16 @@ import static kksy.konkuk_smart_ecampus.ExpandableListAdapter.HEADER;
  */
 public class HomeFragment extends Fragment {
 
+    /*
+    (다슬 수정)
+     */
+    ArrayList<TimeLine> timeLines = new ArrayList<TimeLine>();
+    HashMap<String, String> boardID = new HashMap();//key="강의자료","과제","공지"
+    Lecture lecture;
+    String sugang_subject_ID = "s2"; //현재 검색하려는 과목 리스트
+    String now_StudentID = "201611233";//현재 로그인 한 학생 ID
+    public String sugang_professor_ID = "noinfo";//다슬이가 불러와야됨->(여리요청 완료)//sugang_subject_ID가 s2라면, sugang_professor_ID는 무조건 p2
+
     RecyclerView recyclerView;
     TimelineListAdapter adapter;
 
@@ -52,16 +65,15 @@ public class HomeFragment extends Fragment {
     AlertDialog.Builder builder;
 
     /*YEORI*/
-    ArrayList<TimeLine> timeLines=new ArrayList<TimeLine>();
-    ArrayList<String> boardID=new ArrayList<String>();
+
+
     FirebaseDatabase mdatabase;
     DatabaseReference mdbRef;
     Query query;
-    Query query2;
-    static boolean on=false;
-    ArrayList<Board> boards=new ArrayList<Board>();
-    HashMap<String, String> subjects=new HashMap();
-    String userID="201611210";  //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
+    static boolean on = false;
+    ArrayList<Board> boards = new ArrayList<Board>();
+    HashMap<String, String> subjects = new HashMap();
+    //String userID="201611210";  //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기)
     HashMap<String, String> subject;    //MainActivity에서 HomeFragment로 접근할 때 넘겨줄 것(열->자영언니에게 말하기
     //수강과목은 여러개 일 수 있으니까 나중에는 배열로 고칠 것.
 
@@ -74,7 +86,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
+        mdatabase = FirebaseDatabase.getInstance();
         View view = inflater.inflate(R.layout.fragment_home, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.listViewTimeline);
 
@@ -84,160 +96,86 @@ public class HomeFragment extends Fragment {
         activity = getActivity();
 
         initTimeline();
-
+       // postTimeLine();
         return view;
     }
 
-    public void initTimeline(){
-        Log.d("HomeFragment", "1");
-        timelineList = new ArrayList<>();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        //여리 - 쿼리에서 진행할 예정
 
-        boardID=new ArrayList<String>();
-        mdatabase = FirebaseDatabase.getInstance();
-        //sugang 에 가서 학번으로 timeline에 접근 한 뒤에 타임라인을 가지고온다.
-        //그리고 이 타임라인을 가지고 온 것에 보드 ID를 가지고 와서
-        //이 보드에 맞는 걸 가져오면 된다.
-        mdbRef=mdatabase.getReference("sugang");
-        query = mdbRef.orderByChild("studentID").equalTo(userID);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+    /*
+       (다슬 수정)
+       : Lecture를 등록해서 사용해야 된다면, 이 함수를 이용하시오
+        */
+    public void regiLecture() {
+
+        MyDBHandler myDBHandler = new MyDBHandler("lecture");
+        List<String> str = Arrays.asList(new String[]{"08:00", "08:10"});
+        List<String> str2 = Arrays.asList(new String[]{"08:11", "08:30"});
+
+        Lecture lecture = new Lecture("p2", "s2", "beconinfo", str, str2);
+        myDBHandler.newLecture(lecture);
+    }
+
+//    public void postTimeLine(){
+//        findProfessorID();
+//        findBoardID();
+//        searchBoard();
+//    }
+    public void findBoardID() {
+
+        /*
+        (다슬 수정)
+        1, sugang에서 s1과목을 듣는 학생 s1-201611210 정보를 가져옴
+        2. 해당 학생의 timeLine 정보를 가져온 후
+        3. boardID를 타입별(과제, 강의자료, 공지)로 모두 가지고옴
+         */
+
+        mdbRef = mdatabase.getReference("sugang");
+        query = mdbRef.orderByChild("subID_studentID").equalTo(sugang_subject_ID + "-" + now_StudentID);//sugang_subject_ID+"-"+userID
+        query.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-
-                    Sugang sugang=snapshot.getValue(Sugang.class);
-                    Log.i("str", sugang.getSubID());
-                    subjects.put(sugang.getSubID(), "네트워크 프로그래밍");
-                    TimeLine timeLine=sugang.getTimeLine();
-//                    Log.i("str2", timeLine.getMaterials().get(0).getBoardID());
-
-                    //timeLines=new ArrayList<>();
-                    timeLines.add(timeLine);
-                    Log.i("board timeline", timeLine.toString());
-
-                    mdbRef=mdatabase.getReference("board");
-                    //(임시)
-                    query2=mdbRef.orderByKey().equalTo("s1-p1");    //다스리
-                    //s1만 가지고 s1-p1에 접근하기 위한 것을 다스리에게 문의
-
-                    query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                Log.i("여기들어와?", "제발");
-                                on=true;
-                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                    Iterable<DataSnapshot> data = snapshot1.getChildren();
-                                    //강의자료
-                                    //->강의자료의 모든 value들을 가져온다. 2018...
-                                    Iterable<DataSnapshot> data1 = data.iterator().next().getChildren();  //2018-10-26 21:51:45, 2018-10-27...
-                                    for (Iterator<DataSnapshot> da = data1.iterator(); data1.iterator().hasNext(); ) {
-                                        Board board = da.next().getChildren().iterator().next().getValue(Board.class);
-                                        for (int i = 0; i < timeLines.size(); i++) {
-                                            List<TimeLineBoardFormat> timeLineA = timeLines.get(i).getMaterials();
-
-                                            for (int j = 0; j < timeLineA.size(); j++) {
-                                                if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
-                                                    Log.i("board", i + " " + board.getType());
-                                                    TimelineListAdapter.Item item=new TimelineListAdapter.Item( i + "",
-                                                            subjects.get("s1"),
-                                                            board.getTitle(),
-                                                            board.getUploadDate(),
-                                                            timeLineA.get(j).isIsread(),
-                                                            timeLineA.get(j).isWantTop(),
-                                                            board.getSubID_proID(),
-                                                            board.getBoardID());
-                                                    Log.i("board", timelineList.size()+"");
-
-                                                    //열(도움)
-                                                    //timeLines에 들어있는 거를 총 3번(수강 과목 수)불러서
-                                                    //지금 총 3번이 뜸..
-                                                    //timeLines에 있는 거랑 timeLineList랑 비교해서 이미 추가 되어 있으면.
-                                                    //추가 하지 않고 한번씩만 뜨게 해야함.
-
-//                                                    if(timelineList.size()==0){
-//                                                        Log.i("board", item.boardID);
-//                                                        timelineList.add(item);
-//                                                    }
-//                                                    for(int k=0;k<timelineList.size();k++){
-//                                                        if(timelineList.get(k).boardID!=item.boardID)
-//                                                            Log.i("board", item.boardID);
-//                                                            timelineList.add(item);
-//                                                    }
-
-                                                }
-                                            }
-
-                                        }
-                                        //Log.i("보쟈", da.next().getValue().toString()); //-LP11bhR2..., -LPIJ...
-                                    }
-
-                                    //공지
-                                    Iterable<DataSnapshot> data2 = data.iterator().next().getChildren();
-                                    for (Iterator<DataSnapshot> da = data2.iterator(); data2.iterator().hasNext(); ) {
-                                        Board board = da.next().getChildren().iterator().next().getValue(Board.class);
-                                        for (int i = 0; i < timeLines.size(); i++) {
-                                            List<TimeLineBoardFormat> timeLineA = timeLines.get(i).getMaterials();
-
-                                            for (int j = 0; j < timeLineA.size(); j++) {
-                                                if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
-                                                    timelineList.add(new TimelineListAdapter.Item(
-                                                            i + "",
-                                                            "산학협력 프로젝트2",
-                                                            board.getTitle(),
-                                                            board.getUploadDate(),
-                                                            timeLineA.get(j).isIsread(),
-                                                            timeLineA.get(j).isWantTop(),
-                                                            board.getSubID_proID(),
-                                                            board.getBoardID()
-                                                    ));
-
-                                                }
-                                            }
-
-                                        }
-                                    }
-
-                                    //과제
-                                    Iterable<DataSnapshot> data3 = data.iterator().next().getChildren();
-                                    for (Iterator<DataSnapshot> da = data3.iterator(); data3.iterator().hasNext(); ) {
-                                        Board board = da.next().getChildren().iterator().next().getValue(Board.class);
-                                        for (int i = 0; i < timeLines.size(); i++) {
-                                            List<TimeLineBoardFormat> timeLineA = timeLines.get(i).getMaterials();
-
-                                            for (int j = 0; j < timeLineA.size(); j++) {
-                                                if (board.getBoardID().equals(timeLineA.get(j).getBoardID())) {
-                                                    timelineList.add(new TimelineListAdapter.Item(
-                                                            i + "",
-                                                            "산학협력 프로젝트2",
-                                                            board.getTitle(),
-                                                            board.getUploadDate(),
-                                                            timeLineA.get(j).isIsread(),
-                                                            timeLineA.get(j).isWantTop(),
-                                                            board.getSubID_proID(),
-                                                            board.getBoardID()
-                                                    ));
-
-                                                }
-                                            }
-
-                                        }
-                                        //Log.i("value", board.getTitle());
-                                    }
-                                    /*Collections.sort(data, sortByDate);*/
-//                                    Collections.sort(timelineList, sortByChecked);
-//                                    Collections.sort(timelineList, sortByBookmark);
-                                    adapter.notifyDataSetChanged();
-                                }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.i("HomeFragment", "call findBoardID()");
+                if (dataSnapshot != null) {
+                    Sugang sugang = dataSnapshot.getValue(Sugang.class);
+                    TimeLine timeLine = sugang.getTimeLine();
+                    //material
+                    for (int i = 0; i < timeLine.getMaterials().size(); i++) {
+                        TimeLineBoardFormat timeLineBoardFormat = timeLine.getMaterials().get(i);
+                        boardID.put("강의자료", timeLineBoardFormat.getBoardID());
+                        timeLines.add(timeLine);
+                        //Log.i("HomeFragment : 강의자료",boardID.get("강의자료"));
+                    }
+                    //homework
+                    for (int i = 0; i < timeLine.getHomework().size(); i++) {
+                        TimeLineBoardFormat timeLineBoardFormat = timeLine.getHomework().get(i);
+                        boardID.put("과제", timeLineBoardFormat.getBoardID());
+                        timeLines.add(timeLine);
+                        // Log.i("HomeFragment : 과제",boardID.get("과제"));
+                    }
+                    //notice
+                    for (int i = 0; i < timeLine.getNotice().size(); i++) {
+                        TimeLineBoardFormat timeLineBoardFormat = timeLine.getNotice().get(i);
+                        boardID.put("공지", timeLineBoardFormat.getBoardID());
+                        timeLines.add(timeLine);
+                        //  Log.i("HomeFragment : 공지",boardID.get("공지"));
+                    }
 
                 }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -245,6 +183,118 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    public void findProfessorID() {
+           /*
+        (다슬 수정)
+        - 여리 요청사항 : 과목 코드만으로 professor id 검색
+         */
+
+        mdbRef = mdatabase.getReference("lecture");
+        query = mdbRef.orderByChild("subID").equalTo(sugang_subject_ID);
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.i("HomeFragment", "call findProfessorID()");
+                sugang_professor_ID = dataSnapshot.getKey().split("-")[0];
+                //Log.i("HomeFragment",sugang_professor_ID);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void searchBoard() {
+         /*
+        (다슬 수정)
+        1. board 릴레이션에 접근해서 과목ID 만으로 검색 진행
+        2. 게시글을 타입(강의자료, 공지, 과제)별로 가져옴
+         */
+
+        mdbRef = mdatabase.getReference("board").child("s2-p2");
+        query = mdbRef.orderByKey();//query=mdbRef.orderByKey().equalTo(sugang_subject_ID+"-"+sugang_professor_ID);
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.i("HomeFragment", "call searchBoard()");
+                //Log.i("HomeFragment","sugang_professor_ID :"+sugang_professor_ID);
+                // Log.i("HomeFragment",dataSnapshot.toString());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Board board = snapshot.getChildren().iterator().next().getValue(Board.class);
+                    //Log.i("HomeFragment \n",board.getBoardID());
+                    //boardid 비교
+                    if (boardID.containsValue(board.getBoardID()) == true) {
+                       // Log.i("HomeFragment \n", "true");
+                        timelineList.add(new TimelineListAdapter.Item(
+                                "0",
+                                "산학협력프로젝트1",
+                                board.getTitle(),
+                                board.getUploadDate(),
+                                false, false, board.getSubID_proID(),
+                                board.getBoardID()
+                        ));
+
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    public void initTimeline() {
+        Log.d("HomeFragment", "1");
+        timelineList = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        //(다슬 수정)//
+        findProfessorID();
+        findBoardID();
+        searchBoard();
+        /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         /*
         - 여리
         TimelineListAdapter.Item 객체 생성을 통해 Timeline의 Item들 생성
@@ -263,6 +313,7 @@ public class HomeFragment extends Fragment {
 //                false, false,"s1_p1",
 //                "LP1JCk"
 //        ));
+
 //        timelineList.add(new TimelineListAdapter.Item(
 //                "0",
 //                "산학협력프로젝트2(종합설계)",
@@ -290,7 +341,7 @@ public class HomeFragment extends Fragment {
         adapter.setItemPickClick(new TimelineListAdapter.TimelineItemPickClick() {
             @Override
             public void onPickClick(View view, int postion) {
-                if(!timelineList.get(postion).isNotPick){
+                if (!timelineList.get(postion).isNotPick) {
                     timelineList.get(postion).isNotPick = true;
 
                     /*
@@ -299,8 +350,7 @@ public class HomeFragment extends Fragment {
                      */
 //                    TimeLine timeLine;
 //                    timeLine.getHomework().get(0).setIsread(true);
-                }
-                else{
+                } else {
 
                     timelineList.get(postion).isNotPick = false;
 
@@ -309,10 +359,10 @@ public class HomeFragment extends Fragment {
                     Bookmark 등록 시, bookmark 여부 DB에도 반영
                      */
                     DatabaseReference relation_table;
-                    mdbRef=mdatabase.getReference("sugang");
+                    mdbRef = mdatabase.getReference("sugang");
 
-                    String subid_proid=timelineList.get(postion).subid_proid;
-                    String[] temp=subid_proid.split("_");
+                    String subid_proid = timelineList.get(postion).subid_proid;
+                    String[] temp = subid_proid.split("_");
 
 //                    relation_table=mdbRef.child(temp[0]+"-"+userID).child("timeLine").push();
 //                    TimelineListAdapter.Item item=timelineList.get(postion);
@@ -328,10 +378,12 @@ public class HomeFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+
         adapter.setItemClick(new TimelineListAdapter.TimelineItemClick() {
             @Override
             public void onClick(View view, int position) {
-                if(!timelineList.get(position).isCheck){ // 게시물 미확인 -> 게시물 확인
+                if (!timelineList.get(position).isCheck) { // 게시물 미확인 -> 게시물 확인
                     timelineList.get(position).isCheck = true;
 
                     /*
@@ -339,9 +391,6 @@ public class HomeFragment extends Fragment {
                     게시물 확인 시, 게시물 확인 여부 DB에도 반영
                      */
                 }
-
-//                Collections.sort(timelineList, sortByChecked);
-//                Collections.sort(timelineList, sortByBookmark);
                 adapter.notifyDataSetChanged();
 
                 /*
@@ -349,9 +398,6 @@ public class HomeFragment extends Fragment {
                  */
 
                 fragmentTransaction = fragmentManager.beginTransaction();
-                Log.i("boardnum", position+"");
-                Log.i("boardnum", timelineList.get(0).boardID);
-                Log.i("boardnum", timelineList.get(1).boardID);
                 fragmentTransaction.replace(R.id.fragmentContainer, PostFragment.newInstance(timelineList.get(position).boardID));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -360,6 +406,7 @@ public class HomeFragment extends Fragment {
                         .setAction("해당 게시물로 이동", null).show();
             }
         });
+
         adapter.setItemLongClick(new TimelineListAdapter.TimelineItemLongClick() {
             @Override
             public void onLongClick(final View view, final int position) {
@@ -369,10 +416,9 @@ public class HomeFragment extends Fragment {
                 게시물 삭제 시, Timeline DB에서도 삭제
                  */
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
-                }
-                else{
+                } else {
                     builder = new AlertDialog.Builder(getContext());
                 }
                 builder.setTitle("타임라인 삭제")
@@ -394,7 +440,9 @@ public class HomeFragment extends Fragment {
                             }
                         })
                         .show();
+                adapter.notifyDataSetChanged();
             }
+
         });
 
         recyclerView.setAdapter(adapter);
@@ -412,7 +460,7 @@ public class HomeFragment extends Fragment {
     private final static Comparator<TimelineListAdapter.Item> sortByChecked = new Comparator<TimelineListAdapter.Item>() {
         @Override
         public int compare(TimelineListAdapter.Item o1, TimelineListAdapter.Item o2) {
-            if(Boolean.compare(o1.isCheck, o2.isCheck) == 0)
+            if (Boolean.compare(o1.isCheck, o2.isCheck) == 0)
                 return 1;
             return Boolean.compare(o1.isCheck, o2.isCheck);
         }

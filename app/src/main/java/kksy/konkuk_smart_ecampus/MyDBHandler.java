@@ -1,5 +1,11 @@
 package kksy.konkuk_smart_ecampus;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -89,8 +95,6 @@ public class MyDBHandler {
          */
 
         newTimeLine(board);
-
-
 
 
 /*
@@ -235,4 +239,6 @@ public class MyDBHandler {
         //등록
         relation_table.setValue(sugang);
     }
+
+
 }

@@ -92,16 +92,14 @@ public class PostFragment extends Fragment {
 
         //다스리
         /*
-        * s1만 찾아도 되게 만든다고 했당.
-        * s1.. 까지만.. */
+        * s2만 찾아도 되게 만든다고 했당.
+        * s2.. 까지만.. */
 
-        query = mdbRef.orderByKey().equalTo("s1-p1");
-//        Log.i("yeori", query.toString());
+        query = mdbRef.orderByKey().equalTo("s2-p2");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.i("yeori", "여긴오니..?");
-//                Log.i("yeori", dataSnapshot.getChildren().toString());
+
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Log.i("yeori", snapshot.getValue().toString());
                     boolean check=false;
@@ -151,7 +149,7 @@ public class PostFragment extends Fragment {
                         }
                         //Log.i("value", board.getTitle());
                     }
-                    Log.i("yeori", realBoard.getBoardID());
+
                     /*
                     - 여리
                     mPostId를 통해서 postType, postTitle, postDate, postContent에 입력
