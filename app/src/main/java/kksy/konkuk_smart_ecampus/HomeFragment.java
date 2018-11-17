@@ -291,7 +291,7 @@ public class HomeFragment extends Fragment {
 
 
     public void initTimeline() {
-        Log.d("HomeFragment", "1");
+
         timelineList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -314,7 +314,6 @@ public class HomeFragment extends Fragment {
         - timelineList : Timeline의 List
          */
 
-        Log.i("HomeFragment","hi");
 //        timelineList.add(new TimelineListAdapter.Item(
 //                "0",
 //                "산학협력프로젝트2(종합설계)",
@@ -363,24 +362,9 @@ public class HomeFragment extends Fragment {
                 } else {
 
                     timelineList.get(postion).isNotPick = false;
+                    String reMoveBookmarkID = timelineList.get(postion).boardID;
+                    Log.i("HomeFragment","reMoveBookmarkID: "+reMoveBookmarkID);
 
-                    /*
-                    - 여리
-                    Bookmark 등록 시, bookmark 여부 DB에도 반영
-                     */
-                    DatabaseReference relation_table;
-                    mdbRef = mdatabase.getReference("sugang");
-
-                    String subid_proid = timelineList.get(postion).subid_proid;
-                    String[] temp = subid_proid.split("_");
-
-//                    relation_table=mdbRef.child(temp[0]+"-"+userID).child("timeLine").push();
-//                    TimelineListAdapter.Item item=timelineList.get(postion);
-//                    TimeLineBoardFormat temp2=new TimeLineBoardFormat();
-//                    temp2.setBoardID(item.boardID);
-//                    temp2.setIsread(item.isOpen);
-//                    temp2.setWantTop(item.isCheck);
-                    //relation_table.setValue()
                 }
 
                 Collections.sort(timelineList, sortByChecked);
@@ -438,7 +422,7 @@ public class HomeFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 timelineList.remove(position);
                                 adapter.notifyDataSetChanged();
-
+                                Log.i("HomeFragment",position+"");
                                 Snackbar.make(view, "게시물 삭제", Snackbar.LENGTH_SHORT)
                                         .setAction("게시물 삭제", null).show();
                             }
@@ -450,7 +434,7 @@ public class HomeFragment extends Fragment {
                             }
                         })
                         .show();
-                adapter.notifyDataSetChanged();
+               // adapter.notifyDataSetChanged();
             }
 
         });
