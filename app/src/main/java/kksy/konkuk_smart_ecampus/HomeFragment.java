@@ -251,7 +251,7 @@ public class HomeFragment extends Fragment {
                     Board board = snapshot.getChildren().iterator().next().getValue(Board.class);
                     //Log.i("HomeFragment \n",board.getBoardID());
                     //boardid 비교
-                    if (boardID.containsValue(board.getBoardID()) == true) {
+                    if (boardID.containsValue(board.getBoardID()) == false) {
                         // Log.i("HomeFragment \n", "true");
                         timelineList.add(new TimelineListAdapter.Item(
                                 "0",
@@ -261,7 +261,7 @@ public class HomeFragment extends Fragment {
                                 false, false, board.getSubID_proID(),
                                 board.getBoardID()
                         ));
-
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -314,13 +314,14 @@ public class HomeFragment extends Fragment {
         - timelineList : Timeline의 List
          */
 
+        Log.i("HomeFragment","hi");
 //        timelineList.add(new TimelineListAdapter.Item(
 //                "0",
 //                "산학협력프로젝트2(종합설계)",
 //                "[10/2] 미팅 요약서",
 //                "2018.10.02 오후 11:59",
 //                false, false,"s1_p1",
-//                "LP1JCk"
+//                "LRMeNbMtUyLINtvxu24"
 //        ));
 
 //        timelineList.add(new TimelineListAdapter.Item(
