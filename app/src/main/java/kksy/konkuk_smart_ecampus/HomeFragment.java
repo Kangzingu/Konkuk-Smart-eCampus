@@ -273,7 +273,7 @@ public class HomeFragment extends Fragment {
                         boolean isNotPick=false;
                         for(int i=0;i<mytimLineBoardFormat.size();i++){
                             if(mytimLineBoardFormat.get(i).getBoardID().equals(board.getBoardID())){
-                                Log.i("HomeFragment", "yes");
+                               // Log.i("HomeFragment", "yes");
                                 isCheck=mytimLineBoardFormat.get(i).isIsread();
                                 isNotPick=!mytimLineBoardFormat.get(i).isWantTop();//북마크 여부 :자영이가 db랑 반대로 설계함 그래서 wanttop이지만 yes일때 isnotpick이 no임...
                             }
@@ -397,9 +397,7 @@ public class HomeFragment extends Fragment {
                         mdbRef.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren() ){
-                                    Log.i("HomeFragment",snapshot.toString());
-                                }
+
                             }
 
                             @Override
