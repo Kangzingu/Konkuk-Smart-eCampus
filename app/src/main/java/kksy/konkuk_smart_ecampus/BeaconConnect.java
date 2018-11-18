@@ -103,8 +103,10 @@ public class BeaconConnect extends Application {
                                 currentObject = childSnap.next();
                                 attendanceObject = currentObject;
                             }
-                            Toast.makeText(getApplicationContext(), attendanceObject.getKey().toString(), Toast.LENGTH_LONG).show();
-                            Toast.makeText(getApplicationContext(), attendanceObject.child("state").getValue().toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), studentID, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), subID_pID, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), attendanceObject.getKey().toString(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), attendanceObject.child("state").getValue().toString(), Toast.LENGTH_LONG).show();
                             String attendStartTime = lectureObject.child("attendTime").child("0").getValue().toString();
                             String attendEndTime = lectureObject.child("attendTime").child("1").getValue().toString();
                             String lateStartTime = lectureObject.child("lateTime").child("0").getValue().toString();

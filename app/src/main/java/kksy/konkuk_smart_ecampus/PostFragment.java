@@ -95,19 +95,13 @@ public class PostFragment extends Fragment {
         mdbRef=mdatabase.getReference("board");
 
         //다스리
-        /*
-        * s1만 찾아도 되게 만든다고 했당.
-        * s1.. 까지만.. */
-        Log.i("sid_pid", sid_pid);
         query = mdbRef.orderByKey().equalTo(sid_pid);
-//        Log.i("yeori", query.toString());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.i("yeori", "여긴오니..?");
-//                Log.i("yeori", dataSnapshot.getChildren().toString());
+
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Log.i("yeori", snapshot.getValue().toString());
+
                     boolean check=false;
                     Iterable<DataSnapshot> data=snapshot.getChildren();
 
@@ -155,7 +149,7 @@ public class PostFragment extends Fragment {
                         }
                         //Log.i("value", board.getTitle());
                     }
-                    Log.i("yeori", realBoard.getBoardID());
+
                     /*
                     - 여리
                     mPostId를 통해서 postType, postTitle, postDate, postContent에 입력
@@ -195,10 +189,10 @@ public class PostFragment extends Fragment {
         아직 String들 한테 데이터가 안들어가서 setText 주석 했음
         테스팅 할 때는 꼭 주석 풀고 테스팅!
          */
-//        textViewPostType.setText(postType);
-//        textViewPostTitle.setText(postTitle);
-//        textViewPostDate.setText(postDate);
-//        textViewPostContent.setText(postContent);
+        textViewPostType.setText(postType);
+        textViewPostTitle.setText(postTitle);
+        textViewPostDate.setText(postDate);
+        textViewPostContent.setText(postContent);
 
         return view;
     }
