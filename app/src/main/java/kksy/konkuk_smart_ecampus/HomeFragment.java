@@ -285,7 +285,8 @@ public class HomeFragment extends Fragment {
                                 board.getTitle(),
                                 board.getUploadDate(),
                                 isCheck, isNotPick, board.getSubID_proID(),
-                                board.getBoardID()
+                                board.getBoardID(),
+                                board
                         ));
                         adapter.notifyDataSetChanged();
                     }
@@ -386,10 +387,43 @@ public class HomeFragment extends Fragment {
                     
 
                 } else {
-
+                    String BoardType=timelineList.get(postion).board.getType();
                     timelineList.get(postion).isNotPick = false;
                     String reMoveBookmarkID = timelineList.get(postion).boardID;
                     Log.i("HomeFragment","reMoveBookmarkID: "+reMoveBookmarkID);
+
+                    if(BoardType.equals("과제")){
+                        mdbRef.child("sugang/"+sugang_subject_ID+"-"+now_StudentID+"/"+"timeLine").child("homework");
+                        mdbRef.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren() ){
+                                    Log.i("HomeFragment",snapshot.toString());
+                                }
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
 
                 }
 
@@ -410,6 +444,8 @@ public class HomeFragment extends Fragment {
                     - 여리
                     게시물 확인 시, 게시물 확인 여부 DB에도 반영
                      */
+
+
                 }
                 adapter.notifyDataSetChanged();
 

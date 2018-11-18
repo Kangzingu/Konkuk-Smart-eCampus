@@ -133,6 +133,7 @@ public class AdminActivity extends AppCompatActivity {
         /*
         새로운 게시물이 올라오는 경우, 알람 설정
          */
+        //알람 설정 여기서 하면 될것같음
     }
 
     public void regi(View view) { //학생 정보를 파이어베이스에 등록함
