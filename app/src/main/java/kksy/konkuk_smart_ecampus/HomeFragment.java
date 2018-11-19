@@ -392,6 +392,39 @@ public class HomeFragment extends Fragment {
                     String reMoveBookmarkID = timelineList.get(postion).boardID;
                     Log.i("HomeFragment","reMoveBookmarkID: "+reMoveBookmarkID);
 
+                    //강의자료
+                    if(BoardType.equals("강의자료")){
+                        mdbRef.child("sugang/"+sugang_subject_ID+"-"+now_StudentID+"/"+"timeLine").child("materials");
+                        mdbRef.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                    Log.i("HomeFragment", snapshot.getValue().toString());
+                                }
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                    //과제
                     if(BoardType.equals("과제")){
                         mdbRef.child("sugang/"+sugang_subject_ID+"-"+now_StudentID+"/"+"timeLine").child("homework");
                         mdbRef.addChildEventListener(new ChildEventListener() {
