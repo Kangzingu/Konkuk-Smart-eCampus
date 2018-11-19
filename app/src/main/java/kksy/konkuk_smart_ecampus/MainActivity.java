@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity
     Handler handler=null;
     Thread t;
     Query query2;
+    static String UserID="201611210";
 
     //
 
@@ -141,8 +142,8 @@ public class MainActivity extends AppCompatActivity
             userEmail = userId + "@" + getResources().getString(R.string.konkuk_email);
             userImgURL = null;/*student.getImgURL()*/;
             userIsBeaconCheck = false;/*student.isBeconCheck()*/;
-
             mdbRef=mdatabase.getReference("student");
+
             query = mdbRef.orderByChild("studentID").equalTo(userId);
             Log.i("query log 검사", query.toString());
             query.addListenerForSingleValueEvent(new ValueEventListener() {

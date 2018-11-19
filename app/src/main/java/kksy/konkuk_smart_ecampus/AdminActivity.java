@@ -154,7 +154,7 @@ public class AdminActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     try{
-                        pushFCMNotification(Token, e1.getText().toString(), e2.getText().toString());
+                        pushFCMNotification(Token, e1.getText().toString(), e2.getText().toString(), e4.getText().toString());
                     }catch (Exception ex){
                         Log.i(TAG, ex.toString());
                     }
@@ -205,7 +205,7 @@ public class AdminActivity extends AppCompatActivity {
 
     }
     //yeori
-    public static void pushFCMNotification(String userDeviceIdKey, String type, String title) throws Exception{
+    public static void pushFCMNotification(String userDeviceIdKey, String type, String title, String s1_p1) throws Exception{
 
         String authKey = AUTH_KEY_FCM; // You FCM AUTH key
         String FMCurl = API_URL_FCM;
@@ -224,7 +224,7 @@ public class AdminActivity extends AppCompatActivity {
         String input = "{\"notification\" : {\"title\" : \"" +type+
                 "upload\", " +
                 "\"body\" : \"" +title+
-                "\"}, " +
+                "\"}, " +s1_p1+
                 "\"to\":\"/topics/ALL\"}";
 
         OutputStream os = conn.getOutputStream();
