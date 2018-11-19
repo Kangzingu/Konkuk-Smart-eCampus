@@ -397,7 +397,9 @@ public class HomeFragment extends Fragment {
                         mdbRef.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
+                                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                    Log.i("HomeFragment", snapshot.getValue().toString());
+                                }
                             }
 
                             @Override
@@ -527,4 +529,5 @@ public class HomeFragment extends Fragment {
             return 0;
         }
     };
+
 }

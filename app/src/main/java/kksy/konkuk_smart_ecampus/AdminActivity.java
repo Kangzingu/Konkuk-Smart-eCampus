@@ -14,7 +14,13 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +48,12 @@ public class AdminActivity extends AppCompatActivity {
     Board board;
     Sugang sugang;
 
+    //yeori
+    public final static String AUTH_KEY_FCM = "AAAAxm-Iuik:APA91bH-PlQ9UVb05fcxlEL7vn1UHBg5W6PvMY4FPcehfu_F2tDLh7T5GGcKCmwOU42bYOd1Fct_8zo19CarBrrwlYMB8m17u-HIGNxFLwocYBC8exp2a6puVvHQiqancId4zjtTfILS";
+    public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
+    String Token;
     //
+
     int pos=0;
     static final String TAG="AdminActivity";
     @Override
@@ -134,6 +145,27 @@ public class AdminActivity extends AppCompatActivity {
         새로운 게시물이 올라오는 경우, 알람 설정
          */
         //알람 설정 여기서 하면 될것같음
+        //FirebaseMessaging.getInstance()
+        //FirebaseMessaging.getInstance().subscribeToTopic("ALL");
+        Token=FirebaseInstanceId.getInstance().getToken();
+        Log.i(TAG, Token);
+        try {
+            Thread thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        pushFCMNotification(Token, e1.getText().toString(), e2.getText().toString());
+                    }catch (Exception ex){
+                        Log.i(TAG, ex.toString());
+                    }
+                }
+            });
+            thread.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, Token, Toast.LENGTH_SHORT).show();
     }
 
     public void regi(View view) { //학생 정보를 파이어베이스에 등록함
@@ -171,5 +203,49 @@ public class AdminActivity extends AppCompatActivity {
         //나중에 여기 지우기
         Toast.makeText(getApplicationContext(),"등록완료^.<",Toast.LENGTH_SHORT).show();
 
+    }
+    //yeori
+    public static void pushFCMNotification(String userDeviceIdKey, String type, String title) throws Exception{
+
+        String authKey = AUTH_KEY_FCM; // You FCM AUTH key
+        String FMCurl = API_URL_FCM;
+
+        URL url = new URL(FMCurl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        conn.setUseCaches(false);
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization","key="+authKey);
+        conn.setRequestProperty("Content-Type","application/json");
+
+        String input = "{\"notification\" : {\"title\" : \"" +type+
+                "upload\", " +
+                "\"body\" : \"" +title+
+                "\"}, " +
+                "\"to\":\"/topics/ALL\"}";
+
+        OutputStream os = conn.getOutputStream();
+
+        // 서버에서 날려서 한글 깨지는 사람은 아래처럼  UTF-8로 인코딩해서 날려주자
+        os.write(input.getBytes("UTF-8"));
+        os.flush();
+        os.close();
+
+//        OutputStream wr = conn.getOutputStream();
+//        wr.write(json.toString().getBytes("UTF-8"));
+//        wr.flush();
+//        wr.close();
+
+        int responseCode=conn.getResponseCode();
+        Log.i(TAG, responseCode+"");
+        BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String inputLine;
+        StringBuffer response=new StringBuffer();
+
+        Log.i(TAG, response.toString());
+        Log.i(TAG, "전송완료");
     }
 }

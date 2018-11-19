@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "701314128139-7s9jb1lvtvq8v05fne5h3i5j7npmid8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kksy.konkuk_smart_ecampus",
+            "certificate_hash": "8736970178a886c6937fa6d9b3b758d86ce297f5"
+          }
+        },
+        {
           "client_id": "701314128139-ds94rbdconigaam32avskujhca3s3jv4.apps.googleusercontent.com",
           "client_type": 3
         }
