@@ -189,9 +189,11 @@ public class MainActivity extends AppCompatActivity
     public void initSwitchBeacon(){
         BeaconConnect beaconConnect=(BeaconConnect) getApplication();
         beaconConnect.SetUserID(userId);
+        Toast.makeText(getApplicationContext(), userId, Toast.LENGTH_LONG).show();
         // Beacon Switch 초기 설정
         switchBeacon = (SwitchCompat) findViewById(R.id.switchBeacon);
         switchBeacon.setChecked(userIsBeaconCheck);
+
         if(userIsBeaconCheck==true){
             //디비에 있는 사용자 설정값 따라 첫 구동시 블루투스 온오프
             bluetoothAdapter.enable();
