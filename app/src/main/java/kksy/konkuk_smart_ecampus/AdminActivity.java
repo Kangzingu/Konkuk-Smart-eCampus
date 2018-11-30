@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -220,19 +221,10 @@ public class AdminActivity extends AppCompatActivity {
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Authorization","key="+authKey);
         conn.setRequestProperty("Content-Type","application/json");
-
-        String input = "{\"notification\" : {\"title\" : \"여기다가 제목 넣기\", \"body\" : \"여기다 내용 넣기\"}, \"to\":\"/topics/ALL\"}";
-
-
-//        String input = "{\"notification\" : {\"title\" : \"여기다가 제목 넣기\"" +
-//                ", \"body\" : \""+title+"\"}" +
-//                ", \"to\":\"/topics/ALL\"}";
-
-//        String input = "{\"notification\" : {\"title\" : \"" +type+
-//                "upload\", " +
-//                "\"body\" : \"" +title+
-//                "\"}, " +s1_p1+
-//                "\"to\":\"/topics/ALL\"}";
+        String temp=title+","+s1_p1;
+        String input = "{\"notification\" : {\"title\" : \""+type+"\"" +
+                ", \"body\" : \""+temp+"\"}" +
+                ", \"to\":\"/topics/ALL\"}";
 
         OutputStream os = conn.getOutputStream();
 
