@@ -49,7 +49,7 @@ public class AdminActivity extends AppCompatActivity {
     Sugang sugang;
 
     //yeori
-    public final static String AUTH_KEY_FCM = "AAAAxm-Iuik:APA91bH-PlQ9UVb05fcxlEL7vn1UHBg5W6PvMY4FPcehfu_F2tDLh7T5GGcKCmwOU42bYOd1Fct_8zo19CarBrrwlYMB8m17u-HIGNxFLwocYBC8exp2a6puVvHQiqancId4zjtTfILS";
+    public final static String AUTH_KEY_FCM = "AAAAo0mUWQs:APA91bFwpft44gLY_oSyqgMB0exl-PMVFtj6rx2FfuJ8Oq6bTiV2gNnUQmTmsUNAQnU6_OPpNNY-gnww5D9CF7d_ZX39jp0-hj4b9Bw7zY8J6WXWoyx18LMe7q8YhYH9AcZgN7yvzDVL";
     public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
     String Token;
     //
@@ -221,11 +221,18 @@ public class AdminActivity extends AppCompatActivity {
         conn.setRequestProperty("Authorization","key="+authKey);
         conn.setRequestProperty("Content-Type","application/json");
 
-        String input = "{\"notification\" : {\"title\" : \"" +type+
-                "upload\", " +
-                "\"body\" : \"" +title+
-                "\"}, " +s1_p1+
-                "\"to\":\"/topics/ALL\"}";
+        String input = "{\"notification\" : {\"title\" : \"여기다가 제목 넣기\", \"body\" : \"여기다 내용 넣기\"}, \"to\":\"/topics/ALL\"}";
+
+
+//        String input = "{\"notification\" : {\"title\" : \"여기다가 제목 넣기\"" +
+//                ", \"body\" : \""+title+"\"}" +
+//                ", \"to\":\"/topics/ALL\"}";
+
+//        String input = "{\"notification\" : {\"title\" : \"" +type+
+//                "upload\", " +
+//                "\"body\" : \"" +title+
+//                "\"}, " +s1_p1+
+//                "\"to\":\"/topics/ALL\"}";
 
         OutputStream os = conn.getOutputStream();
 
@@ -233,11 +240,6 @@ public class AdminActivity extends AppCompatActivity {
         os.write(input.getBytes("UTF-8"));
         os.flush();
         os.close();
-
-//        OutputStream wr = conn.getOutputStream();
-//        wr.write(json.toString().getBytes("UTF-8"));
-//        wr.flush();
-//        wr.close();
 
         int responseCode=conn.getResponseCode();
         Log.i(TAG, responseCode+"");
